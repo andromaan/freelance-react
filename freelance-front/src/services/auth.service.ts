@@ -10,15 +10,23 @@ export const authService = {
   // Реєстрація
   signUp: async (data: SignUpVM): Promise<AuthResponse> => {
     try {
-      const response = await api.post<AuthResponse>("/Account/sign-up", data);
+      const response = await api.post<any>("/Account/sign-up", data);
 
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
+      // Якщо є токен в data (JWT токени)
+      if (response.data.data) {
+        const tokens = response.data.data;
+        if (tokens.token) {
+          localStorage.setItem("token", tokens.token);
+        }
+        if (tokens.refreshToken) {
+          localStorage.setItem("refreshToken", tokens.refreshToken);
+        }
       }
 
       return {
-        ...response.data,
         success: true,
+        message: response.data.message,
+        data: response.data.data,
       };
     } catch (error: any) {
       return {
@@ -31,15 +39,23 @@ export const authService = {
   // Вхід
   signIn: async (data: SignInVM): Promise<AuthResponse> => {
     try {
-      const response = await api.post<AuthResponse>("/Account/sign-in", data);
+      const response = await api.post<any>("/Account/sign-in", data);
 
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
+      // Якщо є токен в data (JWT токени)
+      if (response.data.data) {
+        const tokens = response.data.data;
+        if (tokens.token) {
+          localStorage.setItem("token", tokens.token);
+        }
+        if (tokens.refreshToken) {
+          localStorage.setItem("refreshToken", tokens.refreshToken);
+        }
       }
 
       return {
-        ...response.data,
         success: true,
+        message: response.data.message,
+        data: response.data.data,
       };
     } catch (error: any) {
       return {
@@ -52,24 +68,30 @@ export const authService = {
   // Google авторизація
   externalLogin: async (data: ExternalLoginVM): Promise<AuthResponse> => {
     try {
-      const response = await api.post<AuthResponse>(
-        "/Account/external-login",
-        data,
-      );
+      const response = await api.post<any>("/Account/external-login", data);
 
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
+      // Якщо є токен в data (JWT токени)
+      if (response.data.data) {
+        const tokens = response.data.data;
+        if (tokens.token) {
+          localStorage.setItem("token", tokens.token);
+        }
+        if (tokens.refreshToken) {
+          localStorage.setItem("refreshToken", tokens.refreshToken);
+        }
       }
 
       return {
-        ...response.data,
         success: true,
+        message: response.data.message,
+        data: response.data.data,
       };
     } catch (error: any) {
+      const errorResponse = error.response?.data;
       return {
         success: false,
-        message:
-          error.response?.data?.message || "Помилка авторизації через Google",
+        message: errorResponse?.message || "Помилка авторизації через Google",
+        data: errorResponse?.data, // Важливо для перевірки "role_required"
       };
     }
   },

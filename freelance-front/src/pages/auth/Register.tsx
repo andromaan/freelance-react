@@ -3,7 +3,8 @@ import type { FormEvent, ChangeEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { authService } from "../../services/auth.service";
-import type { SignUpVM, FormErrors } from "../../types/auth.types";
+import type { SignUpVM, FormErrors, UserRole } from "../../types/auth.types";
+import { UserRoles } from "../../types/auth.types";
 import GoogleLogin from "./GoogleLogin";
 import "./auth.css";
 
@@ -14,17 +15,17 @@ const Register: React.FC = () => {
     email: "",
     password: "",
     displayName: "",
-    isFreelancer: false,
+    userRole: UserRoles.FREELANCER as UserRole,
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormValues({
       ...formValues,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
     });
     // Очищаємо помилку при зміні значення
     if (errors[name]) {
@@ -69,7 +70,7 @@ const Register: React.FC = () => {
         email: formValues.email,
         password: formValues.password,
         displayName: formValues.displayName || undefined,
-        isFreelancer: formValues.isFreelancer,
+        userRole: formValues.userRole,
       };
 
       const response = await authService.signUp(signUpData);
@@ -153,17 +154,32 @@ const Register: React.FC = () => {
             )}
           </div>
 
-          <div className="form-group checkbox-group">
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                name="isFreelancer"
-                checked={formValues.isFreelancer}
-                onChange={handleChange}
-                disabled={isLoading}
-              />
-              <span>Я фрілансер</span>
-            </label>
+          <div className="form-group">
+            <label>Виберіть роль</label>
+            <div className="role-selection">
+              <label className="role-option">
+                <input
+                  type="radio"
+                  name="userRole"
+                  value={UserRoles.FREELANCER}
+                  checked={formValues.userRole === UserRoles.FREELANCER}
+                  onChange={handleChange}
+                  disabled={isLoading}
+                />
+                <span>Фрілансер</span>
+              </label>
+              <label className="role-option">
+                <input
+                  type="radio"
+                  name="userRole"
+                  value={UserRoles.EMPLOYER}
+                  checked={formValues.userRole === UserRoles.EMPLOYER}
+                  onChange={handleChange}
+                  disabled={isLoading}
+                />
+                <span>Роботодавець</span>
+              </label>
+            </div>
           </div>
 
           <button type="submit" className="auth-button" disabled={isLoading}>
