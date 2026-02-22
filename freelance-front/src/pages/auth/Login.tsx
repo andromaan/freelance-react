@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import type { FormEvent, ChangeEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useSignInMutation } from "../../services/auth/authApi";
 import { authService } from "../../services/auth.service";
 import type { SignInVM, FormErrors } from "../../types/auth.types";
 import GoogleLogin from "./GoogleLogin";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const [signIn, { isLoading }] = useSignInMutation();
 
   const [formValues, setFormValues] = useState<SignInVM>({
     email: "",
@@ -15,7 +17,6 @@ const Login: React.FC = () => {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -56,20 +57,14 @@ const Login: React.FC = () => {
       return;
     }
 
-    setIsLoading(true);
     try {
-      const response = await authService.signIn(formValues);
-
-      if (!response.success) {
-        toast.error(response.message || "Помилка входу");
-      } else {
-        toast.success("Успішний вхід!");
-        navigate("/");
-      }
-    } catch (error) {
-      toast.error("Помилка з'єднання з сервером");
-    } finally {
-      setIsLoading(false);
+      await signIn(formValues).unwrap();
+      toast.success("Успішний вхід!");
+      navigate("/");
+    } catch (error: any) {
+      const errorMessage =
+        error?.message || error?.data?.message || "Помилка входу";
+      toast.error(errorMessage);
     }
   };
 

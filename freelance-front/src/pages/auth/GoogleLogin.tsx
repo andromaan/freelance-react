@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useExternalLoginMutation } from "../../services/auth/authApi";
 import { authService } from "../../services/auth.service";
 import type { ExternalLoginVM, UserRole } from "../../types/auth.types";
 import { UserRoles } from "../../types/auth.types";
@@ -44,8 +45,8 @@ interface GoogleButtonConfiguration {
 
 const GoogleLogin: React.FC = () => {
   const navigate = useNavigate();
+  const [externalLogin, { isLoading }] = useExternalLoginMutation();
   const [googleApiLoaded, setGoogleApiLoaded] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [showRoleSelection, setShowRoleSelection] = useState(false);
   const [pendingGoogleToken, setPendingGoogleToken] = useState<string | null>(
     null,
@@ -59,41 +60,31 @@ const GoogleLogin: React.FC = () => {
 
     if (isLoading) return;
 
-    setIsLoading(true);
     try {
-      // Спочатку пробуємо без ролі
       const externalLoginData: ExternalLoginVM = {
         token: credential,
         provider: "Google",
       };
 
-      const result = await authService.externalLogin(externalLoginData);
-
-      if (!result.success) {
-        // Перевіряємо чи потрібен вибір ролі
-        if (result.data === "role_required") {
-          setPendingGoogleToken(credential);
-          setShowRoleSelection(true);
-          setIsLoading(false);
-          return;
-        }
-        toast.error(result.message || "Помилка входу через Google");
-      } else {
-        toast.success("Успішний вхід через Google!");
-        navigate("/");
+      await externalLogin(externalLoginData).unwrap();
+      toast.success("Успішний вхід через Google!");
+      navigate("/");
+    } catch (error: any) {
+      // Перевіряємо чи потрібен вибір ролі
+      if (error?.data === "role_required") {
+        setPendingGoogleToken(credential);
+        setShowRoleSelection(true);
+        return;
       }
-    } catch (error) {
-      console.error("Error during Google login:", error);
-      toast.error("Помилка з'єднання з сервером");
-    } finally {
-      setIsLoading(false);
+      const errorMessage =
+        error?.message || error?.data?.message || "Помилка входу через Google";
+      toast.error(errorMessage);
     }
   };
 
   const handleRoleSubmit = async () => {
     if (!pendingGoogleToken) return;
 
-    setIsLoading(true);
     try {
       const externalLoginData: ExternalLoginVM = {
         token: pendingGoogleToken,
@@ -101,21 +92,17 @@ const GoogleLogin: React.FC = () => {
         userRole: selectedRole,
       };
 
-      const result = await authService.externalLogin(externalLoginData);
-
-      if (!result.success) {
-        toast.error(result.message || "Помилка реєстрації через Google");
-      } else {
-        toast.success("Успішна реєстрація через Google!");
-        navigate("/");
-      }
-    } catch (error) {
-      console.error("Error during Google registration:", error);
-      toast.error("Помилка з'єднання з сервером");
-    } finally {
-      setIsLoading(false);
+      await externalLogin(externalLoginData).unwrap();
+      toast.success("Успішна реєстрація через Google!");
+      navigate("/");
       setShowRoleSelection(false);
       setPendingGoogleToken(null);
+    } catch (error: any) {
+      const errorMessage =
+        error?.message ||
+        error?.data?.message ||
+        "Помилка реєстрації через Google";
+      toast.error(errorMessage);
     }
   };
 

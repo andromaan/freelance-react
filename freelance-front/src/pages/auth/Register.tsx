@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import type { FormEvent, ChangeEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useSignUpMutation } from "../../services/auth/authApi";
 import { authService } from "../../services/auth.service";
 import type { SignUpVM, FormErrors, UserRole } from "../../types/auth.types";
 import { UserRoles } from "../../types/auth.types";
@@ -9,6 +10,7 @@ import GoogleLogin from "./GoogleLogin";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
+  const [signUp, { isLoading }] = useSignUpMutation();
 
   const [formValues, setFormValues] = useState({
     email: "",
@@ -18,7 +20,6 @@ const Register: React.FC = () => {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -63,7 +64,6 @@ const Register: React.FC = () => {
       return;
     }
 
-    setIsLoading(true);
     try {
       const signUpData: SignUpVM = {
         email: formValues.email,
@@ -72,18 +72,13 @@ const Register: React.FC = () => {
         userRole: formValues.userRole,
       };
 
-      const response = await authService.signUp(signUpData);
-
-      if (!response.success) {
-        toast.error(response.message || "Помилка реєстрації");
-      } else {
-        toast.success("Успішна реєстрація!");
-        navigate("/");
-      }
-    } catch (error) {
-      toast.error("Помилка з'єднання з сервером");
-    } finally {
-      setIsLoading(false);
+      await signUp(signUpData).unwrap();
+      toast.success("Успішна реєстрація!");
+      navigate("/");
+    } catch (error: any) {
+      const errorMessage =
+        error?.message || error?.data?.message || "Помилка реєстрації";
+      toast.error(errorMessage);
     }
   };
 
