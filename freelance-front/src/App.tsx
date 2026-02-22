@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Home from "./pages/Home";
+import Layout from "./components/layout/Layout";
 import { authService } from "./services/auth.service";
 import "./App.css";
 
@@ -33,9 +34,9 @@ function App() {
           <Route
             path="/"
             element={
-              <ProtectedRoute>
+              <Layout>
                 <Home />
-              </ProtectedRoute>
+              </Layout>
             }
           />
           <Route path="*" element={<Navigate to="/" replace />} />
