@@ -5,11 +5,14 @@ import "react-toastify/dist/ReactToastify.css";
 import AppRoutes from "./routes/AppRoutes";
 import { tokenStorage } from "./services/auth/tokenStorage";
 import { useGetMyselfQuery } from "./services/user/userApi";
+import { useNotificationHub } from "./hooks/useNotificationHub";
 import "./App.css";
 
-// Робить один запит при старті — заповнює Redux slice даними користувача
+// Робить один запит при старті та підключає SignalR
 const UserLoader: React.FC = () => {
-  useGetMyselfQuery(undefined, { skip: !tokenStorage.isAuthenticated() });
+  const isAuth = tokenStorage.isAuthenticated();
+  useGetMyselfQuery(undefined, { skip: !isAuth });
+  useNotificationHub(isAuth);
   return null;
 };
 

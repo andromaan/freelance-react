@@ -1,8 +1,9 @@
 import axios from "axios";
+import APP_ENV from "../env";
 
 // Створюємо екземпляр axios з базовою конфігурацією
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5126",
+  baseURL: APP_ENV.API_URL || "http://localhost:5126",
   headers: {
     "Content-Type": "application/json",
   },

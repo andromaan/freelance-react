@@ -5,6 +5,8 @@ import { tokenStorage } from "../../services/auth/tokenStorage";
 import { userApi } from "../../services/user/userApi";
 import { authApi } from "../../services/auth/authApi";
 import { selectCurrentUser, clearUser } from "../../store/userSlice";
+import { clearNotifications } from "../../store/notificationSlice";
+import NotificationBell from "../notifications/NotificationBell";
 import type { AppDispatch } from "../../store";
 import APP_ENV from "../../env";
 
@@ -34,6 +36,7 @@ const Navbar: React.FC = () => {
   const handleLogout = () => {
     tokenStorage.clearTokens();
     dispatch(clearUser());
+    dispatch(clearNotifications());
     dispatch(userApi.util.resetApiState());
     dispatch(authApi.util.resetApiState());
     navigate("/login");
@@ -92,62 +95,65 @@ const Navbar: React.FC = () => {
         {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center gap-3">
           {isAuthenticated ? (
-            <div className="relative" ref={userMenuRef}>
-              <button
-                onClick={() => setUserMenuOpen((v) => !v)}
-                className="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              >
-                {user?.avatarImg ? (
-                  <img
-                    src={`${APP_ENV.API_URL}/${user.avatarImg}`}
-                    alt="avatar"
-                    className="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-gray-700"
-                  />
-                ) : (
-                  <div className="w-8 h-8 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center">
-                    {avatarLetters}
+            <>
+              <NotificationBell />
+              <div className="relative" ref={userMenuRef}>
+                <button
+                  onClick={() => setUserMenuOpen((v) => !v)}
+                  className="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  {user?.avatarImg ? (
+                    <img
+                      src={`${APP_ENV.API_URL}/${user.avatarImg}`}
+                      alt="avatar"
+                      className="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-gray-700"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center">
+                      {avatarLetters}
+                    </div>
+                  )}
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-200 max-w-[120px] truncate">
+                    {user?.displayName ?? user?.email ?? "..."}
+                  </span>
+                  <svg
+                    className="w-4 h-4 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+
+                {userMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg py-1 z-50">
+                    <Link
+                      to="/profile"
+                      className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      Мій профіль
+                    </Link>
+                    <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setUserMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                    >
+                      Вийти
+                    </button>
                   </div>
                 )}
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-200 max-w-[120px] truncate">
-                  {user?.displayName ?? user?.email ?? "..."}
-                </span>
-                <svg
-                  className="w-4 h-4 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </button>
-
-              {userMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg py-1 z-50">
-                  <Link
-                    to="/profile"
-                    className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
-                    onClick={() => setUserMenuOpen(false)}
-                  >
-                    Мій профіль
-                  </Link>
-                  <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setUserMenuOpen(false);
-                    }}
-                    className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
-                  >
-                    Вийти
-                  </button>
-                </div>
-              )}
-            </div>
+              </div>
+            </>
           ) : (
             <>
               <Link
