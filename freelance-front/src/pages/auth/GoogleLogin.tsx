@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useExternalLoginMutation } from "../../services/auth/authApi";
 import { tokenStorage } from "../../services/auth/tokenStorage";
+import { useDispatch } from "react-redux";
+import { userApi } from "../../services/user/userApi";
+import type { AppDispatch } from "../../store";
 import type { ExternalLoginVM, UserRole } from "../../types/auth.types";
 import { UserRoles } from "../../types/auth.types";
 
@@ -45,6 +48,7 @@ interface GoogleButtonConfiguration {
 
 const GoogleLogin: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const [externalLogin, { isLoading }] = useExternalLoginMutation();
   const [googleApiLoaded, setGoogleApiLoaded] = useState(false);
   const [showRoleSelection, setShowRoleSelection] = useState(false);
@@ -67,6 +71,9 @@ const GoogleLogin: React.FC = () => {
       };
 
       await externalLogin(externalLoginData).unwrap();
+      dispatch(
+        userApi.endpoints.getMyself.initiate(undefined, { forceRefetch: true }),
+      );
       toast.success("Успішний вхід через Google!");
       navigate("/");
     } catch (error: any) {
@@ -93,6 +100,9 @@ const GoogleLogin: React.FC = () => {
       };
 
       await externalLogin(externalLoginData).unwrap();
+      dispatch(
+        userApi.endpoints.getMyself.initiate(undefined, { forceRefetch: true }),
+      );
       toast.success("Успішна реєстрація через Google!");
       navigate("/");
       setShowRoleSelection(false);

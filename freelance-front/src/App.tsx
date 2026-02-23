@@ -7,26 +7,27 @@ import Register from "./pages/auth/Register";
 import Home from "./pages/Home";
 import Layout from "./components/layout/Layout";
 import { tokenStorage } from "./services/auth/tokenStorage";
+import { useGetMyselfQuery } from "./services/user/userApi";
 import "./App.css";
 
-// Protected Route Component
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-}
+// Робить один запит при старті — заповнює Redux slice даними користувача
+const UserLoader: React.FC = () => {
+  useGetMyselfQuery(undefined, { skip: !tokenStorage.isAuthenticated() });
+  return null;
+};
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const isAuthenticated = tokenStorage.isAuthenticated();
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-
+// Protected Route Component — для майбутніх захищених маршрутів
+export const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  if (!tokenStorage.isAuthenticated()) return <Navigate to="/login" replace />;
   return <>{children}</>;
 };
 
 function App() {
   return (
     <BrowserRouter>
+      <UserLoader />
       <div className="App">
         <Routes>
           <Route path="/login" element={<Login />} />

@@ -4,12 +4,16 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSignUpMutation } from "../../services/auth/authApi";
 import { tokenStorage } from "../../services/auth/tokenStorage";
+import { useDispatch } from "react-redux";
+import { userApi } from "../../services/user/userApi";
+import type { AppDispatch } from "../../store";
 import type { SignUpVM, FormErrors, UserRole } from "../../types/auth.types";
 import { UserRoles } from "../../types/auth.types";
 import GoogleLogin from "./GoogleLogin";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const [signUp, { isLoading }] = useSignUpMutation();
 
   const [formValues, setFormValues] = useState({
@@ -73,6 +77,9 @@ const Register: React.FC = () => {
       };
 
       await signUp(signUpData).unwrap();
+      dispatch(
+        userApi.endpoints.getMyself.initiate(undefined, { forceRefetch: true }),
+      );
       toast.success("Успішна реєстрація!");
       navigate("/");
     } catch (error: any) {

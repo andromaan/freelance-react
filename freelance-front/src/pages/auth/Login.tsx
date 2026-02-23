@@ -4,11 +4,15 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSignInMutation } from "../../services/auth/authApi";
 import { tokenStorage } from "../../services/auth/tokenStorage";
+import { useDispatch } from "react-redux";
+import { userApi } from "../../services/user/userApi";
+import type { AppDispatch } from "../../store";
 import type { SignInVM, FormErrors } from "../../types/auth.types";
 import GoogleLogin from "./GoogleLogin";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const [signIn, { isLoading }] = useSignInMutation();
 
   const [formValues, setFormValues] = useState<SignInVM>({
@@ -59,6 +63,9 @@ const Login: React.FC = () => {
 
     try {
       await signIn(formValues).unwrap();
+      dispatch(
+        userApi.endpoints.getMyself.initiate(undefined, { forceRefetch: true }),
+      );
       toast.success("Успішний вхід!");
       navigate("/");
     } catch (error: any) {

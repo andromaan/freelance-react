@@ -1,23 +1,21 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { tokenStorage } from "../../services/auth/tokenStorage";
-import { useGetMyselfQuery } from "../../services/user/userApi";
 import { userApi } from "../../services/user/userApi";
 import { authApi } from "../../services/auth/authApi";
+import { selectCurrentUser, clearUser } from "../../store/userSlice";
 import type { AppDispatch } from "../../store";
+import APP_ENV from "../../env";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const isAuthenticated = tokenStorage.isAuthenticated();
+  const user = useSelector(selectCurrentUser);
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
-
-  const { data: user } = useGetMyselfQuery(undefined, {
-    skip: !isAuthenticated,
-  });
 
   // Close user dropdown on outside click
   useEffect(() => {
@@ -35,6 +33,7 @@ const Navbar: React.FC = () => {
 
   const handleLogout = () => {
     tokenStorage.clearTokens();
+    dispatch(clearUser());
     dispatch(userApi.util.resetApiState());
     dispatch(authApi.util.resetApiState());
     navigate("/login");
@@ -100,7 +99,7 @@ const Navbar: React.FC = () => {
               >
                 {user?.avatarImg ? (
                   <img
-                    src={user.avatarImg}
+                    src={`${APP_ENV.API_URL}/${user.avatarImg}`}
                     alt="avatar"
                     className="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-gray-700"
                   />
@@ -235,7 +234,7 @@ const Navbar: React.FC = () => {
                 <div className="flex items-center gap-3 py-2">
                   {user?.avatarImg ? (
                     <img
-                      src={user.avatarImg}
+                      src={`${APP_ENV.API_URL}/${user.avatarImg}`}
                       alt="avatar"
                       className="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-gray-700"
                     />

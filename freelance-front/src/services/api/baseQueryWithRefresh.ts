@@ -5,8 +5,9 @@ import type {
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query";
 import { tokenStorage } from "../auth/tokenStorage";
+import APP_ENV from "../../env";
 
-const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const baseUrl = APP_ENV.API_URL;
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl,
