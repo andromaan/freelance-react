@@ -3,7 +3,7 @@ import type { FormEvent, ChangeEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSignUpMutation } from "../../services/auth/authApi";
-import { authService } from "../../services/auth.service";
+import { tokenStorage } from "../../services/auth/tokenStorage";
 import type { SignUpVM, FormErrors, UserRole } from "../../types/auth.types";
 import { UserRoles } from "../../types/auth.types";
 import GoogleLogin from "./GoogleLogin";
@@ -83,7 +83,7 @@ const Register: React.FC = () => {
   };
 
   useEffect(() => {
-    if (authService.isAuthenticated()) {
+    if (tokenStorage.isAuthenticated()) {
       navigate("/");
     }
   }, [navigate]);

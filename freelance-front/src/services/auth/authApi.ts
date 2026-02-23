@@ -1,5 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithRefresh } from "../api/baseQueryWithRefresh";
+import { tokenStorage } from "./tokenStorage";
 import type {
   SignInVM,
   SignUpVM,
@@ -19,30 +20,23 @@ export const authApi = createApi({
         body: credentials,
       }),
       transformResponse: (response: any) => {
-        // Зберігаємо токени в localStorage
-        if (response.data) {
-          const tokens = response.data;
-          if (tokens.token) {
-            localStorage.setItem("token", tokens.token);
-          }
-          if (tokens.refreshToken) {
-            localStorage.setItem("refreshToken", tokens.refreshToken);
-          }
+        if (response.data?.accessToken) {
+          tokenStorage.setTokens(
+            response.data.accessToken,
+            response.data.refreshToken ?? "",
+          );
         }
-
         return {
           success: true,
           message: response.message || "Успішний вхід",
           data: response.data,
         };
       },
-      transformErrorResponse: (response: any) => {
-        return {
-          success: false,
-          message: response.data?.message || "Помилка входу",
-          data: response.data?.data,
-        };
-      },
+      transformErrorResponse: (response: any) => ({
+        success: false,
+        message: response.data?.message || "Помилка входу",
+        data: response.data?.data,
+      }),
     }),
 
     signUp: builder.mutation<AuthResponse, SignUpVM>({
@@ -52,30 +46,23 @@ export const authApi = createApi({
         body: userData,
       }),
       transformResponse: (response: any) => {
-        // Зберігаємо токени в localStorage
-        if (response.data) {
-          const tokens = response.data;
-          if (tokens.token) {
-            localStorage.setItem("token", tokens.token);
-          }
-          if (tokens.refreshToken) {
-            localStorage.setItem("refreshToken", tokens.refreshToken);
-          }
+        if (response.data?.accessToken) {
+          tokenStorage.setTokens(
+            response.data.accessToken,
+            response.data.refreshToken ?? "",
+          );
         }
-
         return {
           success: true,
           message: response.message || "Успішна реєстрація",
           data: response.data,
         };
       },
-      transformErrorResponse: (response: any) => {
-        return {
-          success: false,
-          message: response.data?.message || "Помилка реєстрації",
-          data: response.data?.data,
-        };
-      },
+      transformErrorResponse: (response: any) => ({
+        success: false,
+        message: response.data?.message || "Помилка реєстрації",
+        data: response.data?.data,
+      }),
     }),
 
     externalLogin: builder.mutation<AuthResponse, ExternalLoginVM>({
@@ -85,31 +72,23 @@ export const authApi = createApi({
         body: externalData,
       }),
       transformResponse: (response: any) => {
-        debugger;
-        // Зберігаємо токени в localStorage
-        if (response.data) {
-          const tokens = response.data;
-          if (tokens.token) {
-            localStorage.setItem("token", tokens.token);
-          }
-          if (tokens.refreshToken) {
-            localStorage.setItem("refreshToken", tokens.refreshToken);
-          }
+        if (response.data?.accessToken) {
+          tokenStorage.setTokens(
+            response.data.accessToken,
+            response.data.refreshToken ?? "",
+          );
         }
-
         return {
           success: true,
           message: response.message || "Успішний вхід через Google",
           data: response.data,
         };
       },
-      transformErrorResponse: (response: any) => {
-        return {
-          success: false,
-          message: response.data?.message || "Помилка авторизації через Google",
-          data: response.data?.data,
-        };
-      },
+      transformErrorResponse: (response: any) => ({
+        success: false,
+        message: response.data?.message || "Помилка авторизації через Google",
+        data: response.data?.data,
+      }),
     }),
   }),
 });

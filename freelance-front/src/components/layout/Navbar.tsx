@@ -1,16 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { authService } from "../../services/auth.service";
+import { useDispatch } from "react-redux";
+import { tokenStorage } from "../../services/auth/tokenStorage";
+import { useGetMyselfQuery } from "../../services/user/userApi";
+import { userApi } from "../../services/user/userApi";
+import { authApi } from "../../services/auth/authApi";
+import type { AppDispatch } from "../../store";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
-  const isAuthenticated = authService.isAuthenticated();
+  const dispatch = useDispatch<AppDispatch>();
+  const isAuthenticated = tokenStorage.isAuthenticated();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  const { data: user } = useGetMyselfQuery(undefined, {
+    skip: !isAuthenticated,
+  });
+
+  // Close user dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(e.target as Node)
+      ) {
+        setUserMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleLogout = () => {
-    authService.logout();
+    tokenStorage.clearTokens();
+    dispatch(userApi.util.resetApiState());
+    dispatch(authApi.util.resetApiState());
     navigate("/login");
   };
+
+  const avatarLetters = user?.displayName
+    ? user.displayName.slice(0, 2).toUpperCase()
+    : (user?.email?.slice(0, 2).toUpperCase() ?? "??");
 
   return (
     <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50 shadow-sm">
@@ -61,12 +93,62 @@ const Navbar: React.FC = () => {
         {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center gap-3">
           {isAuthenticated ? (
-            <button
-              onClick={handleLogout}
-              className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors px-3 py-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
-            >
-              Вийти
-            </button>
+            <div className="relative" ref={userMenuRef}>
+              <button
+                onClick={() => setUserMenuOpen((v) => !v)}
+                className="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                {user?.avatarImg ? (
+                  <img
+                    src={user.avatarImg}
+                    alt="avatar"
+                    className="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-gray-700"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center">
+                    {avatarLetters}
+                  </div>
+                )}
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-200 max-w-[120px] truncate">
+                  {user?.displayName ?? user?.email ?? "..."}
+                </span>
+                <svg
+                  className="w-4 h-4 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+
+              {userMenuOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg py-1 z-50">
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+                    onClick={() => setUserMenuOpen(false)}
+                  >
+                    Мій профіль
+                  </Link>
+                  <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setUserMenuOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                  >
+                    Вийти
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <>
               <Link
@@ -149,15 +231,40 @@ const Navbar: React.FC = () => {
           </Link>
           <div className="border-t border-gray-200 dark:border-gray-700 pt-2 mt-1 flex flex-col gap-2">
             {isAuthenticated ? (
-              <button
-                onClick={() => {
-                  handleLogout();
-                  setMenuOpen(false);
-                }}
-                className="text-left text-sm font-medium text-red-600 py-2"
-              >
-                Вийти
-              </button>
+              <>
+                <div className="flex items-center gap-3 py-2">
+                  {user?.avatarImg ? (
+                    <img
+                      src={user.avatarImg}
+                      alt="avatar"
+                      className="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-gray-700"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
+                      {avatarLetters}
+                    </div>
+                  )}
+                  <span className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
+                    {user?.displayName ?? user?.email ?? "..."}
+                  </span>
+                </div>
+                <Link
+                  to="/profile"
+                  className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Мій профіль
+                </Link>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setMenuOpen(false);
+                  }}
+                  className="text-left text-sm font-medium text-red-600 py-2"
+                >
+                  Вийти
+                </button>
+              </>
             ) : (
               <>
                 <Link

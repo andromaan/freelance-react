@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useExternalLoginMutation } from "../../services/auth/authApi";
-import { authService } from "../../services/auth.service";
+import { tokenStorage } from "../../services/auth/tokenStorage";
 import type { ExternalLoginVM, UserRole } from "../../types/auth.types";
 import { UserRoles } from "../../types/auth.types";
 
@@ -107,7 +107,7 @@ const GoogleLogin: React.FC = () => {
   };
 
   useEffect(() => {
-    if (authService.isAuthenticated()) {
+    if (tokenStorage.isAuthenticated()) {
       navigate("/");
       return;
     }

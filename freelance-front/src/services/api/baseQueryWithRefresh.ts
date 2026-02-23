@@ -4,13 +4,14 @@ import type {
   FetchArgs,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query";
+import { tokenStorage } from "../auth/tokenStorage";
 
 const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl,
   prepareHeaders: (headers) => {
-    const token = localStorage.getItem("token");
+    const token = tokenStorage.getAccessToken();
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }
@@ -27,12 +28,10 @@ export const baseQueryWithRefresh: BaseQueryFn<
 
   // Якщо отримали 401 помилку - спробуємо оновити токен
   if (result?.error?.status === 401) {
-    const refreshToken = localStorage.getItem("refreshToken");
+    const refreshToken = tokenStorage.getRefreshToken();
 
     if (!refreshToken) {
-      // Немає refresh токена - видаляємо все і редирект на логін
-      localStorage.removeItem("token");
-      localStorage.removeItem("refreshToken");
+      tokenStorage.clearTokens();
       return result;
     }
 
@@ -49,23 +48,20 @@ export const baseQueryWithRefresh: BaseQueryFn<
 
     if (refreshResult?.data) {
       const data = refreshResult.data as {
-        data?: { token?: string; refreshToken?: string };
+        data?: { accessToken?: string; refreshToken?: string };
       };
 
-      if (data.data?.token) {
-        // Зберігаємо новий токен
-        localStorage.setItem("token", data.data.token);
-        if (data.data.refreshToken) {
-          localStorage.setItem("refreshToken", data.data.refreshToken);
-        }
-
+      if (data.data?.accessToken) {
+        tokenStorage.setTokens(
+          data.data.accessToken,
+          data.data.refreshToken ?? "",
+        );
         // Повторюємо оригінальний запит з новим токеном
         result = await rawBaseQuery(args, api, extraOptions);
       }
     } else {
       // Не вдалося оновити токен - видаляємо все
-      localStorage.removeItem("token");
-      localStorage.removeItem("refreshToken");
+      tokenStorage.clearTokens();
     }
   }
 

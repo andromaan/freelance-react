@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { authService } from "../services/auth.service";
+import { tokenStorage } from "../services/auth/tokenStorage";
 
 const stats = [
   { value: "10,000+", label: "Фрілансерів" },
@@ -158,7 +158,7 @@ const howItWorks = [
 ];
 
 const Home: React.FC = () => {
-  const isAuthenticated = authService.isAuthenticated();
+  const isAuthenticated = tokenStorage.isAuthenticated();
 
   return (
     <>

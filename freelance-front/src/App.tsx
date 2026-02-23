@@ -6,7 +6,7 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Home from "./pages/Home";
 import Layout from "./components/layout/Layout";
-import { authService } from "./services/auth.service";
+import { tokenStorage } from "./services/auth/tokenStorage";
 import "./App.css";
 
 // Protected Route Component
@@ -15,7 +15,7 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const isAuthenticated = authService.isAuthenticated();
+  const isAuthenticated = tokenStorage.isAuthenticated();
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
