@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useExternalLoginMutation } from "../../services/auth/authApi";
-import { tokenStorage } from "../../services/auth/tokenStorage";
 import { useDispatch } from "react-redux";
 import { userApi } from "../../services/user/userApi";
 import type { AppDispatch } from "../../store";
@@ -117,11 +116,6 @@ const GoogleLogin: React.FC = () => {
   };
 
   useEffect(() => {
-    if (tokenStorage.isAuthenticated()) {
-      navigate("/");
-      return;
-    }
-
     const loadGoogleApi = () => {
       const script = document.createElement("script");
       script.src = "https://accounts.google.com/gsi/client?hl=uk";

@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import type { FormEvent, ChangeEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSignInMutation } from "../../services/auth/authApi";
-import { tokenStorage } from "../../services/auth/tokenStorage";
 import { useDispatch } from "react-redux";
 import { userApi } from "../../services/user/userApi";
 import type { AppDispatch } from "../../store";
@@ -74,12 +73,6 @@ const Login: React.FC = () => {
       toast.error(errorMessage);
     }
   };
-
-  useEffect(() => {
-    if (tokenStorage.isAuthenticated()) {
-      navigate("/");
-    }
-  }, [navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-5">
