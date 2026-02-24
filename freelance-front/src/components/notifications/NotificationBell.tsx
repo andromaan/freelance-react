@@ -8,6 +8,11 @@ import {
 } from "../../store/notificationSlice";
 import { NotificationTypeLabels } from "../../types/notification.types";
 import type { AppDispatch } from "../../store";
+import {
+  useToggleIsReadMutation,
+  useReadAllMutation,
+} from "../../services/notification/notificationApi";
+import { Link } from "react-router-dom";
 
 const formatTime = (iso: string) => {
   const date = new Date(iso);
@@ -26,7 +31,10 @@ const NotificationBell: React.FC = () => {
   const notifications = useSelector(selectNotifications);
   const unreadCount = useSelector(selectUnreadCount);
   const [open, setOpen] = useState(false);
+  const [leavingIds, setLeavingIds] = useState<Set<string>>(new Set());
   const ref = useRef<HTMLDivElement>(null);
+  const [toggleIsRead, { isLoading: toggling }] = useToggleIsReadMutation();
+  const [readAll, { isLoading: readingAll }] = useReadAllMutation();
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -38,12 +46,37 @@ const NotificationBell: React.FC = () => {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const handleOpen = () => {
-    setOpen((v) => !v);
+  const handleOpen = () => setOpen((v) => !v);
+
+  const handleMarkAll = async () => {
+    if (readingAll) return;
+    const unreadIds = notifications.filter((n) => !n.isRead).map((n) => n.id);
+    setLeavingIds(new Set(unreadIds));
+    setTimeout(async () => {
+      try {
+        await readAll().unwrap();
+      } finally {
+        dispatch(markAllAsRead());
+        setLeavingIds(new Set());
+      }
+    }, 300);
   };
 
-  const handleMarkAll = () => {
-    dispatch(markAllAsRead());
+  const handleMarkAsRead = async (id: string) => {
+    if (toggling || leavingIds.has(id)) return;
+    setLeavingIds((prev) => new Set(prev).add(id));
+    setTimeout(async () => {
+      try {
+        await toggleIsRead(id).unwrap();
+      } finally {
+        dispatch(markAsRead(id));
+        setLeavingIds((prev) => {
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
+      }
+    }, 300);
   };
 
   return (
@@ -79,13 +112,13 @@ const NotificationBell: React.FC = () => {
         <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-50 overflow-hidden">
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-700">
-            <span className="text-sm font-semibold text-gray-900 dark:text-white">
-              Сповіщення
-            </span>
+            <Link to="/notifications" className="text-sm font-semibold text-gray-900 dark:text-blue-400 hover:underline">
+              Всі Сповіщення
+            </Link>
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAll}
-                className="text-xs text-primary hover:underline"
+                className="text-xs text-gray-900 dark:text-blue-400 hover:underline"
               >
                 Позначити всі прочитаними
               </button>
@@ -112,37 +145,56 @@ const NotificationBell: React.FC = () => {
                 <p className="text-sm">Немає сповіщень</p>
               </div>
             ) : (
-              notifications.map((n) => (
-                <button
-                  key={n.id}
-                  onClick={() => dispatch(markAsRead(n.id))}
-                  className={`w-full text-left px-4 py-3 border-b border-gray-50 dark:border-gray-700/50 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors ${
-                    !n.isRead ? "bg-blue-50/60 dark:bg-blue-900/10" : ""
-                  }`}
-                >
-                  <div className="flex items-start gap-3">
-                    {/* Unread dot */}
-                    <div className="mt-1.5 flex-shrink-0">
-                      {!n.isRead ? (
-                        <span className="block w-2 h-2 rounded-full bg-primary" />
-                      ) : (
-                        <span className="block w-2 h-2 rounded-full bg-gray-200 dark:bg-gray-600" />
+              notifications.map((n) => {
+                const isLeaving = leavingIds.has(n.id);
+                return (
+                  <div
+                    key={n.id}
+                    className={`group relative border-b border-gray-50 dark:border-gray-700/50 last:border-0 overflow-hidden transition-all duration-300 ease-in-out ${
+                      isLeaving
+                        ? "opacity-0 max-h-0 py-0"
+                        : `opacity-100 max-h-40 ${!n.isRead ? "bg-blue-50/60 dark:bg-blue-900/10" : ""}`
+                    }`}
+                  >
+                    <div className="flex items-start gap-3 px-4 py-3">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-semibold text-primary mb-0.5">
+                          {NotificationTypeLabels[n.type] ?? "Сповіщення"}
+                        </p>
+                        <p className="text-sm text-gray-700 dark:text-gray-200 leading-snug">
+                          {n.message}
+                        </p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                          {formatTime(n.sentAt)}
+                        </p>
+                      </div>
+
+                      {/* Mark as read button — shown only for unread */}
+                      {!n.isRead && (
+                        <button
+                          onClick={() => handleMarkAsRead(n.id)}
+                          title="Позначити прочитаним"
+                          className="flex-shrink-0 mt-0.5 p-1 rounded-md text-gray-400 hover:text-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors opacity-0 group-hover:opacity-100"
+                        >
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                        </button>
                       )}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold text-primary mb-0.5">
-                        {NotificationTypeLabels[n.type] ?? "Сповіщення"}
-                      </p>
-                      <p className="text-sm text-gray-700 dark:text-gray-200 leading-snug">
-                        {n.message}
-                      </p>
-                      <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                        {formatTime(n.sentAt)}
-                      </p>
-                    </div>
                   </div>
-                </button>
-              ))
+                );
+              })
             )}
           </div>
         </div>
