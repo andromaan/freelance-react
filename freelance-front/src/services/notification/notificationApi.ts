@@ -48,19 +48,42 @@ export const notificationApi = createApi({
         url: `/Notification/is-not-read`,
         method: "GET",
       }),
-      transformResponse: (response: any) => response.data ?? response
+      transformResponse: (response: any) => response.data ?? response,
+      providesTags: ["Notification"],
     }),
     toggleIsRead: builder.mutation({
       query: (id: string) => ({
         url: `/Notification/${id}/toggle-read`,
         method: "PATCH",
       }),
+      invalidatesTags: ["Notification"],
     }),
     readAll: builder.mutation<void, void>({
       query: () => ({
         url: `/Notification/read-all`,
         method: "PATCH",
       }),
+      invalidatesTags: ["Notification"],
+    }),
+    getNotificationTypesEmployer: builder.query<
+      { name: string; value: number }[],
+      void
+    >({
+      query: () => ({
+        url: `/Notification/type-employer-enums`,
+        method: "GET",
+      }),
+      transformResponse: (response: any) => response.data ?? response,
+    }),
+    getNotificationTypesFreelancer: builder.query<
+      { name: string; value: number }[],
+      void
+    >({
+      query: () => ({
+        url: `/Notification/type-freelancer-enums`,
+        method: "GET",
+      }),
+      transformResponse: (response: any) => response.data ?? response,
     }),
   }),
 });
@@ -71,4 +94,6 @@ export const {
   useToggleIsReadMutation,
   useReadAllMutation,
   useGetAllNotReadQuery,
+  useGetNotificationTypesEmployerQuery,
+  useGetNotificationTypesFreelancerQuery,
 } = notificationApi;

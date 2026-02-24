@@ -35,7 +35,7 @@ class NotificationHubService {
 
   async start(): Promise<void> {
     if (!this.connection) return;
-    if (this.connection.state === HubConnectionState.Connected) return;
+    if (this.connection.state !== HubConnectionState.Disconnected) return;
     try {
       await this.connection.start();
     } catch (err) {

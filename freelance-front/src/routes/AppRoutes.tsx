@@ -13,9 +13,11 @@ import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
 
 // Route guards
-// ProtectedRoute використовується для захищених маршрутів (розкоментуйте приклад нижче)
-// import ProtectedRoute from "./ProtectedRoute";
+import ProtectedRoute from "./ProtectedRoute";
 import GuestRoute from "./GuestRoute";
+
+// Protected pages
+import Notifications from "../pages/notifications/Notifications";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -49,18 +51,16 @@ const AppRoutes: React.FC = () => {
       />
 
       {/* ── Захищені маршрути (потрібна авторизація) ─────────────────── */}
-      {/* Приклад:
       <Route
-        path="/profile"
+        path="/notifications"
         element={
           <ProtectedRoute>
             <Layout>
-              <Profile />
+              <Notifications />
             </Layout>
           </ProtectedRoute>
         }
       />
-      */}
 
       {/* ── Fallback ──────────────────────────────────────────────────── */}
       <Route path="*" element={<NotFound />} />

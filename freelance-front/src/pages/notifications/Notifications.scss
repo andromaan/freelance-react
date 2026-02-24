@@ -1,0 +1,53 @@
+// Тривалості анімацій
+$duration-page: 0.35s;
+$duration-item: 0.3s;
+$duration-empty: 0.4s;
+$easing: ease;
+
+// Page entrance animation
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Individual notification item entrance
+@keyframes itemEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Empty state entrance
+@keyframes emptyEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.notif-page-enter {
+  animation: pageEnter $duration-page $easing both;
+}
+
+.notif-item-enter {
+  animation: itemEnter $duration-item $easing both;
+}
+
+.notif-empty-enter {
+  animation: emptyEnter $duration-empty $easing both;
+}

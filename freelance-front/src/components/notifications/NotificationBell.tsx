@@ -112,13 +112,13 @@ const NotificationBell: React.FC = () => {
         <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-50 overflow-hidden">
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-700">
-            <Link to="/notifications" className="text-sm font-semibold text-gray-900 dark:text-blue-400 hover:underline">
-              Всі Сповіщення
-            </Link>
+            <span className="text-sm font-semibold text-gray-900 dark:text-white">
+              Сповіщення
+            </span>
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAll}
-                className="text-xs text-gray-900 dark:text-blue-400 hover:underline"
+                className="text-xs text-blue-400 hover:underline"
               >
                 Позначити всі прочитаними
               </button>
@@ -196,6 +196,17 @@ const NotificationBell: React.FC = () => {
                 );
               })
             )}
+          </div>
+
+          {/* Footer */}
+          <div className="px-4 py-2.5 border-t border-gray-100 dark:border-gray-700">
+            <Link
+              to="/notifications"
+              onClick={() => setOpen(false)}
+              className="block text-center text-xs text-blue-400 hover:underline"
+            >
+              Переглянути всі сповіщення
+            </Link>
           </div>
         </div>
       )}
