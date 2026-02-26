@@ -7,6 +7,7 @@ import { userApi } from "../../services/user/userApi";
 import type { AppDispatch } from "../../store";
 import type { ExternalLoginVM, UserRole } from "../../types/auth.types";
 import { UserRoles } from "../../types/auth.types";
+import APP_ENV from "../../env";
 
 // Типи для Google Identity Services
 declare global {
@@ -133,7 +134,7 @@ const GoogleLogin: React.FC = () => {
   useEffect(() => {
     if (googleApiLoaded && window.google) {
       // Отримуємо Client ID з змінних оточення
-      const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+      const clientId = APP_ENV.GOOGLE_CLIENT_ID;
 
       window.google.accounts.id.initialize({
         client_id: clientId,

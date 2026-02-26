@@ -7,7 +7,7 @@ import {
 import type { NotificationVM } from "../../types/notification.types";
 import APP_ENV from "../../env";
 
-const BASE_URL = APP_ENV.API_URL || "http://localhost:5000/api";
+const BASE_URL = APP_ENV.API_URL;
 // Hub знаходиться на корені, а не під /api
 const HUB_URL = BASE_URL + "/notifications";
 
