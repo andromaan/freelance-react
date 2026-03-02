@@ -13,6 +13,7 @@ import {
 } from "../../services/notification/notificationApi";
 import { NotificationTypeLabels } from "../../types/notification.types";
 import type { NotificationType } from "../../types/notification.types";
+import CustomSelect from "../../components/ui/CustomSelect";
 import "./Notifications.scss";
 
 const PAGE_SIZE = 10;
@@ -188,23 +189,16 @@ const Notifications: React.FC = () => {
 
         {/* Type filter */}
         {notificationTypes.length > 0 && (
-          <select
-            value={typeFilter ?? ""}
-            onChange={(e) =>
-              handleFilterChange(
-                isReadFilter,
-                e.target.value === "" ? null : Number(e.target.value),
-              )
-            }
-            className="px-4 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/30"
-          >
-            <option value="">Усі типи</option>
-            {notificationTypes.map((t) => (
-              <option key={t.value} value={t.value}>
-                {NotificationTypeLabels[t.value as NotificationType] ?? t.name}
-              </option>
-            ))}
-          </select>
+          <CustomSelect
+            options={notificationTypes.map((t) => ({
+              label:
+                NotificationTypeLabels[t.value as NotificationType] ?? t.name,
+              value: t.value,
+            }))}
+            value={typeFilter}
+            onChange={(v) => handleFilterChange(isReadFilter, v)}
+            placeholder="Усі типи"
+          />
         )}
       </div>
 

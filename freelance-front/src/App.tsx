@@ -28,7 +28,6 @@ const UserLoader: React.FC = () => {
 
   useEffect(() => {
     dispatch(addNotifications(paginatedNotifications));
-    console.log("Notifications from API:", paginatedNotifications);
   }, [paginatedNotifications, dispatch]);
 
   return null;
