@@ -6,5 +6,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
+    host: true,
+    strictPort: true,
+    origin: "localhost",
+    allowedHosts: ["localhost", "freelance-marketplace.pp.ua"],
   },
 });
