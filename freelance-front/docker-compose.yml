@@ -1,10 +1,14 @@
 services:
-     react:
-        image: androman/freelance-react:latest
-        restart: always
-        ports:
-            - "3000:3000"
-        environment:
-            VITE_API_URL: ${VITE_API_URL}
-            VITE_GOOGLE_CLIENT_ID: ${VITE_GOOGLE_CLIENT_ID}
-            VITE_STRIPE_PUBLISHABLE_KEY: ${VITE_STRIPE_PUBLISHABLE_KEY}
+  react:
+    # image: androman/freelance-react:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      DISABLE_HTTPS: "true"
+      VITE_API_URL: ${VITE_API_URL}
+      VITE_GOOGLE_CLIENT_ID: ${VITE_GOOGLE_CLIENT_ID}
+      VITE_STRIPE_PUBLISHABLE_KEY: ${VITE_STRIPE_PUBLISHABLE_KEY}

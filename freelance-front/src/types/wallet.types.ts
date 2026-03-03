@@ -4,7 +4,8 @@ export interface WalletBalanceVM {
 }
 
 export interface CreatePaymentIntentVM {
-  amount: number; // in cents
+  amount: number;
+  currency: string;
 }
 
 export interface CreatePaymentIntentResponse {
