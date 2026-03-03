@@ -5,6 +5,7 @@ import { userApi } from "../services/user/userApi";
 import userReducer from "./userSlice";
 import notificationReducer from "./notificationSlice";
 import { notificationApi } from "../services/notification/notificationApi";
+import { walletApi } from "../services/wallet/walletApi";
 
 export const store = configureStore({
   reducer: {
@@ -13,11 +14,17 @@ export const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     [notificationApi.reducerPath]: notificationApi.reducer,
+    [walletApi.reducerPath]: walletApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(authApi.middleware, userApi.middleware, notificationApi.middleware),
+    }).concat(
+      authApi.middleware,
+      userApi.middleware,
+      notificationApi.middleware,
+      walletApi.middleware,
+    ),
 });
 
 setupListeners(store.dispatch);

@@ -140,6 +140,13 @@ const Navbar: React.FC = () => {
                     >
                       Мій профіль
                     </Link>
+                    <Link
+                      to="/wallet"
+                      className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      Гаманець
+                    </Link>
                     <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
                     <button
                       onClick={() => {
