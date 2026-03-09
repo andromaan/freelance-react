@@ -126,9 +126,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
         {cardError && (
           <p className="text-red-500 text-xs mt-1.5">{cardError}</p>
         )}
-        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1.5">
-          Тестова картка: 4242 4242 4242 4242 · будь-яка дата · будь-який CVC
-        </p>
+        
       </div>
 
       {/* Дії */}
