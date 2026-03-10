@@ -97,6 +97,28 @@ const Navbar: React.FC = () => {
           {isAuthenticated ? (
             <>
               <NotificationBell />
+              <Link
+                to="/wallet"
+                className="text-gray-600 dark:text-gray-300 transition-colors p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                <svg
+                  className="w-6 h-6"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.8}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="2" y="6" width="20" height="16" rx="2" />
+                  <path d="M18,6V4.66a2,2,0,0,0-2.55-1.93L2.88,6.34" />
+                  <path
+                    fillRule="evenodd"
+                    d="M22,11.64H18.18A2.18,2.18,0,0,0,16,13.82h0A2.19,2.19,0,0,0,18.18,16H22"
+                  />
+                </svg>
+              </Link>
               <div className="relative" ref={userMenuRef}>
                 <button
                   onClick={() => setUserMenuOpen((v) => !v)}
