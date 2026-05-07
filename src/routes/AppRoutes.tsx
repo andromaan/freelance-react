@@ -17,7 +17,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import GuestRoute from "./GuestRoute";
 
 // Protected pages
-import Notifications from "../pages/notifications/Notifications";
+import Notifications from "../pages/notifications/NotificationsPage";
 import WalletPage from "../pages/wallet/WalletPage";
 
 const AppRoutes: React.FC = () => {

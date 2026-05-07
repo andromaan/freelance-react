@@ -132,7 +132,7 @@ const Notifications: React.FC = () => {
   );
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8 notif-page-enter">
+    <div className="max-w-3xl mx-auto px-4 py-8 notification-page-enter">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -244,7 +244,7 @@ const Notifications: React.FC = () => {
             />
           ))
         ) : notifications.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-gray-400 dark:text-gray-500 notif-empty-enter">
+          <div className="flex flex-col items-center justify-center py-20 text-gray-400 dark:text-gray-500 notification-empty-enter">
             <svg
               className="w-14 h-14 mb-3 opacity-30"
               fill="none"
@@ -269,7 +269,7 @@ const Notifications: React.FC = () => {
               return (
                 <div
                   key={n.id}
-                  className={`group flex items-start gap-4 p-4 rounded-xl border transition-all duration-300 notif-item-enter ${
+                  className={`group flex items-start gap-4 p-4 rounded-xl border transition-all duration-300 notification-item-enter ${
                     !n.isRead
                       ? "bg-blue-50/60 dark:bg-blue-900/10 border-blue-100 dark:border-blue-900/30"
                       : "bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700"

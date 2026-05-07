@@ -40,14 +40,14 @@ $easing: ease;
   }
 }
 
-.notif-page-enter {
+.notification-page-enter {
   animation: pageEnter $duration-page $easing both;
 }
 
-.notif-item-enter {
+.notification-item-enter {
   animation: itemEnter $duration-item $easing both;
 }
 
-.notif-empty-enter {
+.notification-empty-enter {
   animation: emptyEnter $duration-empty $easing both;
 }

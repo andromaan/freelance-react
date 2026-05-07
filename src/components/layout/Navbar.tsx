@@ -79,7 +79,7 @@ const Navbar: React.FC = () => {
             Головна
           </Link>
           <Link
-            to="/jobs"
+            to="/projects"
             className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors"
           >
             Вакансії
