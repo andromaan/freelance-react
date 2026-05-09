@@ -41,37 +41,27 @@ const AppRoutes: React.FC = () => {
         }
       />
 
-      {/* ── Публічні маршрути з Layout ────────────────────────────────── */}
-      <Route
-        path="/"
-        element={
-          <Layout>
-            <Home />
-          </Layout>
-        }
-      />
+      {/* ── Маршрути з Layout ─────────────────────────────────────────── */}
+      <Route element={<Layout />}>
+        <Route path="/" element={<Home />} />
 
-      {/* ── Захищені маршрути (потрібна авторизація) ─────────────────── */}
-      <Route
-        path="/notifications"
-        element={
-          <ProtectedRoute>
-            <Layout>
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute>
               <Notifications />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/wallet"
-        element={
-          <ProtectedRoute>
-            <Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/wallet"
+          element={
+            <ProtectedRoute>
               <WalletPage />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+            </ProtectedRoute>
+          }
+        />
+      </Route>
 
       {/* ── Fallback ──────────────────────────────────────────────────── */}
       <Route path="*" element={<NotFound />} />
