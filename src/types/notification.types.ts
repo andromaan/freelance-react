@@ -17,8 +17,8 @@ export type NotificationType =
 export const NotificationTypeLabels: Record<NotificationType, string> = {
   [NotificationType.NewBidReceived]: "Нова заявка",
   [NotificationType.NewMessage]: "Нове повідомлення",
-  [NotificationType.MilestoneApproved]: "Міленштейн затверджено",
-  [NotificationType.MilestoneRejected]: "Міленштейн відхилено",
+  [NotificationType.MilestoneApproved]: "Майлстон затверджено",
+  [NotificationType.MilestoneRejected]: "Майлстон відхилено",
   [NotificationType.ContractCreated]: "Контракт створено",
   [NotificationType.PaymentReceived]: "Платіж отримано",
   [NotificationType.DisputeOpened]: "Спір відкрито",
