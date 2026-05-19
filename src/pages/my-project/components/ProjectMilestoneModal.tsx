@@ -1,184 +1,480 @@
-import React, { useState, useEffect } from "react";
-import Modal from "../../../../components/ui/Modal";
+import React, { useState, useEffect, useId } from "react";
+import BaseModal from "../../../components/ui/BaseModal";
 import {
   useCreateProjectMilestoneMutation,
   useUpdateProjectMilestoneMutation,
-} from "../../../../services/project-milestones/project-milestonesApi";
-import type { ProjectMilestoneVM, CreateProjectMilestoneVM, UpdateProjectMilestoneVM } from "../../../../types/project-milestone.types";
+} from "../../../services/project-milestones/project-milestonesApi";
+import type {
+  ProjectMilestoneVM,
+  CreateProjectMilestoneVM,
+  UpdateProjectMilestoneVM,
+} from "../../../types/project-milestone.types";
+
+// ─── Types ─────────────────────────────────────────────────────────────────
 
 interface ProjectMilestoneModalProps {
   isOpen: boolean;
   onClose: () => void;
+  /** Required for CREATE mode; ignored in EDIT mode (taken from `milestone.projectId`) */
   projectId: string;
-  milestone?: ProjectMilestoneVM; // If provided, we're in EDIT mode
+  /** When provided, the modal operates in EDIT mode */
+  milestone?: ProjectMilestoneVM;
+  /** Called after successful create/update */
+  onSuccess?: () => void;
 }
 
+// ─── Form state ────────────────────────────────────────────────────────────
+
+interface FormState {
+  description: string;
+  amount: string;
+  dueDate: string;
+}
+
+interface FormErrors {
+  description?: string;
+  amount?: string;
+  dueDate?: string;
+}
+
+const EMPTY_FORM: FormState = {
+  description: "",
+  amount: "",
+  dueDate: "",
+};
+
+// ─── Helpers ───────────────────────────────────────────────────────────────
+
+function toInputDate(iso: string): string {
+  try {
+    return new Date(iso).toISOString().split("T")[0];
+  } catch {
+    return "";
+  }
+}
+
+function validate(values: FormState): FormErrors {
+  const errors: FormErrors = {};
+
+  if (!values.description.trim()) {
+    errors.description = "Description is required";
+  } else if (values.description.trim().length < 5) {
+    errors.description = "Description must be at least 5 characters long";
+  }
+
+  const amount = parseFloat(values.amount);
+  if (!values.amount || isNaN(amount)) {
+    errors.amount = "Please enter an amount";
+  } else if (amount <= 0) {
+    errors.amount = "Amount must be a positive number";
+  }
+
+  if (!values.dueDate) {
+    errors.dueDate = "Please specify the due date";
+  } else {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (new Date(values.dueDate) < today) {
+      errors.dueDate = "The date cannot be in the past";
+    }
+  }
+
+  return errors;
+}
+
+// ─── Reusable field components ─────────────────────────────────────────────
+
+interface FieldProps {
+  id: string;
+  label: string;
+  required?: boolean;
+  error?: string;
+  children: React.ReactNode;
+}
+
+const Field: React.FC<FieldProps> = ({
+  id,
+  label,
+  required,
+  error,
+  children,
+}) => {
+  const errorId = `${id}-error`;
+  return (
+    <div className="flex flex-col gap-1">
+      <label
+        htmlFor={id}
+        className="text-sm font-medium text-gray-700 dark:text-gray-300"
+      >
+        {label}
+        {required && (
+          <span
+            className="ml-1 text-red-500"
+            aria-hidden="true"
+            title="Required field"
+          >
+            *
+          </span>
+        )}
+      </label>
+
+      {/* Passes error-id down via cloneElement for aria-describedby */}
+      {React.isValidElement(children) &&
+        React.cloneElement(
+          children as React.ReactElement<{
+            "aria-describedby"?: string;
+            "aria-invalid"?: "true" | "false";
+          }>,
+          {
+            "aria-describedby": error ? errorId : undefined,
+            "aria-invalid": error ? "true" : undefined,
+          },
+        )}
+
+      {error && (
+        <p
+          id={errorId}
+          role="alert"
+          className="text-xs text-red-500 dark:text-red-400 flex items-center gap-1"
+        >
+          {/* Warning icon */}
+          <svg
+            className="w-3.5 h-3.5 flex-shrink-0"
+            aria-hidden="true"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
+              clipRule="evenodd"
+            />
+          </svg>
+          {error}
+        </p>
+      )}
+    </div>
+  );
+};
+
+const inputClass =
+  "w-full px-3 py-2 rounded-lg border text-sm " +
+  "bg-white dark:bg-gray-800 " +
+  "text-gray-900 dark:text-white " +
+  "border-gray-300 dark:border-gray-600 " +
+  "placeholder:text-gray-400 dark:placeholder:text-gray-500 " +
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary " +
+  "aria-[invalid=true]:border-red-400 dark:aria-[invalid=true]:border-red-500 " +
+  "transition-colors";
+
+// ─── Main component ────────────────────────────────────────────────────────
+
+/**
+ * Universal modal for creating and editing project milestones.
+ *
+ * Pass `milestone` to enter EDIT mode; omit it for CREATE mode.
+ * Fully WCAG 2.1 compliant via the underlying <BaseModal>.
+ *
+ * @example
+ * // Create
+ * <ProjectMilestoneModal isOpen={open} onClose={handleClose} projectId={id} />
+ *
+ * // Edit
+ * <ProjectMilestoneModal isOpen={open} onClose={handleClose} projectId={id} milestone={m} />
+ */
 const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
   isOpen,
   onClose,
   projectId,
   milestone,
+  onSuccess,
 }) => {
   const isEditing = !!milestone;
-  
-  const [createMilestone, { isLoading: isCreating }] = useCreateProjectMilestoneMutation();
-  const [updateMilestone, { isLoading: isUpdating }] = useUpdateProjectMilestoneMutation();
 
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    amount: 0,
-    dueDate: "",
-  });
+  const descriptionId = useId();
+  const amountId = useId();
+  const dueDateId = useId();
 
+  const [createMilestone, { isLoading: isCreating }] =
+    useCreateProjectMilestoneMutation();
+  const [updateMilestone, { isLoading: isUpdating }] =
+    useUpdateProjectMilestoneMutation();
+
+  const [form, setForm] = useState<FormState>(EMPTY_FORM);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [touched, setTouched] = useState<
+    Partial<Record<keyof FormState, boolean>>
+  >({});
+
+  // Reset form when modal opens/switches mode
   useEffect(() => {
-    if (isOpen) {
-      if (milestone) {
-        setFormData({
-          title: milestone.title,
-          description: milestone.description,
-          amount: milestone.amount,
-          dueDate: milestone.dueDate ? new Date(milestone.dueDate).toISOString().split('T')[0] : "",
-        });
-      } else {
-        setFormData({
-          title: "",
-          description: "",
-          amount: 0,
-          dueDate: "",
-        });
-      }
+    if (!isOpen) return;
+
+    setErrors({});
+    setSubmitError(null);
+    setTouched({});
+
+    if (milestone) {
+      setForm({
+        description: milestone.description ?? "",
+        amount: String(milestone.amount),
+        dueDate: milestone.dueDate ? toInputDate(milestone.dueDate) : "",
+      });
+    } else {
+      setForm(EMPTY_FORM);
     }
   }, [isOpen, milestone]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === "amount" ? Number(value) : value,
-    }));
+  // ── Handlers ──────────────────────────────────────────────────────────────
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target as {
+      name: keyof FormState;
+      value: string;
+    };
+    setForm((prev) => ({ ...prev, [name]: value }));
+
+    // Clear error on change if field was touched
+    if (touched[name]) {
+      const newErrors = validate({ ...form, [name]: value });
+      setErrors((prev) => ({ ...prev, [name]: newErrors[name] }));
+    }
+  };
+
+  const handleBlur = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name } = e.target as { name: keyof FormState };
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    const fieldErrors = validate(form);
+    setErrors((prev) => ({ ...prev, [name]: fieldErrors[name] }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError(null);
+
+    const validationErrors = validate(form);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      // Mark all as touched so all errors show
+      setTouched({ description: true, amount: true, dueDate: true });
+      return;
+    }
+
+    const dueDateISO = new Date(form.dueDate).toISOString();
+
     try {
-      if (isEditing && milestone?.id) {
-        const updatePayload: UpdateProjectMilestoneVM = {
-          title: formData.title,
-          description: formData.description,
-          amount: formData.amount,
-          dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : undefined,
+      if (isEditing && milestone) {
+        const payload: UpdateProjectMilestoneVM = {
+          id: milestone.id,
+          description: form.description.trim(),
+          amount: parseFloat(form.amount),
+          dueDate: dueDateISO,
         };
-        await updateMilestone({ id: milestone.id, data: updatePayload }).unwrap();
+        await updateMilestone({ id: milestone.id, data: payload }).unwrap();
       } else {
-        const createPayload: CreateProjectMilestoneVM = {
+        const payload: CreateProjectMilestoneVM = {
           projectId,
-          title: formData.title,
-          description: formData.description,
-          amount: formData.amount,
-          dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : undefined,
+          description: form.description.trim(),
+          amount: parseFloat(form.amount),
+          dueDate: dueDateISO,
         };
-        await createMilestone(createPayload).unwrap();
+        await createMilestone(payload).unwrap();
       }
+
+      onSuccess?.();
       onClose();
-    } catch (error) {
-      console.error("Failed to save milestone:", error);
+    } catch (err: any) {
+      const message =
+        err?.data?.message ??
+        err?.data?.title ??
+        "An error occurred. Please try again.";
+      setSubmitError(message);
     }
   };
 
   const isSubmitting = isCreating || isUpdating;
 
+  // ── Render ────────────────────────────────────────────────────────────────
+
   return (
-    <Modal
+    <BaseModal
       isOpen={isOpen}
       onClose={onClose}
-      title={isEditing ? "Редагувати етап (віху)" : "Створити новий етап"}
+      title={isEditing ? "Edit Milestone" : "New Project Milestone"}
+      description={
+        isEditing
+          ? "Update the details of the selected milestone"
+          : "Fill in the details to add a new milestone to the project"
+      }
+      size="md"
+      
+      // TODO 
+      // preventBackdropClose={isSubmitting}
+      preventBackdropClose
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Назва <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            required
-            value={formData.title}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
-            placeholder="Наприклад: Розробка дизайну"
-          />
-        </div>
+      <form
+        id="milestone-form"
+        onSubmit={handleSubmit}
+        noValidate
+        aria-label={
+          isEditing ? "Form for editing milestone" : "Form for creating milestone"
+        }
+        className="space-y-5"
+      >
+        {/* ── Server-level error ── */}
+        {submitError && (
+          <div
+            role="alert"
+            aria-live="assertive"
+            className="flex items-start gap-2 rounded-lg px-4 py-3 text-sm
+                       bg-red-50 dark:bg-red-900/20
+                       border border-red-200 dark:border-red-800
+                       text-red-700 dark:text-red-400"
+          >
+            <svg
+              className="w-4 h-4 flex-shrink-0 mt-0.5"
+              aria-hidden="true"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                clipRule="evenodd"
+              />
+            </svg>
+            {submitError}
+          </div>
+        )}
 
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Опис <span className="text-red-500">*</span>
-          </label>
+        {/* ── Description ── */}
+        <Field
+          id={descriptionId}
+          label="Description"
+          required
+          error={errors.description}
+        >
           <textarea
-            id="description"
+            id={descriptionId}
             name="description"
-            required
-            value={formData.description}
-            onChange={handleChange}
             rows={3}
-            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
-            placeholder="Деталі етапу..."
+            required
+            value={form.description}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="Milestone details (e.g., UI design development)..."
+            className={`${inputClass} resize-none`}
           />
-        </div>
+        </Field>
 
+        {/* ── Amount + Due date side by side ── */}
         <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="amount" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Сума ({'$'}) <span className="text-red-500">*</span>
-            </label>
+          <Field id={amountId} label="Amount ($)" required error={errors.amount}>
             <input
               type="number"
-              id="amount"
+              id={amountId}
               name="amount"
               required
-              min="1"
-              value={formData.amount || ""}
+              min="0.01"
+              step="0.01"
+              value={form.amount}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
+              onBlur={handleBlur}
+              placeholder="0.00"
+              className={inputClass}
             />
-          </div>
+          </Field>
 
-          <div>
-            <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Термін здачі <span className="text-red-500">*</span>
-            </label>
+          <Field
+            id={dueDateId}
+            label="Due Date"
+            required
+            error={errors.dueDate}
+          >
             <input
               type="date"
-              id="dueDate"
+              id={dueDateId}
               name="dueDate"
               required
-              value={formData.dueDate}
+              value={form.dueDate}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
+              onBlur={handleBlur}
+              min={new Date().toISOString().split("T")[0]}
+              className={inputClass}
             />
-          </div>
+          </Field>
         </div>
 
-        <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700 mt-6">
+        {/* ── Required field legend ── */}
+        <p className="text-xs text-gray-400 dark:text-gray-500">
+          <span aria-hidden="true">* </span>Required fields
+        </p>
+
+        {/* ── Actions ── */}
+        <div className="flex items-center justify-end gap-3 pt-2 border-t border-gray-100 dark:border-gray-700/60">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors border border-transparent"
             disabled={isSubmitting}
+            className="px-4 py-2 text-sm font-medium rounded-lg
+                       text-gray-700 dark:text-gray-300
+                       border border-gray-300 dark:border-gray-600
+                       hover:bg-gray-50 dark:hover:bg-gray-800
+                       focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60
+                       disabled:opacity-50 disabled:cursor-not-allowed
+                       transition-colors"
           >
-            Скасувати
+            Cancel
           </button>
+
           <button
             type="submit"
-            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors shadow-sm disabled:opacity-50"
+            form="milestone-form"
             disabled={isSubmitting}
+            aria-busy={isSubmitting}
+            className="inline-flex items-center gap-2 px-5 py-2 text-sm font-semibold rounded-lg
+                       bg-primary hover:bg-primary-hover text-white
+                       focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2
+                       disabled:opacity-60 disabled:cursor-not-allowed
+                       shadow-sm hover:shadow-md
+                       transition-all duration-150"
           >
-            {isSubmitting ? "Збереження..." : "Зберегти"}
+            {isSubmitting && (
+              <svg
+                className="w-4 h-4 animate-spin"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                />
+              </svg>
+            )}
+            {isSubmitting
+              ? "Saving..."
+              : isEditing
+                ? "Save Changes"
+                : "Create Milestone"}
           </button>
         </div>
       </form>
-    </Modal>
+    </BaseModal>
   );
 };
 

@@ -15,16 +15,16 @@ export type NotificationType =
   (typeof NotificationType)[keyof typeof NotificationType];
 
 export const NotificationTypeLabels: Record<NotificationType, string> = {
-  [NotificationType.NewBidReceived]: "Нова заявка",
-  [NotificationType.NewMessage]: "Нове повідомлення",
-  [NotificationType.MilestoneApproved]: "Майлстон затверджено",
-  [NotificationType.MilestoneRejected]: "Майлстон відхилено",
-  [NotificationType.ContractCreated]: "Контракт створено",
-  [NotificationType.PaymentReceived]: "Платіж отримано",
-  [NotificationType.DisputeOpened]: "Спір відкрито",
-  [NotificationType.ReviewLeft]: "Залишено відгук",
-  [NotificationType.SystemAnnouncement]: "Оголошення системи",
-  [NotificationType.ProjectDeadlineReminder]: "Нагадування про дедлайн",
+  [NotificationType.NewBidReceived]: "New Bid Received",
+  [NotificationType.NewMessage]: "New Message",
+  [NotificationType.MilestoneApproved]: "Milestone Approved",
+  [NotificationType.MilestoneRejected]: "Milestone Rejected",
+  [NotificationType.ContractCreated]: "Contract Created",
+  [NotificationType.PaymentReceived]: "Payment Received",
+  [NotificationType.DisputeOpened]: "Dispute Opened",
+  [NotificationType.ReviewLeft]: "Review Left",
+  [NotificationType.SystemAnnouncement]: "System Announcement",
+  [NotificationType.ProjectDeadlineReminder]: "Project Deadline Reminder",
 };
 
 export interface NotificationVM {

@@ -13,7 +13,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({
 }) => {
   return (
     <div className="bg-gradient-to-br from-primary to-blue-700 dark:from-blue-900 dark:to-blue-950 rounded-2xl p-6 text-white shadow-lg mb-6">
-      <p className="text-sm text-blue-100 mb-1">Поточний баланс</p>
+      <p className="text-sm text-blue-100 mb-1">Current Balance</p>
       {isLoading ? (
         <div className="h-9 w-32 bg-white/20 animate-pulse rounded-lg" />
       ) : (
@@ -38,7 +38,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({
             d="M12 4v16m8-8H4"
           />
         </svg>
-        Поповнити
+        Deposit
       </button>
     </div>
   );

@@ -24,7 +24,7 @@ export const useNotificationHub = (enabled: boolean) => {
     const handler = (notification: NotificationVM) => {
       dispatch(addNotification(notification));
 
-      const label = NotificationTypeLabels[notification.type] ?? "Сповіщення";
+      const label = NotificationTypeLabels[notification.type] ?? "Notification";
       toast.info(`${label}: ${notification.message}`, {
         position: "bottom-right",
         autoClose: 5000,

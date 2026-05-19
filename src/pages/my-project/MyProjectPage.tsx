@@ -46,7 +46,6 @@ const MyProjectPage: React.FC = () => {
 
   const bidsCount = project.bidsCount ?? 0;
   const quotesCount = project.quotesCount ?? 0;
-  const milestones = project.milestones ?? [];
 
   return (
     <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 font-sans pb-12 pt-8 px-4 sm:px-6 lg:px-8 transition-colors">
@@ -57,7 +56,7 @@ const MyProjectPage: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2 space-y-6">
-            <ProjectMilestones milestones={milestones} />
+            <ProjectMilestones projectId={project.id} />
           </div>
 
           <div className="md:col-span-1 space-y-6">

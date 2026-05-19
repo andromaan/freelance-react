@@ -79,19 +79,19 @@ const Navbar: React.FC = () => {
             to="/"
             className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors"
           >
-            Головна
+            Home
           </Link>
           <Link
             to="/projects"
             className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors"
           >
-            Вакансії
+            Projects
           </Link>
           <Link
             to="/freelancers"
             className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors"
           >
-            Фрілансери
+            Freelancers
           </Link>
         </div>
 
@@ -199,7 +199,7 @@ const Navbar: React.FC = () => {
                       className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
                       onClick={() => setUserMenuOpen(false)}
                     >
-                      Мій профіль
+                      My Profile
                     </Link>
                     {user?.role?.name === ROLES.EMPLOYER && (
                       <Link
@@ -207,7 +207,7 @@ const Navbar: React.FC = () => {
                         className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
                         onClick={() => setUserMenuOpen(false)}
                       >
-                        Мої проєкти
+                        My Projects
                       </Link>
                     )}
                     <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
@@ -218,7 +218,7 @@ const Navbar: React.FC = () => {
                       }}
                       className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
                     >
-                      Вийти
+                      Logout
                     </button>
                   </div>
                 )}
@@ -230,13 +230,13 @@ const Navbar: React.FC = () => {
                 to="/login"
                 className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
               >
-                Увійти
+                Login
               </Link>
               <Link
                 to="/register"
                 className="text-sm font-medium bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg transition-colors"
               >
-                Реєстрація
+                Register
               </Link>
             </>
           )}
@@ -288,21 +288,21 @@ const Navbar: React.FC = () => {
             className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
             onClick={() => setMenuOpen(false)}
           >
-            Головна
+            Home
           </Link>
           <Link
             to="/jobs"
             className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
             onClick={() => setMenuOpen(false)}
           >
-            Вакансії
+            Projects
           </Link>
           <Link
             to="/freelancers"
             className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
             onClick={() => setMenuOpen(false)}
           >
-            Фрілансери
+            Freelancers
           </Link>
           <div className="border-t border-gray-200 dark:border-gray-700 pt-2 mt-1 flex flex-col gap-2">
             {isAuthenticated ? (
@@ -328,7 +328,7 @@ const Navbar: React.FC = () => {
                   className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
                   onClick={() => setMenuOpen(false)}
                 >
-                  Мій профіль
+                  My Profile
                 </Link>
                 <button
                   onClick={() => {
@@ -337,7 +337,7 @@ const Navbar: React.FC = () => {
                   }}
                   className="text-left text-sm font-medium text-red-600 py-2"
                 >
-                  Вийти
+                  Logout
                 </button>
               </>
             ) : (
@@ -347,14 +347,14 @@ const Navbar: React.FC = () => {
                   className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
                   onClick={() => setMenuOpen(false)}
                 >
-                  Увійти
+                  Login
                 </Link>
                 <Link
                   to="/register"
                   className="bg-primary text-white text-sm font-medium py-2 px-4 rounded-lg text-center"
                   onClick={() => setMenuOpen(false)}
                 >
-                  Реєстрація
+                  Register
                 </Link>
               </>
             )}

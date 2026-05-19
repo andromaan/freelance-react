@@ -40,7 +40,7 @@ const NotificationItem: React.FC<Props> = ({
                 : "text-blue-600 dark:text-blue-400"
             }`}
           >
-            {NotificationTypeLabels[n.type] ?? "Сповіщення"}
+            {NotificationTypeLabels[n.type] ?? "Notifications"}
           </span>
           <span
             className={`text-xs text-gray-400 dark:text-gray-500 
@@ -57,7 +57,7 @@ const NotificationItem: React.FC<Props> = ({
       <button
         onClick={() => onToggle(n.id, n.isRead)}
         disabled={isToggling}
-        title={n.isRead ? "Позначити непрочитаним" : "Позначити прочитаним"}
+        title={n.isRead ? "Mark as unread" : "Mark as read"}
         className={`flex-shrink-0 p-1.5 rounded-lg transition-all duration-200 opacity-0 group-hover:opacity-100 disabled:cursor-not-allowed ${
           n.isRead
             ? "text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"

@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { tokenStorage } from "../services/auth/tokenStorage";
 
 const stats = [
-  { value: "10,000+", label: "Фрілансерів" },
-  { value: "5,000+", label: "Завершених проектів" },
-  { value: "2,000+", label: "Роботодавців" },
-  { value: "98%", label: "Задоволених клієнтів" },
+  { value: "10,000+", label: "Freelancers" },
+  { value: "5,000+", label: "Completed Projects" },
+  { value: "2,000+", label: "Employers" },
+  { value: "98%", label: "Satisfied Clients" },
 ];
 
 const categories = [
@@ -26,9 +26,9 @@ const categories = [
         />
       </svg>
     ),
-    title: "Розробка",
-    description: "Веб, мобільні додатки, API",
-    count: "1,200+ фрілансерів",
+    title: "Development",
+    description: "Web, mobile applications, API",
+    count: "1,200+ freelancers",
   },
   {
     icon: (
@@ -46,9 +46,9 @@ const categories = [
         />
       </svg>
     ),
-    title: "Дизайн",
-    description: "UI/UX, графіка, брендинг",
-    count: "850+ фрілансерів",
+    title: "Design",
+    description: "UI/UX, graphics, branding",
+    count: "850+ freelancers",
   },
   {
     icon: (
@@ -66,9 +66,9 @@ const categories = [
         />
       </svg>
     ),
-    title: "Контент",
-    description: "Тексти, копірайтинг, переклади",
-    count: "640+ фрілансерів",
+    title: "Content",
+    description: "Texts, copywriting, translations",
+    count: "640+ freelancers",
   },
   {
     icon: (
@@ -86,9 +86,9 @@ const categories = [
         />
       </svg>
     ),
-    title: "Маркетинг",
-    description: "SMM, SEO, реклама",
-    count: "500+ фрілансерів",
+    title: "Marketing",
+    description: "SMM, SEO, advertising",
+    count: "500+ freelancers",
   },
   {
     icon: (
@@ -106,9 +106,9 @@ const categories = [
         />
       </svg>
     ),
-    title: "Відео",
-    description: "Монтаж, анімація, motion",
-    count: "380+ фрілансерів",
+    title: "Video",
+    description: "Editing, animation, motion",
+    count: "380+ freelancers",
   },
   {
     icon: (
@@ -126,34 +126,34 @@ const categories = [
         />
       </svg>
     ),
-    title: "Консалтинг",
-    description: "Бізнес-аналіз, фінанси",
-    count: "290+ фрілансерів",
+    title: "Consulting",
+    description: "Business analysis, finance",
+    count: "290+ freelancers",
   },
 ];
 
 const howItWorks = [
   {
     step: "01",
-    title: "Зареєструйтесь",
-    description: "Створіть акаунт фрілансера або роботодавця за кілька хвилин.",
+    title: "Register",
+    description: "Create a freelancer or employer account in a few minutes.",
   },
   {
     step: "02",
-    title: "Знайдіть роботу або виконавця",
+    title: "Find Work or Freelancer",
     description:
-      "Переглядайте вакансії або профілі фрілансерів та оберіть найкращого.",
+      "Browse job postings or freelancer profiles and choose the best fit.",
   },
   {
     step: "03",
-    title: "Домовтеся і починайте",
-    description: "Узгодьте умови, підпишіть угоду та розпочніть проект.",
+    title: "Negotiate and Start",
+    description: "Negotiate terms, sign the agreement, and start the project.",
   },
   {
     step: "04",
-    title: "Отримайте результат",
+    title: "Receive Results",
     description:
-      "Виконавець здає роботу, ви підтверджуєте і оплачуєте через платформу.",
+      "The freelancer delivers the work, you confirm and pay through the platform.",
   },
 ];
 
@@ -166,14 +166,14 @@ const Home: React.FC = () => {
       <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 dark:from-gray-900 dark:via-blue-950 dark:to-gray-950 text-white py-20 sm:py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-            Знайдіть ідеального{" "}
-            <span className="text-blue-200">фрілансера</span>
+            Find the perfect{" "}
+            <span className="text-blue-200">freelancer</span>
             <br />
-            для вашого проекту
+            for your project
           </h1>
           <p className="text-lg sm:text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
-            Тисячі перевірених фахівців готові допомогти вашому бізнесу рости.
-            Швидко, безпечно, якісно.
+            Thousands of verified professionals are ready to help your business grow.
+            Fast, secure, quality.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {isAuthenticated ? (
@@ -182,13 +182,13 @@ const Home: React.FC = () => {
                   to="/jobs"
                   className="bg-white text-blue-700 font-semibold px-8 py-3.5 rounded-xl hover:bg-blue-50 transition-colors text-base"
                 >
-                  Знайти роботу
+                  Find Work
                 </Link>
                 <Link
                   to="/freelancers"
                   className="bg-blue-500/30 border border-white/30 text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-blue-500/50 transition-colors text-base"
                 >
-                  Знайти фрілансера
+                  Find Freelancer
                 </Link>
               </>
             ) : (
@@ -197,13 +197,13 @@ const Home: React.FC = () => {
                   to="/register"
                   className="bg-white text-blue-700 font-semibold px-8 py-3.5 rounded-xl hover:bg-blue-50 transition-colors text-base"
                 >
-                  Розпочати безкоштовно
+                  Start Free
                 </Link>
                 <Link
                   to="/login"
                   className="bg-blue-500/30 border border-white/30 text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-blue-500/50 transition-colors text-base"
                 >
-                  Увійти
+                  Login
                 </Link>
               </>
             )}
@@ -234,10 +234,10 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3">
-              Популярні категорії
+              Popular Categories
             </h2>
             <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
-              Знайдіть фахівця у будь-якій сфері
+              Find professionals in any field
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -272,10 +272,10 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3">
-              Як це працює
+              How It Works
             </h2>
             <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
-              Почніть працювати або шукати виконавців за 4 простих кроки
+              Get started by working or finding freelancers in 4 simple steps
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -301,24 +301,24 @@ const Home: React.FC = () => {
         <section className="py-16 bg-primary dark:bg-blue-900">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
             <h2 className="text-2xl sm:text-3xl font-bold mb-4">
-              Готові розпочати?
+              Ready to get started?
             </h2>
             <p className="text-blue-100 mb-8 text-base sm:text-lg max-w-xl mx-auto">
-              Приєднуйтесь до тисяч фрілансерів та роботодавців, які вже знайшли
-              один одного.
+              Join thousands of freelancers and clients who have already found
+              each other.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/register"
                 className="bg-white text-primary hover:bg-blue-50 font-semibold px-8 py-3.5 rounded-xl transition-colors text-base"
               >
-                Зареєструватись як фрілансер
+                Register as Freelancer
               </Link>
               <Link
                 to="/register"
                 className="bg-transparent border-2 border-white text-white hover:bg-white/10 font-semibold px-8 py-3.5 rounded-xl transition-colors text-base"
               >
-                Знайти виконавця
+                Find Freelancer
               </Link>
             </div>
           </div>

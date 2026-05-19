@@ -9,7 +9,7 @@ const NotificationsHeader: React.FC<Props> = ({ readingAll, onReadAll }) => {
   return (
     <div className="flex items-center justify-between mb-6">
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-        Сповіщення
+        Notifications
       </h1>
       <button
         onClick={onReadAll}
@@ -37,7 +37,7 @@ const NotificationsHeader: React.FC<Props> = ({ readingAll, onReadAll }) => {
             />
           </svg>
         )}
-        Позначити всі прочитаними
+        Mark all as read
       </button>
     </div>
   );

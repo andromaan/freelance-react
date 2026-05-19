@@ -105,7 +105,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
       {/* Сума */}
       <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl px-4 py-3 text-center">
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-0.5">
-          Сума поповнення
+          Enter Amount ({currency})
         </p>
         <p className="text-2xl font-bold text-primary">
           {formatCurrencyAmount(amount, currency)}
@@ -115,7 +115,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
       {/* Stripe CardElement */}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Дані картки
+          Card Details
         </label>
         <div className="border-2 border-gray-200 dark:border-gray-600 rounded-lg px-3 py-3 bg-white dark:bg-gray-800 focus-within:border-primary transition-colors">
           <CardElement
@@ -137,7 +137,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
           disabled={isLoading}
           className="flex-1 px-4 py-3 text-sm font-medium rounded-lg border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors"
         >
-          Скасувати
+          Cancel
         </button>
         <button
           type="submit"
@@ -165,7 +165,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
               />
             </svg>
           )}
-          {isLoading ? "Обробка…" : "Оплатити"}
+          {isLoading ? "Processing…" : "Pay"}
         </button>
       </div>
     </form>

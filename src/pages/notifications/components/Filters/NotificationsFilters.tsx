@@ -11,9 +11,9 @@ type Props = {
 };
 
 const isReadOptions = [
-  { label: "Всі", value: null },
-  { label: "Непрочитані", value: false },
-  { label: "Прочитані", value: true },
+  { label: "All", value: null },
+  { label: "Unread", value: false },
+  { label: "Read", value: true },
 ];
 
 const NotificationsFilters: React.FC<Props> = ({
@@ -49,7 +49,7 @@ const NotificationsFilters: React.FC<Props> = ({
           }))}
           value={typeFilter}
           onChange={(v) => onChange(isReadFilter, v)}
-          placeholder="Усі типи"
+          placeholder="All types"
         />
       )}
     </div>
