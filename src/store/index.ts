@@ -6,6 +6,7 @@ import userReducer from "./userSlice";
 import notificationReducer from "./notificationSlice";
 import { notificationApi } from "../services/notification/notificationApi";
 import { walletApi } from "../services/wallet/walletApi";
+import { projectsApi } from "../services/projects/projectsApi";
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
     [notificationApi.reducerPath]: notificationApi.reducer,
     [walletApi.reducerPath]: walletApi.reducer,
+    [projectsApi.reducerPath]: projectsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -24,6 +26,7 @@ export const store = configureStore({
       userApi.middleware,
       notificationApi.middleware,
       walletApi.middleware,
+      projectsApi.middleware,
     ),
 });
 

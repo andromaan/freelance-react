@@ -19,6 +19,7 @@ import GuestRoute from "./GuestRoute";
 // Protected pages
 import Notifications from "../pages/notifications/NotificationsPage";
 import WalletPage from "../pages/wallet/WalletPage";
+import MyProjectsPage from "../pages/my-projects/MyProjectsPage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -58,6 +59,15 @@ const AppRoutes: React.FC = () => {
           element={
             <ProtectedRoute>
               <WalletPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/my-projects"
+          element={
+            <ProtectedRoute>
+              <MyProjectsPage />
             </ProtectedRoute>
           }
         />

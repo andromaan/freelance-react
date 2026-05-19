@@ -79,7 +79,7 @@ const NotificationsList: React.FC<Props> = ({
         <div
           className={`space-y-2 transition-opacity duration-200 ${isFetching ? "opacity-50" : "opacity-100"}`}
         >
-          {notifications.map((n, idx) => {
+          {notifications.map((n, _) => {
             const isToggling = togglingIds.has(n.id);
             return (
               <NotificationItem

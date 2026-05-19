@@ -1,0 +1,165 @@
+import React from "react";
+import { ProjectStatus, type ProjectVM } from "../../../types/project.types";
+
+const ProjectCard: React.FC<{ project: ProjectVM }> = ({ project }) => {
+  const categoryName =
+    project.categories.length > 0
+      ? project.categories[0].name.toUpperCase()
+      : "GENERAL";
+
+  const deadlineDate = new Date(project.deadline).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+
+  const deadline = new Date(project.deadline);
+  const now = new Date();
+  const diffInMs = deadline.getTime() - now.getTime();
+  const msPerDay = 1000 * 60 * 60 * 24;
+  const diffInDays = Math.ceil(Math.abs(diffInMs) / msPerDay);
+
+  const isFuture = diffInMs >= 0;
+  let dueDate = "";
+  if (diffInDays < 31) {
+    dueDate = `${diffInDays} day${diffInDays === 1 ? "" : "s"} ${isFuture ? "left" : "ago"}`;
+  } else if (diffInDays < 365) {
+    const months = Math.floor(diffInDays / 30);
+    dueDate = `${months} month${months === 1 ? "" : "s"} ${isFuture ? "left" : "ago"}`;
+  } else {
+    const years = Math.floor(diffInDays / 365);
+    dueDate = `${years} year${years === 1 ? "" : "s"} ${isFuture ? "left" : "ago"}`;
+  }
+
+  const dueSoon = isFuture && diffInDays <= 3;
+  const dueClass = dueSoon ? "text-xs text-red-400" : "text-xs text-gray-400";
+
+  const getStatusText = () => {
+    const str = project.status;
+    const words = str.split(/(?=[A-Z])/);
+
+    return words.join(" ");
+  };
+
+  const isInProgress = project.status === ProjectStatus.InProgress;
+
+  return (
+    <div className="bg-[#1c1c1e] rounded-xl p-6 flex flex-col justify-between border border-[#2c2c2e] hover:border-gray-600 transition-colors">
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <span className="text-[10px] font-bold tracking-wider px-3 py-1 rounded-full bg-blue-900/40 text-blue-400">
+              {categoryName}
+            </span>
+            {project.status !== ProjectStatus.Completed && (
+              <span className={`${dueClass} flex items-center gap-1`}>
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                Due {dueDate}
+              </span>
+            )}
+          </div>
+          <button className="text-gray-500 hover:text-white transition-colors">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <h3 className="text-xl font-semibold text-white mb-1">
+          {project.title}
+        </h3>
+      </div>
+
+      <div className="mt-8">
+        {project.status === ProjectStatus.Completed ? (
+          <div className="flex items-center justify-between border-t border-gray-800 pt-4 mt-2">
+            <span className="flex items-center gap-2 text-sm text-blue-400 font-medium">
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+              DELIVERED
+            </span>
+            <span className="text-xs font-bold text-gray-500 uppercase">
+              Archive
+            </span>
+          </div>
+        ) : (
+          <>
+            {isInProgress ? (
+              <div className="flex items-end justify-between gap-4">
+                <div className="flex-1">
+                  <div className="flex justify-between mb-2">
+                    <div>
+                      <p className="text-[10px] text-gray-500 uppercase font-bold mb-0.5">
+                        Status
+                      </p>
+                      <p className="text-sm font-medium text-white">
+                        {getStatusText()}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-gray-500 uppercase font-bold mb-0.5">
+                        Deadline
+                      </p>
+                      <p className="text-sm font-medium text-white">
+                        {deadlineDate}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <button className="px-4 py-2 bg-white text-black text-sm font-semibold rounded-lg hover:bg-gray-200 transition-colors">
+                    VIEW DETAILS
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex justify-between items-center mt-3">
+                <span className="text-sm text-gray-400 font-medium">
+                  {getStatusText()}
+                </span>
+                <button className="text-[10px] font-bold text-blue-500 hover:text-blue-400 uppercase tracking-wider">
+                  Details
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ProjectCard;
