@@ -7,6 +7,9 @@ import notificationReducer from "./notificationSlice";
 import { notificationApi } from "../services/notification/notificationApi";
 import { walletApi } from "../services/wallet/walletApi";
 import { projectsApi } from "../services/projects/projectsApi";
+import { bidsApi } from "../services/bids/bidsApi";
+import { quotesApi } from "../services/quotes/quotesApi";
+import { projectMilestonesApi } from "../services/project-milestones/project-milestonesApi";
 
 export const store = configureStore({
   reducer: {
@@ -17,6 +20,9 @@ export const store = configureStore({
     [notificationApi.reducerPath]: notificationApi.reducer,
     [walletApi.reducerPath]: walletApi.reducer,
     [projectsApi.reducerPath]: projectsApi.reducer,
+    [bidsApi.reducerPath]: bidsApi.reducer,
+    [quotesApi.reducerPath]: quotesApi.reducer,
+    [projectMilestonesApi.reducerPath]: projectMilestonesApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -27,6 +33,9 @@ export const store = configureStore({
       notificationApi.middleware,
       walletApi.middleware,
       projectsApi.middleware,
+      bidsApi.middleware,
+      quotesApi.middleware,
+      projectMilestonesApi.middleware
     ),
 });
 
