@@ -17,7 +17,7 @@ const Tabs: React.FC<Props> = ({ activeTab, onTabChange, counts }) => {
   ];
 
   return (
-    <div className="flex items-center gap-6 border-b border-gray-800 mb-8 overflow-x-auto">
+    <div className="flex items-center gap-6 border-b border-gray-200 dark:border-gray-800 mb-8 overflow-x-auto">
       {tabs.map((tab) => {
         const isActive = activeTab === tab.value;
         const countKey = tab.value === null ? "all" : tab.value;
@@ -28,15 +28,15 @@ const Tabs: React.FC<Props> = ({ activeTab, onTabChange, counts }) => {
             className={`flex items-center gap-2 py-4 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
               isActive
                 ? "border-primary text-primary"
-                : "border-transparent text-gray-400 hover:text-gray-200"
+                : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             }`}
           >
             {tab.label}
             <span
               className={`text-xs px-2 py-0.5 rounded-full ${
                 isActive
-                  ? "bg-primary/20 text-primary"
-                  : "bg-gray-800 text-gray-500"
+                  ? "bg-blue-100 text-blue-600 dark:bg-primary/20 dark:text-primary"
+                  : "bg-gray-100 text-gray-500 dark:bg-gray-800"
               }`}
             >
               {counts[countKey] || 0}

@@ -44,11 +44,11 @@ const ProjectCard: React.FC<{ project: ProjectVM }> = ({ project }) => {
   const isInProgress = project.status === ProjectStatus.InProgress;
 
   return (
-    <div className="bg-[#1c1c1e] rounded-xl p-6 flex flex-col justify-between border border-[#2c2c2e] hover:border-gray-600 transition-colors">
+    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 flex flex-col justify-between border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 shadow-sm transition-colors">
       <div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <span className="text-[10px] font-bold tracking-wider px-3 py-1 rounded-full bg-blue-900/40 text-blue-400">
+            <span className="text-[10px] font-bold tracking-wider px-3 py-1 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
               {categoryName}
             </span>
             {project.status !== ProjectStatus.Completed && (
@@ -70,7 +70,7 @@ const ProjectCard: React.FC<{ project: ProjectVM }> = ({ project }) => {
               </span>
             )}
           </div>
-          <button className="text-gray-500 hover:text-white transition-colors">
+          <button className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors">
             <svg
               className="w-5 h-5"
               fill="none"
@@ -87,15 +87,15 @@ const ProjectCard: React.FC<{ project: ProjectVM }> = ({ project }) => {
           </button>
         </div>
 
-        <h3 className="text-xl font-semibold text-white mb-1">
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
           {project.title}
         </h3>
       </div>
 
       <div className="mt-8">
         {project.status === ProjectStatus.Completed ? (
-          <div className="flex items-center justify-between border-t border-gray-800 pt-4 mt-2">
-            <span className="flex items-center gap-2 text-sm text-blue-400 font-medium">
+          <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-4 mt-2">
+            <span className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 font-medium">
               <svg
                 className="w-4 h-4"
                 fill="none"
@@ -125,7 +125,7 @@ const ProjectCard: React.FC<{ project: ProjectVM }> = ({ project }) => {
                       <p className="text-[10px] text-gray-500 uppercase font-bold mb-0.5">
                         Status
                       </p>
-                      <p className="text-sm font-medium text-white">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
                         {getStatusText()}
                       </p>
                     </div>
@@ -133,24 +133,24 @@ const ProjectCard: React.FC<{ project: ProjectVM }> = ({ project }) => {
                       <p className="text-[10px] text-gray-500 uppercase font-bold mb-0.5">
                         Deadline
                       </p>
-                      <p className="text-sm font-medium text-white">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
                         {deadlineDate}
                       </p>
                     </div>
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <button className="px-4 py-2 bg-white text-black text-sm font-semibold rounded-lg hover:bg-gray-200 transition-colors">
+                  <button className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-hover transition-colors">
                     VIEW DETAILS
                   </button>
                 </div>
               </div>
             ) : (
               <div className="flex justify-between items-center mt-3">
-                <span className="text-sm text-gray-400 font-medium">
+                <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">
                   {getStatusText()}
                 </span>
-                <button className="text-[10px] font-bold text-blue-500 hover:text-blue-400 uppercase tracking-wider">
+                <button className="text-[10px] font-bold text-primary hover:opacity-80 uppercase tracking-wider transition-opacity">
                   Details
                 </button>
               </div>

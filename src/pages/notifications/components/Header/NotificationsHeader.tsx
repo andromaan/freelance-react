@@ -14,11 +14,11 @@ const NotificationsHeader: React.FC<Props> = ({ readingAll, onReadAll }) => {
       <button
         onClick={onReadAll}
         disabled={readingAll}
-        className="relative text-sm text-primary hover:underline disabled:opacity-50 flex items-center gap-2"
+        className="relative text-sm text-blue-400 hover:underline disabled:opacity-50 flex items-center gap-2"
       >
         {readingAll && (
           <svg
-            className="w-3.5 h-3.5 animate-spin text-primary"
+            className="w-3.5 h-3.5 animate-spin text-blue-400"
             fill="none"
             viewBox="0 0 24 24"
           >
