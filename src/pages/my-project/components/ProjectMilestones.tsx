@@ -5,6 +5,7 @@ import {
 } from "../../../services/project-milestones/project-milestonesApi";
 import type { ProjectMilestoneVM } from "../../../types/project-milestone.types";
 import ProjectMilestoneModal from "./ProjectMilestoneModal";
+import ConfirmModal from "../../../components/ui/ConfirmModal";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -175,6 +176,9 @@ const ProjectMilestones: React.FC<Props> = ({ projectId }) => {
     ProjectMilestoneVM | undefined
   >();
 
+  // ── Confirm-delete dialog state ──────────────────────────────────────────
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+
   const openCreate = () => {
     setEditingMilestone(undefined);
     setModalOpen(true);
@@ -185,8 +189,16 @@ const ProjectMilestones: React.FC<Props> = ({ projectId }) => {
     setModalOpen(true);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!window.confirm("Видалити цей етап?")) return;
+  /** Opens the confirmation dialog instead of window.confirm */
+  const handleDelete = (id: string) => {
+    setPendingDeleteId(id);
+  };
+
+  /** Called when the user confirms deletion in the modal */
+  const handleConfirmDelete = async () => {
+    if (!pendingDeleteId) return;
+    const id = pendingDeleteId;
+    setPendingDeleteId(null);
     try {
       await deleteMilestone(id).unwrap();
     } catch {
@@ -295,12 +307,24 @@ const ProjectMilestones: React.FC<Props> = ({ projectId }) => {
         )}
       </section>
 
-      {/* ── Modal ── */}
+      {/* ── Create / Edit Modal ── */}
       <ProjectMilestoneModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         projectId={projectId}
         milestone={editingMilestone}
+      />
+
+      {/* ── Confirm Delete Modal ── */}
+      <ConfirmModal
+        isOpen={pendingDeleteId !== null}
+        onClose={() => setPendingDeleteId(null)}
+        onConfirm={handleConfirmDelete}
+        title="Delete this milestone?"
+        description="This action cannot be undone. The milestone will be permanently deleted."
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        isLoading={isDeleting}
       />
     </>
   );
