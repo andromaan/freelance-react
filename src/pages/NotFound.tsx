@@ -9,7 +9,7 @@ const NotFound: React.FC = () => {
       <div className="text-center max-w-lg">
         {/* 404 number */}
         <div className="relative mb-6 select-none">
-          <span className="text-[160px] sm:text-[200px] font-black text-gray-100 dark:text-gray-800 leading-none block">
+          <span className="text-[160px] sm:text-[200px] font-black text-gray-400 dark:text-gray-800 leading-none block">
             404
           </span>
           <div className="absolute inset-0 flex mt-6 items-center justify-center">

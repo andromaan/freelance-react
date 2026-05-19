@@ -5,8 +5,8 @@ import {
   useCreatePaymentIntentMutation,
   useConfirmDepositMutation,
 } from "../../../../services/wallet/walletApi";
-import { useDarkMode } from "../../hooks/useDarkMode";
 import { toStripeAmount, formatCurrencyAmount } from "../../utils/currency";
+import { useTheme } from "../../../../hooks/useTheme";
 
 export interface CheckoutFormProps {
   amount: number;
@@ -23,7 +23,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
 }) => {
   const stripe = useStripe();
   const elements = useElements();
-  const isDark = useDarkMode();
+  const isDark = useTheme().theme === "dark";
 
   const cardElementOptions = {
     style: {
