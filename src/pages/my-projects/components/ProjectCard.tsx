@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { ProjectStatus, type ProjectVM } from "../../../types/project.types";
 
 const ProjectCard: React.FC<{ project: ProjectVM }> = ({ project }) => {
@@ -140,9 +141,12 @@ const ProjectCard: React.FC<{ project: ProjectVM }> = ({ project }) => {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <button className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-hover transition-colors">
+                  <Link
+                    to={`/my-projects/${project.id}`}
+                    className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-hover transition-colors inline-block"
+                  >
                     VIEW DETAILS
-                  </button>
+                  </Link>
                 </div>
               </div>
             ) : (
@@ -150,9 +154,12 @@ const ProjectCard: React.FC<{ project: ProjectVM }> = ({ project }) => {
                 <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">
                   {getStatusText()}
                 </span>
-                <button className="text-[10px] font-bold text-primary hover:opacity-80 uppercase tracking-wider transition-opacity">
+                <Link
+                  to={`/my-projects/${project.id}`}
+                  className="text-[10px] font-bold text-primary hover:opacity-80 uppercase tracking-wider transition-opacity inline-block"
+                >
                   Details
-                </button>
+                </Link>
               </div>
             )}
           </>

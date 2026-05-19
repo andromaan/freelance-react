@@ -20,6 +20,7 @@ import GuestRoute from "./GuestRoute";
 import Notifications from "../pages/notifications/NotificationsPage";
 import WalletPage from "../pages/wallet/WalletPage";
 import MyProjectsPage from "../pages/my-projects/MyProjectsPage";
+import MyProjectPage from "../pages/my-project/MyProjectPage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -68,6 +69,15 @@ const AppRoutes: React.FC = () => {
           element={
             <ProtectedRoute>
               <MyProjectsPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/my-projects/:projectId"
+          element={
+            <ProtectedRoute>
+              <MyProjectPage />
             </ProtectedRoute>
           }
         />

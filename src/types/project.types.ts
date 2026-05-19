@@ -1,5 +1,15 @@
 import type { CategoriesVM } from "./category.type";
 
+export interface MilestoneVM {
+  id: string;
+  projectId: string;
+  title: string;
+  description: string;
+  amount: number;
+  dueDate: string;
+  status: string;
+}
+
 export interface ProjectVM {
   id: string;
   title: string;
@@ -8,6 +18,11 @@ export interface ProjectVM {
   deadline: string;
   categories: CategoriesVM[];
   status: ProjectStatus;
+
+  // Optional counts for UI
+  bidsCount?: number;
+  quotesCount?: number;
+  milestones?: MilestoneVM[];
 }
 
 export const ProjectStatus = {

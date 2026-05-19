@@ -7,6 +7,14 @@ export const projectsApi = createApi({
   baseQuery: baseQueryWithRefresh,
   tagTypes: ["Project"],
   endpoints: (builder) => ({
+    getProjectById: builder.query<ProjectVM, string>({
+      query: (id) => ({
+        url: `/Project/${id}`,
+        method: "GET",
+      }),
+      transformResponse: (response: any) => response.data ?? response,
+      providesTags: (result, error, id) => [{ type: "Project", id }],
+    }),
     getProjectsByEmployer: builder.query<ProjectVM[], void>({
       query: () => ({
         url: `/Project/by-employer`,
@@ -15,9 +23,8 @@ export const projectsApi = createApi({
       transformResponse: (response: any) => response.data ?? response,
       providesTags: ["Project"],
     }),
-})
+  }),
 });
 
-export const {
-  useGetProjectsByEmployerQuery,
-} = projectsApi;
+export const { useGetProjectByIdQuery, useGetProjectsByEmployerQuery } =
+  projectsApi;
