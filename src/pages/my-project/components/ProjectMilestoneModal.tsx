@@ -9,6 +9,7 @@ import type {
   CreateProjectMilestoneVM,
   UpdateProjectMilestoneVM,
 } from "../../../types/project-milestone.types";
+import { FormField, inputClass } from "../../../components/ui/FormKit";
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -81,91 +82,6 @@ function validate(values: FormState): FormErrors {
 
   return errors;
 }
-
-// ─── Reusable field components ─────────────────────────────────────────────
-
-interface FieldProps {
-  id: string;
-  label: string;
-  required?: boolean;
-  error?: string;
-  children: React.ReactNode;
-}
-
-const Field: React.FC<FieldProps> = ({
-  id,
-  label,
-  required,
-  error,
-  children,
-}) => {
-  const errorId = `${id}-error`;
-  return (
-    <div className="flex flex-col gap-1">
-      <label
-        htmlFor={id}
-        className="text-sm font-medium text-gray-700 dark:text-gray-300"
-      >
-        {label}
-        {required && (
-          <span
-            className="ml-1 text-red-500"
-            aria-hidden="true"
-            title="Required field"
-          >
-            *
-          </span>
-        )}
-      </label>
-
-      {/* Passes error-id down via cloneElement for aria-describedby */}
-      {React.isValidElement(children) &&
-        React.cloneElement(
-          children as React.ReactElement<{
-            "aria-describedby"?: string;
-            "aria-invalid"?: "true" | "false";
-          }>,
-          {
-            "aria-describedby": error ? errorId : undefined,
-            "aria-invalid": error ? "true" : undefined,
-          },
-        )}
-
-      {error && (
-        <p
-          id={errorId}
-          role="alert"
-          className="text-xs text-red-500 dark:text-red-400 flex items-center gap-1"
-        >
-          {/* Warning icon */}
-          <svg
-            className="w-3.5 h-3.5 flex-shrink-0"
-            aria-hidden="true"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
-              clipRule="evenodd"
-            />
-          </svg>
-          {error}
-        </p>
-      )}
-    </div>
-  );
-};
-
-const inputClass =
-  "w-full px-3 py-2 rounded-lg border text-sm " +
-  "bg-white dark:bg-gray-800 " +
-  "text-gray-900 dark:text-white " +
-  "border-gray-300 dark:border-gray-600 " +
-  "placeholder:text-gray-400 dark:placeholder:text-gray-500 " +
-  "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary " +
-  "aria-[invalid=true]:border-red-400 dark:aria-[invalid=true]:border-red-500 " +
-  "transition-colors";
 
 // ─── Main component ────────────────────────────────────────────────────────
 
@@ -312,8 +228,7 @@ const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
           : "Fill in the details to add a new milestone to the project"
       }
       size="md"
-      
-      // TODO 
+      // TODO
       // preventBackdropClose={isSubmitting}
       preventBackdropClose
     >
@@ -322,7 +237,9 @@ const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
         onSubmit={handleSubmit}
         noValidate
         aria-label={
-          isEditing ? "Form for editing milestone" : "Form for creating milestone"
+          isEditing
+            ? "Form for editing milestone"
+            : "Form for creating milestone"
         }
         className="space-y-5"
       >
@@ -353,7 +270,7 @@ const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
         )}
 
         {/* ── Description ── */}
-        <Field
+        <FormField
           id={descriptionId}
           label="Description"
           required
@@ -370,11 +287,16 @@ const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
             placeholder="Milestone details (e.g., UI design development)..."
             className={`${inputClass} resize-none`}
           />
-        </Field>
+        </FormField>
 
         {/* ── Amount + Due date side by side ── */}
         <div className="grid grid-cols-2 gap-4">
-          <Field id={amountId} label="Amount ($)" required error={errors.amount}>
+          <FormField
+            id={amountId}
+            label="Amount ($)"
+            required
+            error={errors.amount}
+          >
             <input
               type="number"
               id={amountId}
@@ -388,9 +310,9 @@ const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
               placeholder="0.00"
               className={inputClass}
             />
-          </Field>
+          </FormField>
 
-          <Field
+          <FormField
             id={dueDateId}
             label="Due Date"
             required
@@ -407,7 +329,7 @@ const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
               min={new Date().toISOString().split("T")[0]}
               className={inputClass}
             />
-          </Field>
+          </FormField>
         </div>
 
         {/* ── Required field legend ── */}

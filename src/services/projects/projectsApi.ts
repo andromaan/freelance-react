@@ -4,6 +4,7 @@ import type {
   ProjectVM,
   UpdateProjectVM,
   UpdateProjectCategoriesVM,
+  CreateProjectVM,
 } from "../../types/project.types";
 import type { ApiResponse } from "../../types/response.types";
 
@@ -28,6 +29,17 @@ export const projectsApi = createApi({
       }),
       transformResponse: (response: { data: ProjectVM[] }) => response.data ?? response,
       providesTags: ["Project"],
+    }),
+
+    // POST /Project  — create new project
+    createProject: builder.mutation<ApiResponse<ProjectVM>, CreateProjectVM>({
+      query: (data) => ({
+        url: `/Project`,
+        method: "POST",
+        body: data,
+      }),
+      transformResponse: (response: ApiResponse<ProjectVM>) => response,
+      invalidatesTags: ["Project"],
     }),
 
     // PUT /Project/:id  — update title, description, budget, deadline
@@ -55,6 +67,12 @@ export const projectsApi = createApi({
         { type: "Project", id: projectId },
       ],
     }),
+
+    // DELETE /Project/:id
+    deleteProject: builder.mutation<void, string>({
+      query: (id) => ({ url: `/Project/${id}`, method: "DELETE" }),
+      invalidatesTags: ["Project"],
+    }),
   }),
 });
 
@@ -63,4 +81,6 @@ export const {
   useGetProjectsByEmployerQuery,
   useUpdateProjectMutation,
   useUpdateProjectCategoriesMutation,
+  useCreateProjectMutation,
+  useDeleteProjectMutation,
 } = projectsApi;

@@ -1,6 +1,10 @@
 import React from "react";
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  onCreateClick?: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onCreateClick }) => {
   return (
     <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-8 transition-colors">
       <div>
@@ -29,7 +33,10 @@ const Header: React.FC = () => {
           </svg>
           Filter & Sort
         </button>
-        <button className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 dark:hover:opacity-90 transition-colors text-sm font-medium">
+        <button
+          onClick={onCreateClick}
+          className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 dark:hover:opacity-90 transition-colors text-sm font-medium"
+        >
           <svg
             className="w-4 h-4"
             fill="none"

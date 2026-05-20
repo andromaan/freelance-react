@@ -44,3 +44,11 @@ export interface UpdateProjectVM {
 export interface UpdateProjectCategoriesVM {
   categoryIds: number[];
 }
+
+export interface CreateProjectVM {
+  title: string;
+  description: string;
+  budget: number;
+  deadline: string;
+  categoryIds: number[];
+}
