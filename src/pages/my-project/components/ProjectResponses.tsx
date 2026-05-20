@@ -1,17 +1,63 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useGetBidsByProjectQuery } from "../../../services/bids/bidsApi";
+import { useGetQuotesByProjectQuery } from "../../../services/quotes/quotesApi";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Props {
   projectId: string;
-  bidsCount: number;
-  quotesCount: number;
 }
 
-const ProjectResponses: React.FC<Props> = ({
-  projectId,
-  bidsCount,
-  quotesCount,
-}) => {
+// ─── Skeleton counter ─────────────────────────────────────────────────────────
+
+const CountSkeleton: React.FC = () => (
+  <span
+    className="block mx-auto mb-1 h-9 w-10 rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse"
+    aria-hidden="true"
+  />
+);
+
+// ─── Single stat cell ─────────────────────────────────────────────────────────
+
+interface StatCellProps {
+  to: string;
+  count: number;
+  isLoading: boolean;
+  label: string;
+  color: string; // Tailwind text-* class
+}
+
+const StatCell: React.FC<StatCellProps> = ({ to, count, isLoading, label, color }) => (
+  <Link
+    to={to}
+    aria-label={`${count} ${label}`}
+    className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors group flex flex-col items-center"
+  >
+    {isLoading ? (
+      <CountSkeleton />
+    ) : (
+      <span
+        className={`block text-3xl font-bold ${color} mb-1 group-hover:scale-110 transition-transform tabular-nums`}
+      >
+        {count}
+      </span>
+    )}
+    <span className="text-xs text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-widest">
+      {label}
+    </span>
+  </Link>
+);
+
+// ─── Main component ────────────────────────────────────────────────────────────
+
+const ProjectResponses: React.FC<Props> = ({ projectId }) => {
+  const { data: bids = [], isLoading: isBidsLoading } =
+    useGetBidsByProjectQuery(projectId, { skip: !projectId });
+
+  const { data: quotes = [], isLoading: isQuotesLoading } =
+    useGetQuotesByProjectQuery(projectId, { skip: !projectId });
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
       <div className="p-4 border-b border-gray-100 dark:border-gray-700">
@@ -19,33 +65,26 @@ const ProjectResponses: React.FC<Props> = ({
           Responses
         </h3>
       </div>
-      <div className="grid grid-cols-2 divide-x divide-gray-100 dark:divide-gray-700 text-center">
-        <Link
-          to={`/my-projects/${projectId}/bids`}
-          className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors group"
-        >
-          <span className="block text-3xl font-bold text-primary mb-1 group-hover:scale-110 transition-transform">
-            {bidsCount}
-          </span>
-          <span className="text-xs text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-widest">
-            Bids
-          </span>
-        </Link>
 
-        <Link
+      <div className="grid grid-cols-2 divide-x divide-gray-100 dark:divide-gray-700 text-center">
+        <StatCell
+          to={`/my-projects/${projectId}/bids`}
+          count={bids.length}
+          isLoading={isBidsLoading}
+          label="Bids"
+          color="text-primary"
+        />
+        <StatCell
           to={`/my-projects/${projectId}/quotes`}
-          className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors group"
-        >
-          <span className="block text-3xl font-bold text-green-500 mb-1 group-hover:scale-110 transition-transform">
-            {quotesCount}
-          </span>
-          <span className="text-xs text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-widest">
-            Quotes
-          </span>
-        </Link>
+          count={quotes.length}
+          isLoading={isQuotesLoading}
+          label="Quotes"
+          color="text-green-500"
+        />
       </div>
     </div>
   );
 };
 
 export default ProjectResponses;
+
