@@ -21,6 +21,8 @@ import Notifications from "../pages/notifications/NotificationsPage";
 import WalletPage from "../pages/wallet/WalletPage";
 import MyProjectsPage from "../pages/my-projects/MyProjectsPage";
 import MyProjectPage from "../pages/my-project/MyProjectPage";
+import ProjectBidsPage from "../pages/my-project/ProjectBidsPage";
+import ProjectQuotesPage from "../pages/my-project/ProjectQuotesPage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -78,6 +80,24 @@ const AppRoutes: React.FC = () => {
           element={
             <ProtectedRoute>
               <MyProjectPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/my-projects/:projectId/bids"
+          element={
+            <ProtectedRoute>
+              <ProjectBidsPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/my-projects/:projectId/quotes"
+          element={
+            <ProtectedRoute>
+              <ProjectQuotesPage />
             </ProtectedRoute>
           }
         />

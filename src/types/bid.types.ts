@@ -6,4 +6,5 @@ export interface BidVM {
     message: string;
     createdAt: string;
     updatedAt: string;
+    createdBy: string;
 }

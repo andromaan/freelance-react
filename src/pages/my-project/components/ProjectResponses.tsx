@@ -28,7 +28,13 @@ interface StatCellProps {
   color: string; // Tailwind text-* class
 }
 
-const StatCell: React.FC<StatCellProps> = ({ to, count, isLoading, label, color }) => (
+const StatCell: React.FC<StatCellProps> = ({
+  to,
+  count,
+  isLoading,
+  label,
+  color,
+}) => (
   <Link
     to={to}
     aria-label={`${count} ${label}`}
@@ -87,4 +93,3 @@ const ProjectResponses: React.FC<Props> = ({ projectId }) => {
 };
 
 export default ProjectResponses;
-

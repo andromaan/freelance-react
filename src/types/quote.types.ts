@@ -6,4 +6,5 @@ export interface QuoteVM {
     message: string;
     createdAt: string;
     updatedAt: string;
+    createdBy: string;
 }
