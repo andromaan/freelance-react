@@ -40,13 +40,13 @@ const Login: React.FC = () => {
     const newErrors: FormErrors = {};
 
     if (!formValues.email) {
-      newErrors.email = "Обов'язкове поле";
+      newErrors.email = "Required field";
     } else if (!/\S+@\S+\.\S+/.test(formValues.email)) {
-      newErrors.email = "Некоректний email";
+      newErrors.email = "Invalid email";
     }
 
     if (!formValues.password) {
-      newErrors.password = "Обов'язкове поле";
+      newErrors.password = "Required field";
     }
 
     setErrors(newErrors);
@@ -65,11 +65,11 @@ const Login: React.FC = () => {
       dispatch(
         userApi.endpoints.getMyself.initiate(undefined, { forceRefetch: true }),
       );
-      toast.success("Успішний вхід!");
+      toast.success("Successfully logged in!");
       navigate("/");
     } catch (error: any) {
       const errorMessage =
-        error?.message || error?.data?.message || "Помилка входу";
+        error?.message || error?.data?.message || "Error logging in";
       toast.error(errorMessage);
     }
   };
@@ -79,7 +79,7 @@ const Login: React.FC = () => {
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-8 w-full max-w-md shadow-lg">
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <h1 className="text-gray-900 dark:text-white text-2xl font-semibold mb-6 text-center">
-            Вхід
+            Login to Your Account
           </h1>
 
           <div className="w-full">
@@ -100,7 +100,7 @@ const Login: React.FC = () => {
                   ? "border-red-500 focus:border-red-500"
                   : "border-gray-200 dark:border-gray-600 focus:border-primary"
               }`}
-              placeholder="Введіть email"
+              placeholder="Enter email"
               disabled={isLoading}
             />
             {errors.email && (
@@ -113,7 +113,7 @@ const Login: React.FC = () => {
               htmlFor="password"
               className="text-gray-700 dark:text-gray-300 text-sm font-medium mb-2 block"
             >
-              Пароль
+              Password
             </label>
             <input
               id="password"
@@ -126,7 +126,7 @@ const Login: React.FC = () => {
                   ? "border-red-500 focus:border-red-500"
                   : "border-gray-200 dark:border-gray-600 focus:border-primary"
               }`}
-              placeholder="Введіть пароль"
+              placeholder="Enter password"
               disabled={isLoading}
             />
             {errors.password && (
@@ -139,7 +139,7 @@ const Login: React.FC = () => {
             className="bg-primary hover:bg-primary-hover text-white border-none rounded-lg px-3 py-3 text-base font-medium cursor-pointer transition-all w-full disabled:opacity-60 disabled:cursor-not-allowed"
             disabled={isLoading}
           >
-            {isLoading ? "Завантаження..." : "Увійти"}
+            {isLoading ? "Loading..." : "Sign in"}
           </button>
 
           <div className="text-center mt-4">
@@ -147,7 +147,7 @@ const Login: React.FC = () => {
               to="/register"
               className="text-primary hover:text-primary-hover text-sm transition-colors hover:underline"
             >
-              Ще не маєте акаунта? Зареєструватися
+              Don't have an account? Register
             </Link>
           </div>
         </form>
@@ -155,7 +155,7 @@ const Login: React.FC = () => {
         <div className="mt-6 text-center">
           <div className="flex items-center my-5 text-gray-600 dark:text-gray-400">
             <div className="flex-1 border-b border-gray-200 dark:border-gray-600"></div>
-            <span className="px-3 text-sm">або</span>
+            <span className="px-3 text-sm">or</span>
             <div className="flex-1 border-b border-gray-200 dark:border-gray-600"></div>
           </div>
           <GoogleLogin />

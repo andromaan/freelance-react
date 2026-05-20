@@ -66,8 +66,8 @@ const ProjectMeta: React.FC<Props> = ({ project }) => {
                 Edit Project
               </button>
             </div>
-            <div className="shrink-0 flex gap-4 text-right">
-              <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-100 dark:border-gray-700">
+            <div className="shrink-0 flex flex-col gap-4 text-right">
+              <div className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border border-gray-300 dark:border-gray-700">
                 <p className="text-[10px] text-gray-500 uppercase font-bold mb-1">
                   Budget
                 </p>
@@ -75,11 +75,11 @@ const ProjectMeta: React.FC<Props> = ({ project }) => {
                   ${project.budget}
                 </p>
               </div>
-              <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-100 dark:border-gray-700">
+              <div className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border border-gray-300 dark:border-gray-700">
                 <p className="text-[10px] text-gray-500 uppercase font-bold mb-1">
                   Deadline
                 </p>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                <p className="font-medium text-gray-900 dark:text-white">
                   {new Date(project.deadline).toLocaleDateString("uk-UA")}
                 </p>
               </div>

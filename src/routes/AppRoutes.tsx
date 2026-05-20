@@ -21,8 +21,11 @@ import Notifications from "../pages/notifications/NotificationsPage";
 import WalletPage from "../pages/wallet/WalletPage";
 import MyProjectsPage from "../pages/my-projects/MyProjectsPage";
 import MyProjectPage from "../pages/my-project/MyProjectPage";
-import ProjectBidsPage from "../pages/my-project/ProjectBidsPage";
-import ProjectQuotesPage from "../pages/my-project/ProjectQuotesPage";
+import MyProjectBidsPage from "../pages/my-project/MyProjectBidsPage";
+import MyProjectQuotesPage from "../pages/my-project/MyProjectQuotesPage";
+import ProjectsPage from "../pages/projects/components/ProjectsPage";
+import ProjectPage from "../pages/project/ProjectPage";
+import ProjectBidsPage from "../pages/project/ProjectBidsPage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -66,41 +69,48 @@ const AppRoutes: React.FC = () => {
           }
         />
 
-        <Route
-          path="/my-projects"
-          element={
-            <ProtectedRoute>
-              <MyProjectsPage />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/my-projects">
+          <Route
+            index
+            element={
+              <ProtectedRoute>
+                <MyProjectsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path=":projectId"
+            element={
+              <ProtectedRoute>
+                <MyProjectPage />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/my-projects/:projectId"
-          element={
-            <ProtectedRoute>
-              <MyProjectPage />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path=":projectId/bids"
+            element={
+              <ProtectedRoute>
+                <MyProjectBidsPage />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/my-projects/:projectId/bids"
-          element={
-            <ProtectedRoute>
-              <ProjectBidsPage />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path=":projectId/quotes"
+            element={
+              <ProtectedRoute>
+                <MyProjectQuotesPage />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
 
-        <Route
-          path="/my-projects/:projectId/quotes"
-          element={
-            <ProtectedRoute>
-              <ProjectQuotesPage />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="projects">
+          <Route index element={<ProjectsPage />} />
+          <Route path=":projectId" element={<ProjectPage />} />
+          <Route path=":projectId/bids" element={<ProjectBidsPage />} />
+        </Route>
       </Route>
 
       {/* ── Fallback ──────────────────────────────────────────────────── */}

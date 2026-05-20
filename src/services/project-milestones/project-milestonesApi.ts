@@ -48,6 +48,7 @@ export const projectMilestonesApi = createApi({
         body,
       }),
       transformResponse: (response: any) => response.data ?? response,
+      transformErrorResponse: (response: any) => response,
       invalidatesTags: [{ type: "ProjectMilestone", id: "LIST" }],
     }),
 

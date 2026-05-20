@@ -1,0 +1,61 @@
+import React from "react";
+import type { ProjectVM } from "../../../types/project.types";
+
+interface Props {
+  project: ProjectVM;
+}
+
+const ProjectMeta: React.FC<Props> = ({ project }) => {
+  const categories =
+    project.categories?.length > 0
+      ? project.categories
+      : [{ id: "general" as unknown as number, name: "GENERAL" }];
+
+  return (
+    <>
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-6">
+          <div>
+            <div className="flex flex-wrap gap-2 mb-4">
+              {categories.map((cat) => (
+                <span
+                  key={cat.id}
+                  className="inline-block text-[10px] font-bold tracking-wider px-3 py-1 rounded-full bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                >
+                  {cat.name.toUpperCase()}
+                </span>
+              ))}
+            </div>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              {project.title}
+            </h1>
+            <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed max-w-3xl whitespace-pre-wrap">
+              {project.description}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-4 shrink-0 text-right">
+            <div className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border border-gray-300 dark:border-gray-700">
+              <p className="text-[10px] text-gray-500 uppercase font-bold mb-1">
+                Budget
+              </p>
+              <p className="text-xl font-bold text-gray-900 dark:text-white">
+                ${project.budget}
+              </p>
+            </div>
+            <div className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border border-gray-300 dark:border-gray-700">
+              <p className="text-[10px] text-gray-500 uppercase font-bold mb-1">
+                Deadline
+              </p>
+              <p className="font-medium text-gray-900 dark:text-white">
+                {new Date(project.deadline).toLocaleDateString("uk-UA")}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default ProjectMeta;

@@ -23,10 +23,10 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
     return () => document.removeEventListener("mousedown", handler);
   }, [menuOpen]);
 
-  const categoryName =
-    project.categories.length > 0
-      ? project.categories[0].name.toUpperCase()
-      : "GENERAL";
+  // const categoryName =
+  //   project.categories.length > 0
+  //     ? project.categories[0].name.toUpperCase()
+  //     : "GENERAL";
 
   const deadlineDate = new Date(project.deadline).toLocaleDateString("en-US", {
     month: "short",
@@ -69,9 +69,6 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
       <div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <span className="text-[10px] font-bold tracking-wider px-3 py-1 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
-              {categoryName}
-            </span>
             {project.status !== ProjectStatus.Completed && (
               <span className={`${dueClass} flex items-center gap-1`}>
                 <svg
@@ -126,8 +123,18 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
                   }}
                   className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
                   </svg>
                   Delete
                 </button>
@@ -141,7 +148,26 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
         </h3>
       </div>
 
-      <div className="mt-8">
+      <div className="flex gap-2 my-3">
+        {(project.categories?.length > 2
+          ? project.categories.slice(0, 2)
+          : project.categories
+        )?.map((c) => (
+          <span
+            key={c.id}
+            className="text-[10px] font-bold tracking-wider px-3 py-1 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400"
+          >
+            {c.name}
+          </span>
+        ))}
+        {project.categories?.length > 2 && (
+          <span className="text-[10px] font-bold tracking-wider px-3 py-1 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
+            ...
+          </span>
+        )}
+      </div>
+
+      <div>
         {project.status === ProjectStatus.Completed ? (
           <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-4 mt-2">
             <span className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 font-medium">

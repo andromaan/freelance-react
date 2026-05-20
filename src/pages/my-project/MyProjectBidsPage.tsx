@@ -41,9 +41,13 @@ const SenderInfo: React.FC<SenderInfoProps> = ({ createdBy }) => {
             {user.displayName}
           </span>
         )}
-        <span className="text-sm text-gray-500 dark:text-gray-400">{user.email}</span>
+        <span className="text-sm text-gray-500 dark:text-gray-400">
+          {user.email}
+        </span>
         {user.country?.name && (
-          <span className="text-xs text-gray-400 dark:text-gray-500">{user.country.name}</span>
+          <span className="text-xs text-gray-400 dark:text-gray-500">
+            {user.country.name}
+          </span>
         )}
       </div>
     </div>
@@ -99,14 +103,19 @@ const SkeletonCard: React.FC = () => (
 );
 
 /* ─── Page ───────────────────────────────────────────────────────────────── */
-const ProjectBidsPage: React.FC = () => {
+const MyProjectBidsPage: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const navigate = useNavigate();
 
-  const { data: project, isLoading: projectLoading } = useGetProjectByIdQuery(projectId!);
-  const { data: bids = [], isLoading: bidsLoading } = useGetBidsByProjectQuery(projectId!, {
-    skip: !projectId,
-  });
+  const { data: project, isLoading: projectLoading } = useGetProjectByIdQuery(
+    projectId!,
+  );
+  const { data: bids = [], isLoading: bidsLoading } = useGetBidsByProjectQuery(
+    projectId!,
+    {
+      skip: !projectId,
+    },
+  );
 
   const isLoading = bidsLoading;
 
@@ -144,7 +153,9 @@ const ProjectBidsPage: React.FC = () => {
           </div>
         ) : bids.length === 0 ? (
           <div className="flex items-center justify-center py-20">
-            <p className="text-gray-400 dark:text-gray-500 text-base">No bids received yet.</p>
+            <p className="text-gray-400 dark:text-gray-500 text-base">
+              No bids received yet.
+            </p>
           </div>
         ) : (
           <div className="flex flex-col gap-4">
@@ -158,4 +169,4 @@ const ProjectBidsPage: React.FC = () => {
   );
 };
 
-export default ProjectBidsPage;
+export default MyProjectBidsPage;

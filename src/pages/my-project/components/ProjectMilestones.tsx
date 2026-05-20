@@ -65,10 +65,10 @@ const MilestoneRow: React.FC<MilestoneRowProps> = ({
     {/* Left — description + date */}
     <div className="min-w-0">
       <p className="text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
-        {milestone.description || <em className="text-gray-400">Без опису</em>}
+        {milestone.description || <em className="text-gray-400">No description</em>}
       </p>
       <p className="mt-1 text-[11px] font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">
-        До: {formatDate(milestone.dueDate)}
+        Due: {formatDate(milestone.dueDate)}
       </p>
     </div>
 
@@ -83,7 +83,7 @@ const MilestoneRow: React.FC<MilestoneRowProps> = ({
         <button
           type="button"
           onClick={() => onEdit(milestone)}
-          aria-label={`Редагувати етап на суму $${milestone.amount}`}
+          aria-label={`Edit milestone for $${milestone.amount}`}
           className="p-1.5 rounded-lg text-gray-400 hover:text-primary hover:bg-primary/10
                      focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60
                      transition-colors"
@@ -109,7 +109,7 @@ const MilestoneRow: React.FC<MilestoneRowProps> = ({
           type="button"
           onClick={() => onDelete(milestone.id)}
           disabled={isDeleting}
-          aria-label={`Видалити етап на суму $${milestone.amount}`}
+          aria-label={`Delete milestone for $${milestone.amount}`}
           aria-busy={isDeleting}
           className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20
                      focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400/60
@@ -223,7 +223,7 @@ const ProjectMilestones: React.FC<Props> = ({ projectId }) => {
               id="milestones-heading"
               className="text-lg font-bold text-gray-900 dark:text-white"
             >
-              Етапи проєкту
+              Project Milestones
             </h2>
             {milestones && milestones.length > 0 && (
               <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">

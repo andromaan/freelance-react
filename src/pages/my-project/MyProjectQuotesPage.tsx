@@ -41,12 +41,18 @@ const SenderInfo: React.FC<SenderInfoProps> = ({ createdBy }) => {
             {user.displayName}
           </span>
         )}
-        <span className="text-sm text-gray-500 dark:text-gray-400">{user.email}</span>
+        <span className="text-sm text-gray-500 dark:text-gray-400">
+          {user.email}
+        </span>
         {user.country?.name && (
-          <span className="text-xs text-gray-400 dark:text-gray-500">{user.country.name}</span>
+          <span className="text-xs text-gray-400 dark:text-gray-500">
+            {user.country.name}
+          </span>
         )}
         {user.role?.name && (
-          <span className="text-xs text-gray-400 dark:text-gray-500">{user.role.name}</span>
+          <span className="text-xs text-gray-400 dark:text-gray-500">
+            {user.role.name}
+          </span>
         )}
       </div>
     </div>
@@ -102,14 +108,17 @@ const SkeletonCard: React.FC = () => (
 );
 
 /* ─── Page ───────────────────────────────────────────────────────────────── */
-const ProjectQuotesPage: React.FC = () => {
+const MyProjectQuotesPage: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const navigate = useNavigate();
 
-  const { data: project, isLoading: projectLoading } = useGetProjectByIdQuery(projectId!);
-  const { data: quotes = [], isLoading: quotesLoading } = useGetQuotesByProjectQuery(projectId!, {
-    skip: !projectId,
-  });
+  const { data: project, isLoading: projectLoading } = useGetProjectByIdQuery(
+    projectId!,
+  );
+  const { data: quotes = [], isLoading: quotesLoading } =
+    useGetQuotesByProjectQuery(projectId!, {
+      skip: !projectId,
+    });
 
   const isLoading = quotesLoading;
 
@@ -147,7 +156,9 @@ const ProjectQuotesPage: React.FC = () => {
           </div>
         ) : quotes.length === 0 ? (
           <div className="flex items-center justify-center py-20">
-            <p className="text-gray-400 dark:text-gray-500 text-base">No quotes received yet.</p>
+            <p className="text-gray-400 dark:text-gray-500 text-base">
+              No quotes received yet.
+            </p>
           </div>
         ) : (
           <div className="flex flex-col gap-4">
@@ -161,4 +172,4 @@ const ProjectQuotesPage: React.FC = () => {
   );
 };
 
-export default ProjectQuotesPage;
+export default MyProjectQuotesPage;

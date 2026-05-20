@@ -169,7 +169,7 @@ const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
     setErrors((prev) => ({ ...prev, [name]: fieldErrors[name] }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitError(null);
 
@@ -191,6 +191,7 @@ const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
           amount: parseFloat(form.amount),
           dueDate: dueDateISO,
         };
+
         await updateMilestone({ id: milestone.id, data: payload }).unwrap();
       } else {
         const payload: CreateProjectMilestoneVM = {
@@ -199,16 +200,21 @@ const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
           amount: parseFloat(form.amount),
           dueDate: dueDateISO,
         };
+
         await createMilestone(payload).unwrap();
       }
 
       onSuccess?.();
       onClose();
     } catch (err: any) {
-      const message =
+      let message =
         err?.data?.message ??
         err?.data?.title ??
         "An error occurred. Please try again.";
+
+      if (err?.status === 403) {
+        message = "You don't have permission to perform this action.";
+      }
       setSubmitError(message);
     }
   };
