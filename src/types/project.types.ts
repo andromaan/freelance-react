@@ -1,4 +1,4 @@
-import type { CategoriesVM } from "./category.type";
+import type { CategoriesVM } from "./category.types";
 
 export interface MilestoneVM {
   id: string;
@@ -33,3 +33,14 @@ export const ProjectStatus = {
 } as const;
 
 export type ProjectStatus = (typeof ProjectStatus)[keyof typeof ProjectStatus];
+
+export interface UpdateProjectVM {
+  title: string;
+  description: string;
+  budget: number;
+  deadline: string;
+}
+
+export interface UpdateProjectCategoriesVM {
+  categoryIds: number[];
+}

@@ -110,7 +110,7 @@ const ProjectCard: React.FC<{ project: ProjectVM }> = ({ project }) => {
                   d="M5 13l4 4L19 7"
                 />
               </svg>
-              DELIVERED
+              Completed
             </span>
             <span className="text-xs font-bold text-gray-500 uppercase">
               Archive

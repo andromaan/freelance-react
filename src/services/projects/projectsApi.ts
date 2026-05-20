@@ -1,6 +1,11 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithRefresh } from "../api/baseQueryWithRefresh";
-import type { ProjectVM } from "../../types/project.types";
+import type {
+  ProjectVM,
+  UpdateProjectVM,
+  UpdateProjectCategoriesVM,
+} from "../../types/project.types";
+import type { ApiResponse } from "../../types/response.types";
 
 export const projectsApi = createApi({
   reducerPath: "projectsApi",
@@ -13,18 +18,49 @@ export const projectsApi = createApi({
         method: "GET",
       }),
       transformResponse: (response: any) => response.data ?? response,
-      providesTags: (result, error, id) => [{ type: "Project", id }],
+      providesTags: (_result, _err, id) => [{ type: "Project", id }],
     }),
+
     getProjectsByEmployer: builder.query<ProjectVM[], void>({
       query: () => ({
         url: `/Project/by-employer`,
         method: "GET",
       }),
-      transformResponse: (response: any) => response.data ?? response,
+      transformResponse: (response: { data: ProjectVM[] }) => response.data ?? response,
       providesTags: ["Project"],
+    }),
+
+    // PUT /Project/:id  — update title, description, budget, deadline
+    updateProject: builder.mutation<ApiResponse<ProjectVM>, { id: string; data: UpdateProjectVM }>({
+      query: ({ id, data }) => ({
+        url: `/Project/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      transformResponse: (response: ApiResponse<ProjectVM>) => response,
+      invalidatesTags: (_result, _err, { id }) => [{ type: "Project", id }],
+    }),
+
+    // PATCH /Project/categories/:projectId  — replace category list
+    updateProjectCategories: builder.mutation<
+      void,
+      { projectId: string; data: UpdateProjectCategoriesVM }
+    >({
+      query: ({ projectId, data }) => ({
+        url: `/Project/categories/${projectId}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: (_result, _err, { projectId }) => [
+        { type: "Project", id: projectId },
+      ],
     }),
   }),
 });
 
-export const { useGetProjectByIdQuery, useGetProjectsByEmployerQuery } =
-  projectsApi;
+export const {
+  useGetProjectByIdQuery,
+  useGetProjectsByEmployerQuery,
+  useUpdateProjectMutation,
+  useUpdateProjectCategoriesMutation,
+} = projectsApi;
