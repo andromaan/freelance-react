@@ -43,7 +43,7 @@ export const projectsApi = createApi({
 
     // PATCH /Project/categories/:projectId  — replace category list
     updateProjectCategories: builder.mutation<
-      void,
+      ApiResponse<void>,
       { projectId: string; data: UpdateProjectCategoriesVM }
     >({
       query: ({ projectId, data }) => ({

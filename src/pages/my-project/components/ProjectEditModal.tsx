@@ -387,6 +387,8 @@ const ProjectEditModal: React.FC<Props> = ({
         projectId: project.id,
         data: { categoryIds: selectedCategoryIds },
       }).unwrap();
+
+      toast.success("Categories updated successfully");
     } catch (err: any) {
       setCatServerError(
         err?.data?.message ??

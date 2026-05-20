@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AppRoutes from "./routes/AppRoutes";
 import { tokenStorage } from "./services/auth/tokenStorage";
@@ -31,6 +32,54 @@ const UserLoader: React.FC = () => {
   return null;
 };
 
+// ─── Themed toast ─────────────────────────────────────────────────────────────
+
+/**
+ * Watches the `dark` class on <html> (set by useTheme) and passes the
+ * matching theme to ToastContainer so toasts always match the active palette.
+ */
+const ThemedToast: React.FC = () => {
+  const [isDark, setIsDark] = useState(
+    document.documentElement.classList.contains("dark"),
+  );
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <ToastContainer
+      position="top-right"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme={isDark ? "dark" : "light"}
+      toastStyle={{
+        borderRadius: "0.75rem",
+        border: isDark ? "1px solid #374151" : "1px solid #e5e7eb",
+        background: isDark ? "#1f2937" : "#fff",
+        boxShadow: isDark
+          ? "0 8px 24px #00000073"
+          : "0 8px 24px rgba(0,0,0,0.10)",
+        fontSize: "0.875rem",
+        fontFamily: "inherit",
+      }}
+    />
+  );
+};
+
 function App() {
   // Remove the HTML-level full-page loader once React has mounted
   React.useEffect(() => {
@@ -46,6 +95,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <ThemedToast />
       <UserLoader />
       <AppRoutes />
     </BrowserRouter>
