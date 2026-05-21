@@ -1,6 +1,7 @@
 import React from "react";
 import type { NotificationVM } from "../../../../types/notification.types";
 import { NotificationTypeLabels } from "../../../../types/notification.types";
+import { Link } from "react-router-dom";
 
 type Props = {
   n: NotificationVM;
@@ -15,14 +16,28 @@ const NotificationItem: React.FC<Props> = ({
   onToggle,
   formatTime,
 }) => {
+  console.log("notification", n);
   return (
     <div
-      className={`group flex items-start gap-4 p-4 rounded-xl border transition-all duration-300 notification-item-enter ${
+      className={`group relative flex items-start items-center gap-4 p-4 rounded-xl border transition-all duration-300 notification-item-enter ${
         !n.isRead
           ? "bg-blue-50/60 dark:bg-blue-500/10 border-blue-300 dark:border-blue-900/30"
           : "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
       } ${isToggling ? "opacity-60 scale-[0.99]" : "opacity-100 scale-100"}`}
     >
+      {n.linkAddress && (
+        <Link
+          to={n.linkAddress}
+          className={`text-xs font-semibold text-blue-400 hover:underline absolute top-2 right-4 ${
+            !n.isRead
+              ? "text-blue-500 dark:text-blue-400"
+              : "text-blue-600 dark:text-blue-400"
+          }`}
+        >
+          Check it →
+        </Link>
+      )}
+
       <div className="mt-1.5 flex-shrink-0">
         <span
           className={`block w-2.5 h-2.5 rounded-full transition-colors duration-300 ${
@@ -42,6 +57,7 @@ const NotificationItem: React.FC<Props> = ({
           >
             {NotificationTypeLabels[n.type] ?? "Notifications"}
           </span>
+
           <span
             className={`text-xs text-gray-400 dark:text-gray-500 
               ${!n.isRead ? "text-gray-500 dark:text-gray-100" : "text-gray-600 dark:text-gray-100/60 "}`}

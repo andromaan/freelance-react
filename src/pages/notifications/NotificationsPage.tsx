@@ -24,10 +24,10 @@ const formatTime = (iso: string) => {
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffMin = Math.floor(diffMs / 60000);
-  if (diffMin < 1) return "щойно";
-  if (diffMin < 60) return `${diffMin} хв тому`;
+  if (diffMin < 1) return "just now";
+  if (diffMin < 60) return `${diffMin} min ago`;
   const diffH = Math.floor(diffMin / 60);
-  if (diffH < 24) return `${diffH} год тому`;
+  if (diffH < 24) return `${diffH} hours ago`;
   return date.toLocaleDateString("uk-UA");
 };
 

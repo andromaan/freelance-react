@@ -36,6 +36,7 @@ export interface NotificationVM {
   isRead: boolean;
   sentAt: string;
   userId: string | null;
+  linkAddress?: string | null;
 }
 
 export interface NotificationPagedVM extends PagedVM {

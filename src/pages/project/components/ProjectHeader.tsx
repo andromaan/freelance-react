@@ -6,12 +6,11 @@ import { selectCurrentUser } from "../../../store/userSlice";
 import AddBidModal from "./AddBidModal";
 
 interface Props {
-  status: string;
   projectId: string;
   projectBudget?: number;
 }
 
-const ProjectHeader: React.FC<Props> = ({ status, projectId, projectBudget }) => {
+const ProjectHeader: React.FC<Props> = ({ projectId, projectBudget }) => {
   const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
   const [bidOpen, setBidOpen] = useState(false);

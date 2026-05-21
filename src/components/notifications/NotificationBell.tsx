@@ -19,10 +19,10 @@ const formatTime = (iso: string) => {
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffMin = Math.floor(diffMs / 60000);
-  if (diffMin < 1) return "щойно";
-  if (diffMin < 60) return `${diffMin} хв тому`;
+  if (diffMin < 1) return "just now";
+  if (diffMin < 60) return `${diffMin} min ago`;
   const diffH = Math.floor(diffMin / 60);
-  if (diffH < 24) return `${diffH} год тому`;
+  if (diffH < 24) return `${diffH} hours ago`;
   return date.toLocaleDateString("uk-UA");
 };
 
@@ -157,18 +157,19 @@ const NotificationBell: React.FC = () => {
                     }`}
                   >
                     <div className="flex items-start gap-3 px-4 py-3">
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-primary mb-0.5">
-                          {NotificationTypeLabels[n.type] ?? "Notifications"}
-                        </p>
-                        <p className="text-sm text-gray-700 dark:text-gray-200 leading-snug">
-                          {n.message}
-                        </p>
-                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                          {formatTime(n.sentAt)}
-                        </p>
-                      </div>
-
+                      <Link to="/notifications">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-semibold text-primary mb-0.5">
+                            {NotificationTypeLabels[n.type] ?? "Notifications"}
+                          </p>
+                          <p className="text-sm text-gray-700 dark:text-gray-200 leading-snug">
+                            {n.message}
+                          </p>
+                          <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                            {formatTime(n.sentAt)}
+                          </p>
+                        </div>
+                      </Link>
                       {/* Mark as read button — shown only for unread */}
                       {!n.isRead && (
                         <button
