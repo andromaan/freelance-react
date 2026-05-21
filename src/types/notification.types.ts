@@ -2,15 +2,17 @@ import type { PagedVM } from "./pagination.types";
 
 export const NotificationType = {
   NewBidReceived: 0,
-  NewMessage: 1,
-  MilestoneApproved: 2,
-  MilestoneRejected: 3,
-  ContractCreated: 4,
-  PaymentReceived: 5,
-  DisputeOpened: 6,
-  ReviewLeft: 7,
-  SystemAnnouncement: 8,
-  ProjectDeadlineReminder: 9,
+  InterestedInYourBid: 1,
+  NotInterestedInYourBid: 2,
+  NewMessage: 4,
+  MilestoneApproved: 5,
+  MilestoneRejected: 6,
+  ContractCreated: 7,
+  PaymentReceived: 8,
+  DisputeOpened: 9,
+  ReviewLeft: 10,
+  SystemAnnouncement: 11,
+  ProjectDeadlineReminder: 12,
 } as const;
 
 export type NotificationType =
@@ -18,6 +20,8 @@ export type NotificationType =
 
 export const NotificationTypeLabels: Record<NotificationType, string> = {
   [NotificationType.NewBidReceived]: "New Bid Received",
+  [NotificationType.InterestedInYourBid]: "Interested in Your Bid",
+  [NotificationType.NotInterestedInYourBid]: "Not Interested in Your Bid",
   [NotificationType.NewMessage]: "New Message",
   [NotificationType.MilestoneApproved]: "Milestone Approved",
   [NotificationType.MilestoneRejected]: "Milestone Rejected",

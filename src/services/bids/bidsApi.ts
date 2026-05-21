@@ -1,6 +1,10 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithRefresh } from "../api/baseQueryWithRefresh";
-import type { BidVM, CreateBidVM } from "../../types/bid.types";
+import type {
+  BidVM,
+  CreateBidVM,
+  UpdateBidIsInterestVM,
+} from "../../types/bid.types";
 import type { ApiResponse } from "../../types/response.types";
 
 export const bidsApi = createApi({
@@ -13,6 +17,7 @@ export const bidsApi = createApi({
         url: `/Bid/by-project/${projectId}`,
         method: "GET",
       }),
+      providesTags: ["Bid"],
       transformResponse: (response: any) => response.data ?? response,
     }),
 
@@ -24,7 +29,23 @@ export const bidsApi = createApi({
       }),
       invalidatesTags: ["Bid"],
     }),
+
+    updateBidIsInterest: builder.mutation<
+      ApiResponse<BidVM>,
+      UpdateBidIsInterestVM
+    >({
+      query: (data) => ({
+        url: `/Bid/is-interesting/${data.bidId}?isInteresting=${data.isInteresting}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["Bid"],
+    }),
   }),
 });
 
-export const { useGetBidsByProjectQuery, useCreateBidMutation } = bidsApi;
+export const {
+  useGetBidsByProjectQuery,
+  useCreateBidMutation,
+  useUpdateBidIsInterestMutation,
+} = bidsApi;
