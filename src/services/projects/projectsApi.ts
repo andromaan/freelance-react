@@ -30,15 +30,19 @@ export const projectsApi = createApi({
         url: `/Project/by-employer`,
         method: "GET",
       }),
-      transformResponse: (response: { data: ProjectVM[] }) => response.data ?? response,
+      transformResponse: (response: { data: ProjectVM[] }) =>
+        response.data ?? response,
       providesTags: ["Project"],
     }),
 
     // Get project with filters
-    getProjectsFiltered: builder.query<PaginatedItemsVM<ProjectVM>, ProjectFilterVM>({
+    getProjectsFiltered: builder.query<
+      PaginatedItemsVM<ProjectVM>,
+      ProjectFilterVM
+    >({
       query: (filter) => ({
         url: `/Project/search?${buildQueryParams(filter)}`,
-        method: "GET"
+        method: "GET",
       }),
       transformResponse: (response: any) => response.data ?? response,
     }),
@@ -55,7 +59,10 @@ export const projectsApi = createApi({
     }),
 
     // PUT /Project/:id  — update title, description, budget, deadline
-    updateProject: builder.mutation<ApiResponse<ProjectVM>, { id: string; data: UpdateProjectVM }>({
+    updateProject: builder.mutation<
+      ApiResponse<ProjectVM>,
+      { id: string; data: UpdateProjectVM }
+    >({
       query: ({ id, data }) => ({
         url: `/Project/${id}`,
         method: "PUT",

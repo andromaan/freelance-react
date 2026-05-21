@@ -47,7 +47,11 @@ const ProjectPage: React.FC = () => {
   return (
     <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 font-sans pb-12 pt-8 px-4 sm:px-6 lg:px-8 transition-colors">
       <div className="max-w-5xl mx-auto space-y-6">
-        <ProjectHeader status={project.status} />
+        <ProjectHeader
+          status={project.status}
+          projectId={project.id}
+          projectBudget={project.budget}
+        />
 
         <ProjectMeta project={project} />
 

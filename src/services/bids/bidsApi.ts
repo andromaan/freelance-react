@@ -1,6 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithRefresh } from "../api/baseQueryWithRefresh";
-import type { BidVM } from "../../types/bid.types";
+import type { BidVM, CreateBidVM } from "../../types/bid.types";
+import type { ApiResponse } from "../../types/response.types";
 
 export const bidsApi = createApi({
   reducerPath: "bidsApi",
@@ -14,7 +15,16 @@ export const bidsApi = createApi({
       }),
       transformResponse: (response: any) => response.data ?? response,
     }),
+
+    createBid: builder.mutation<ApiResponse<BidVM>, CreateBidVM>({
+      query: (data) => ({
+        url: "/Bid",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Bid"],
+    }),
   }),
 });
 
-export const { useGetBidsByProjectQuery } = bidsApi;
+export const { useGetBidsByProjectQuery, useCreateBidMutation } = bidsApi;

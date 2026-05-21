@@ -8,3 +8,9 @@ export interface BidVM {
     updatedAt: string;
     createdBy: string;
 }
+
+export interface CreateBidVM {
+    projectId: string;
+    amount: number;
+    message: string;
+}
