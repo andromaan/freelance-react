@@ -1,16 +1,16 @@
 export interface BidVM {
-    id: string;
-    projectId: string;
-    freelancerId: string;
-    amount: number;
-    message: string;
-    createdAt: string;
-    updatedAt: string;
-    createdBy: string;
+  id: string;
+  projectId: string;
+  freelancerId: string;
+  amount: number;
+  message: string;
+  createdAt: string;
+  modifiedAt: string;
+  createdBy: string;
 }
 
 export interface CreateBidVM {
-    projectId: string;
-    amount: number;
-    message: string;
+  projectId: string;
+  amount: number;
+  message: string;
 }

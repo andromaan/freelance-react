@@ -67,7 +67,7 @@ const BidCard: React.FC<BidCardProps> = ({ bid }) => {
           ${bid.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
         </span>
         <span className="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap pt-1">
-          {new Date(bid.createdAt).toLocaleDateString("uk-UA")}
+          {new Date(bid.modifiedAt).toLocaleDateString("uk-UA")}
         </span>
       </div>
 
