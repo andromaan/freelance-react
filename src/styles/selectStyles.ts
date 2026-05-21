@@ -1,60 +1,58 @@
+import { useMemo } from "react";
 import type { StylesConfig } from "react-select";
-import { useTheme } from "../hooks/useTheme";
+import { useTheme } from "../context/ThemeContext";
 
 // ─── Shared react-select styles matched to the project's design system ────────
 //
-// Colours reference:
-//   primary   → CSS var (--color-primary), approximated as #7c3aed (violet-600)
-//   gray-*    → Tailwind slate/gray palette
-//   dark mode → detected via prefers-color-scheme media query at call-time
-//
-// Usage:
-//   import { buildSelectStyles } from "../../../styles/selectStyles";
-//   const styles = buildSelectStyles(isDark);
-//
-// Or simply pass the result of `buildSelectStyles()` directly:
-//   styles={buildSelectStyles()}
-//
-// Dynamic Usage (React Component):
+// Dynamic usage (React component) — реагує на toggleTheme без перезавантаження:
 //   import { useSelectStyles } from "../../../styles/selectStyles";
 //   const styles = useSelectStyles();
+//   <Select styles={styles} ... />
+//
+// Статичне використання (якщо тема відома заздалегідь):
+//   import { buildSelectStyles } from "../../../styles/selectStyles";
+//   const styles = buildSelectStyles(isDark);
 
 export interface SelectOption<T = number | string> {
   value: T;
   label: string;
 }
 
-/** Hook that automatically updates styles based on the current useTheme state */
-export function useSelectStyles<T>(): StylesConfig<SelectOption<T>, true> {
+/**
+ * Hook — повертає стилі, які автоматично оновлюються при toggleTheme.
+ * Мемоізується по `theme`, тому об'єкт стилів не перестворюється зайво.
+ */
+export function useSelectStyles<T = number | string>(): StylesConfig<SelectOption<T>, true> {
   const { theme } = useTheme();
-  return buildSelectStyles<T>(theme === "dark");
+  // useMemo гарантує, що новий об'єкт стилів створюється лише коли тема змінилась,
+  // але ЗАВЖДИ після зміни theme — react-select отримає новий референс і перемалює себе.
+  return useMemo(() => buildSelectStyles<T>(theme === "dark"), [theme]);
 }
 
-/** Returns a StylesConfig object that matches the project design system. */
-export function buildSelectStyles<T>(
+/** Будує StylesConfig для заданого стану теми. */
+export function buildSelectStyles<T = number | string>(
   isDark: boolean,
 ): StylesConfig<SelectOption<T>, true> {
-  const bg = isDark ? "#1f2937" : "#F9FAFB";           // gray-800 / white
-const bgHover = isDark ? "#374151" : "#dddddd";       // gray-700 / gray-50
-const border = isDark ? "#4b5563" : "#d1d5db";       // gray-600 / gray-300
-const text = isDark ? "#f9fafb" : "#111827";         // gray-50 / gray-900
-const placeholder = isDark ? "#6b7280" : "#9ca3af";  // gray-500 / gray-400
+  // ── Палітра ──────────────────────────────────────────────────────────────────
+  const bg          = isDark ? "#1f2937" : "#F9FAFB";          // gray-800  / gray-50
+  const bgHover     = isDark ? "#374151" : "#dddddd";          // gray-700  / gray-200
+  const border      = isDark ? "#4b5563" : "#d1d5db";          // gray-600  / gray-300
+  const text        = isDark ? "#f9fafb" : "#111827";          // gray-50   / gray-900
+  const placeholder = isDark ? "#6b7280" : "#9ca3af";          // gray-500  / gray-400
+  const indicator   = isDark ? "#6b7280" : "#9ca3af";
 
-// ─── Замінено violet → indigo (синій) ───
-const primary = "#2563eb";                          // indigo-600
-const primaryLight = isDark
-  ? "rgba(37, 99, 235, 0.25)"
-  : "rgba(37, 99, 235, 0.1)";
-const multiValueBg = isDark
-  ? "rgba(37, 99, 235, 0.3)"
-  : "rgba(37, 99, 235, 0.12)";
-const multiValueText = isDark ? "#bfdbfe" : "#1e40af"; // blue-200 / blue-800
+  // ── Акцентний колір (indigo-600) ─────────────────────────────────────────────
+  const primary       = "#2563eb";
+  const primaryLight  = isDark ? "rgba(37,99,235,0.25)" : "rgba(37,99,235,0.10)";
+  const multiValueBg  = isDark ? "rgba(37,99,235,0.30)" : "rgba(37,99,235,0.12)";
+  const multiValueText = isDark ? "#bfdbfe" : "#1e40af";       // blue-200  / blue-800
+
   return {
     control: (base, state) => ({
       ...base,
       backgroundColor: bg,
       borderColor: state.isFocused ? primary : border,
-      borderRadius: "0.5rem", // rounded-lg
+      borderRadius: "0.5rem",
       boxShadow: state.isFocused ? `0 0 0 2px ${primaryLight}` : "none",
       minHeight: "2.375rem",
       fontSize: "0.875rem",
@@ -91,7 +89,7 @@ const multiValueText = isDark ? "#bfdbfe" : "#1e40af"; // blue-200 / blue-800
       color: multiValueText,
       borderRadius: "999px",
       "&:hover": {
-        backgroundColor: "rgba(124,58,237,0.2)",
+        backgroundColor: "rgba(37,99,235,0.2)",
         color: multiValueText,
       },
     }),
@@ -119,7 +117,7 @@ const multiValueText = isDark ? "#bfdbfe" : "#1e40af"; // blue-200 / blue-800
       border: `1px solid ${border}`,
       borderRadius: "0.5rem",
       boxShadow: isDark
-        ? "0 10px 25px rgba(0,0,0,0.5)"
+        ? "0 10px 25px rgba(0,0,0,0.50)"
         : "0 10px 25px rgba(0,0,0,0.12)",
       zIndex: 9999,
       overflow: "hidden",
@@ -152,18 +150,16 @@ const multiValueText = isDark ? "#bfdbfe" : "#1e40af"; // blue-200 / blue-800
 
     dropdownIndicator: (base, state) => ({
       ...base,
-      color: isDark ? "#6b7280" : "#9ca3af",
+      color: indicator,
       padding: "0 8px",
-      transform: state.selectProps.menuIsOpen
-        ? "rotate(180deg)"
-        : "rotate(0deg)",
+      transform: state.selectProps.menuIsOpen ? "rotate(180deg)" : "rotate(0deg)",
       transition: "transform 200ms",
       "&:hover": { color: primary },
     }),
 
     clearIndicator: (base) => ({
       ...base,
-      color: isDark ? "#6b7280" : "#9ca3af",
+      color: indicator,
       padding: "0 4px",
       "&:hover": { color: "#ef4444" },
     }),

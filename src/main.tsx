@@ -5,11 +5,14 @@ import { store } from "./store";
 import "./index.css";
 import "./styles/custom.scss";
 import App from "./App.tsx";
+import { ThemeProvider } from "./context/ThemeContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
-      <App />
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
     </Provider>
   </StrictMode>,
 );

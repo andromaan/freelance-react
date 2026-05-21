@@ -6,7 +6,7 @@ import {
   useConfirmDepositMutation,
 } from "../../../../services/wallet/walletApi";
 import { toStripeAmount, formatCurrencyAmount } from "../../utils/currency";
-import { useTheme } from "../../../../hooks/useTheme";
+import { useTheme } from "../../../../context/ThemeContext";
 
 export interface CheckoutFormProps {
   amount: number;
