@@ -5,8 +5,11 @@ import type {
   UpdateProjectVM,
   UpdateProjectCategoriesVM,
   CreateProjectVM,
+  ProjectFilterVM,
 } from "../../types/project.types";
 import type { ApiResponse } from "../../types/response.types";
+import type { PaginatedItemsVM } from "../../types/pagination.types";
+import { buildQueryParams } from "../utils/queryParams";
 
 export const projectsApi = createApi({
   reducerPath: "projectsApi",
@@ -29,6 +32,15 @@ export const projectsApi = createApi({
       }),
       transformResponse: (response: { data: ProjectVM[] }) => response.data ?? response,
       providesTags: ["Project"],
+    }),
+
+    // Get project with filters
+    getProjectsFiltered: builder.query<PaginatedItemsVM<ProjectVM>, ProjectFilterVM>({
+      query: (filter) => ({
+        url: `/Project/search?${buildQueryParams(filter)}`,
+        method: "GET"
+      }),
+      transformResponse: (response: any) => response.data ?? response,
     }),
 
     // POST /Project  — create new project
@@ -78,6 +90,7 @@ export const projectsApi = createApi({
 
 export const {
   useGetProjectByIdQuery,
+  useGetProjectsFilteredQuery,
   useGetProjectsByEmployerQuery,
   useUpdateProjectMutation,
   useUpdateProjectCategoriesMutation,

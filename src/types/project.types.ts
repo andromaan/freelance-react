@@ -1,4 +1,5 @@
 import type { CategoriesVM } from "./category.types";
+import type { PagedVM } from "./pagination.types";
 
 export interface MilestoneVM {
   id: string;
@@ -52,3 +53,22 @@ export interface CreateProjectVM {
   deadline: string;
   categoryIds: number[];
 }
+
+export interface ProjectFilterVM extends PagedVM {
+  title?: string;
+  description?: string;
+  budgetMin?: number;
+  budgetMax?: number;
+  deadlineMax?: string;
+  categoryIds?: number[];
+}
+
+// export const ProjectStatusEnum = {
+//   Open: 0,
+//   InProgress: 1,
+//   Completed: 2,
+//   Cancelled: 3,
+// } as const;
+
+// /** Тип для фільтра/запиту — 0 | 1 | 2 | 3 */
+// export type ProjectStatusEnum = (typeof ProjectStatusEnum)[keyof typeof ProjectStatusEnum];

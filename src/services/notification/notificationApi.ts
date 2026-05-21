@@ -1,11 +1,11 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithRefresh } from "../api/baseQueryWithRefresh";
-import type { NotificationVM } from "../../types/notification.types";
 import type {
+  NotificationVM,
   NotificationPagedVM,
-  PagedVM,
-  PaginatedItemsVM,
-} from "../../types/pagination.types";
+} from "../../types/notification.types";
+import type { PagedVM, PaginatedItemsVM } from "../../types/pagination.types";
+import { buildQueryParams } from "../utils/queryParams";
 
 export const notificationApi = createApi({
   reducerPath: "notificationApi",
@@ -27,19 +27,10 @@ export const notificationApi = createApi({
       PaginatedItemsVM<NotificationVM>,
       NotificationPagedVM
     >({
-      query: ({ page, pageSize, isRead, notificationType }) => {
-        const params = new URLSearchParams({
-          Page: String(page),
-          PageSize: String(pageSize),
-        });
-        if (isRead != null) params.append("IsRead", String(isRead));
-        if (notificationType != null)
-          params.append("NotificationType", String(notificationType));
-        return {
-          url: `/Notification/filtered?${params.toString()}`,
-          method: "GET",
-        };
-      },
+      query: (filter) => ({
+        url: `/Notification/filtered?${buildQueryParams(filter)}`,
+        method: "GET",
+      }),
       transformResponse: (response: any) => response.data ?? response,
       providesTags: ["Notification"],
     }),

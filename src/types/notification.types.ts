@@ -1,3 +1,5 @@
+import type { PagedVM } from "./pagination.types";
+
 export const NotificationType = {
   NewBidReceived: 0,
   NewMessage: 1,
@@ -34,4 +36,9 @@ export interface NotificationVM {
   isRead: boolean;
   sentAt: string;
   userId: string | null;
+}
+
+export interface NotificationPagedVM extends PagedVM {
+  isRead?: boolean | null;
+  notificationType?: number | null;
 }

@@ -23,7 +23,7 @@ import MyProjectsPage from "../pages/my-projects/MyProjectsPage";
 import MyProjectPage from "../pages/my-project/MyProjectPage";
 import MyProjectBidsPage from "../pages/my-project/MyProjectBidsPage";
 import MyProjectQuotesPage from "../pages/my-project/MyProjectQuotesPage";
-import ProjectsPage from "../pages/projects/components/ProjectsPage";
+import ProjectsPage from "../pages/projects/ProjectsPage";
 import ProjectPage from "../pages/project/ProjectPage";
 import ProjectBidsPage from "../pages/project/ProjectBidsPage";
 

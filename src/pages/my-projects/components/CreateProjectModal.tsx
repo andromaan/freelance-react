@@ -5,7 +5,7 @@ import { useCreateProjectMutation } from "../../../services/projects/projectsApi
 import { useGetAllCategoriesQuery } from "../../../services/categories/categoriesApi";
 import type { CreateProjectVM } from "../../../types/project.types";
 import {
-  buildSelectStyles,
+  useSelectStyles,
   type SelectOption,
 } from "../../../styles/selectStyles";
 import { toast } from "react-toastify";
@@ -313,7 +313,7 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
             value={selectedCategoryOptions}
             onChange={handleCategoryChange}
             isLoading={isCategoriesLoading}
-            styles={buildSelectStyles<number>()}
+            styles={useSelectStyles<number>()}
             placeholder="Select categories…"
             noOptionsMessage={() => "No categories available"}
             aria-label="Select project categories"

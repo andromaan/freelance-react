@@ -8,11 +8,16 @@ import {
 import type { ProjectVM, UpdateProjectVM } from "../../../types/project.types";
 import type { CategoriesVM } from "../../../types/category.types";
 import {
-  buildSelectStyles,
+  useSelectStyles,
   type SelectOption,
 } from "../../../styles/selectStyles";
 import { toast } from "react-toastify";
-import { SectionDivider, FormErrorAlert, FormField, inputClass } from "../../../components/ui/FormKit";
+import {
+  SectionDivider,
+  FormErrorAlert,
+  FormField,
+  inputClass,
+} from "../../../components/ui/FormKit";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -232,7 +237,10 @@ const ProjectEditModal: React.FC<Props> = ({
     };
 
     try {
-      const result = await updateProject({ id: project.id, data: payload }).unwrap();
+      const result = await updateProject({
+        id: project.id,
+        data: payload,
+      }).unwrap();
       toast.success(result.message);
     } catch (err: any) {
       setFieldsServerError(
@@ -423,7 +431,7 @@ const ProjectEditModal: React.FC<Props> = ({
               options={categoryOptions}
               value={selectedCategoryOptions}
               onChange={handleCategoryChange}
-              styles={buildSelectStyles<number>()}
+              styles={useSelectStyles<number>()}
               placeholder="Select categories…"
               noOptionsMessage={() => "No categories available"}
               aria-label="Select project categories"

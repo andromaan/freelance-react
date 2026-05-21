@@ -1,4 +1,5 @@
 import type { StylesConfig } from "react-select";
+import { useTheme } from "../hooks/useTheme";
 
 // ─── Shared react-select styles matched to the project's design system ────────
 //
@@ -13,26 +14,41 @@ import type { StylesConfig } from "react-select";
 //
 // Or simply pass the result of `buildSelectStyles()` directly:
 //   styles={buildSelectStyles()}
+//
+// Dynamic Usage (React Component):
+//   import { useSelectStyles } from "../../../styles/selectStyles";
+//   const styles = useSelectStyles();
 
 export interface SelectOption<T = number | string> {
   value: T;
   label: string;
 }
 
+/** Hook that automatically updates styles based on the current useTheme state */
+export function useSelectStyles<T>(): StylesConfig<SelectOption<T>, true> {
+  const { theme } = useTheme();
+  return buildSelectStyles<T>(theme === "dark");
+}
+
 /** Returns a StylesConfig object that matches the project design system. */
 export function buildSelectStyles<T>(
-  isDark = window.matchMedia("(prefers-color-scheme: dark)").matches,
+  isDark: boolean,
 ): StylesConfig<SelectOption<T>, true> {
-  const bg = isDark ? "#1f2937" : "#ffffff"; // gray-800 / white
-  const bgHover = isDark ? "#374151" : "#f9fafb"; // gray-700 / gray-50
-  const border = isDark ? "#4b5563" : "#d1d5db"; // gray-600 / gray-300
-  const text = isDark ? "#f9fafb" : "#111827"; // gray-50 / gray-900
-  const placeholder = isDark ? "#6b7280" : "#9ca3af"; // gray-500 / gray-400
-  const primary = "#7c3aed"; // violet-600  (closest to --color-primary)
-  const primaryLight = isDark ? "rgba(124,58,237,0.25)" : "rgba(124,58,237,0.1)";
-  const multiValueBg = isDark ? "rgba(124,58,237,0.3)" : "rgba(124,58,237,0.12)";
-  const multiValueText = isDark ? "#ddd6fe" : "#5b21b6"; // violet-200 / violet-800
+  const bg = isDark ? "#1f2937" : "#F9FAFB";           // gray-800 / white
+const bgHover = isDark ? "#374151" : "#dddddd";       // gray-700 / gray-50
+const border = isDark ? "#4b5563" : "#d1d5db";       // gray-600 / gray-300
+const text = isDark ? "#f9fafb" : "#111827";         // gray-50 / gray-900
+const placeholder = isDark ? "#6b7280" : "#9ca3af";  // gray-500 / gray-400
 
+// ─── Замінено violet → indigo (синій) ───
+const primary = "#2563eb";                          // indigo-600
+const primaryLight = isDark
+  ? "rgba(37, 99, 235, 0.25)"
+  : "rgba(37, 99, 235, 0.1)";
+const multiValueBg = isDark
+  ? "rgba(37, 99, 235, 0.3)"
+  : "rgba(37, 99, 235, 0.12)";
+const multiValueText = isDark ? "#bfdbfe" : "#1e40af"; // blue-200 / blue-800
   return {
     control: (base, state) => ({
       ...base,
@@ -138,7 +154,9 @@ export function buildSelectStyles<T>(
       ...base,
       color: isDark ? "#6b7280" : "#9ca3af",
       padding: "0 8px",
-      transform: state.selectProps.menuIsOpen ? "rotate(180deg)" : "rotate(0deg)",
+      transform: state.selectProps.menuIsOpen
+        ? "rotate(180deg)"
+        : "rotate(0deg)",
       transition: "transform 200ms",
       "&:hover": { color: primary },
     }),
