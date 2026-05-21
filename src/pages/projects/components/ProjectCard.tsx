@@ -36,20 +36,20 @@ const ProjectCard: React.FC<{ project: ProjectVM }> = ({ project }) => {
           {project.description}
         </p>
 
-        <div className="flex gap-2 my-3">
-          {(project.categories?.length > 3
-            ? project.categories.slice(0, 3)
+        <div className="flex flex-wrap gap-2 my-3">
+          {(project.categories?.length > 4
+            ? project.categories.slice(0, 4)
             : project.categories
           )?.map((c) => (
             <span
               key={c.id}
-              className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-medium"
+              className="text-[10px] px-2 py-0.5 rounded-full tracking-wider bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-medium"
             >
               {c.name}
             </span>
           ))}
-          {project.categories?.length > 2 && (
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-medium">
+          {project.categories?.length > 4 && (
+            <span className="text-[10px] px-2 py-0.5 rounded-full tracking-wider bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-medium">
               ...
             </span>
           )}
