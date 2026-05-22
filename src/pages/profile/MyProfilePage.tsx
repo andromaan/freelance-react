@@ -5,10 +5,12 @@ import { ROLES } from "../../constants/roles";
 import APP_ENV from "../../env";
 import { selectCurrentUser } from "../../store/userSlice";
 import type { BidVM } from "../../types/bid.types";
+import type { QuoteVM } from "../../types/quote.types";
 import AddQuoteModal from "./components/AddQuoteModal";
 import EditBidModal from "./components/EditBidModal";
+import EditQuoteModal from "./components/EditQuoteModal";
 import { EditProfileTab } from "./EditProfileTab";
-import { MyQuotesTab } from "./MyQuotesTab";
+import MyQuotesTab from "./MyQuotesTab";
 import MyBidsTab from "./MyBidsTab";
 
 // ─── Tab config ───────────────────────────────────────────────────────────────
@@ -97,6 +99,7 @@ const MyProfilePage: React.FC = () => {
   // Quote & edit bid modal state
   const [quoteTarget, setQuoteTarget] = useState<BidVM | null>(null);
   const [editBidTarget, setEditBidTarget] = useState<BidVM | null>(null);
+  const [editQuoteTarget, setEditQuoteTarget] = useState<QuoteVM | null>(null);
 
   const visibleTabs = isFreelancer
     ? TABS
@@ -207,7 +210,9 @@ const MyProfilePage: React.FC = () => {
               onEditBid={(bid) => setEditBidTarget(bid)}
             />
           )}
-          {activeTab === "my-quotes" && <MyQuotesTab />}
+          {activeTab === "my-quotes" && (
+            <MyQuotesTab onEditQuote={(quote) => setEditQuoteTarget(quote)} />
+          )}
         </main>
       </div>
 
@@ -224,6 +229,14 @@ const MyProfilePage: React.FC = () => {
           isOpen={editBidTarget !== null}
           onClose={() => setEditBidTarget(null)}
           bid={editBidTarget}
+        />
+      )}
+
+      {editQuoteTarget && (
+        <EditQuoteModal
+          isOpen={editQuoteTarget !== null}
+          onClose={() => setEditQuoteTarget(null)}
+          quote={editQuoteTarget}
         />
       )}
     </div>

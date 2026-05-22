@@ -14,3 +14,8 @@ export interface CreateQuoteVM {
   amount: number;
   message: string;
 }
+
+export interface UpdateQuoteVM {
+  amount: number;
+  message?: string;
+}
