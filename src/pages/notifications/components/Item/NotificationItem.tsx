@@ -16,7 +16,6 @@ const NotificationItem: React.FC<Props> = ({
   onToggle,
   formatTime,
 }) => {
-  console.log("notification", n);
   return (
     <div
       className={`group relative flex items-start items-center gap-4 p-4 rounded-xl border transition-all duration-300 notification-item-enter ${

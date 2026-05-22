@@ -16,6 +16,7 @@ import "./Notifications.scss";
 import NotificationsHeader from "./components/Header/NotificationsHeader";
 import NotificationsFilters from "./components/Filters/NotificationsFilters";
 import NotificationsList from "./components/List/NotificationsList";
+import type { SelectOption } from "../../styles/selectStyles";
 
 const PAGE_SIZE = 10;
 
@@ -37,7 +38,7 @@ const Notifications: React.FC = () => {
 
   const [page, setPage] = useState(1);
   const [isReadFilter, setIsReadFilter] = useState<boolean | null>(null);
-  const [typeFilter, setTypeFilter] = useState<number | null>(null);
+  const [typeFilter, setTypeFilter] = useState<SelectOption<number> | null>(null);
   // Track individual item toggling IDs for per-item spinner
   const [togglingIds, setTogglingIds] = useState<Set<string>>(new Set());
 
@@ -76,7 +77,7 @@ const Notifications: React.FC = () => {
     page,
     pageSize: PAGE_SIZE,
     isRead: isReadFilter,
-    notificationType: typeFilter,
+    notificationType: typeFilter?.value,
   });
 
   const [toggleIsRead] = useToggleIsReadMutation();
@@ -114,7 +115,7 @@ const Notifications: React.FC = () => {
 
   const handleFilterChange = (
     newIsRead: boolean | null,
-    newType: number | null,
+    newType: SelectOption<number> | null,
   ) => {
     setPage(1);
     setIsReadFilter(newIsRead);

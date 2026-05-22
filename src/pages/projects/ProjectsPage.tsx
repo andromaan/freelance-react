@@ -2,11 +2,14 @@ import React, { useEffect, useId, useState } from "react";
 import Select from "react-select";
 import { useGetAllCategoriesQuery } from "../../services/categories/categoriesApi";
 import { useGetProjectsFilteredQuery } from "../../services/projects/projectsApi";
-import { useSelectStyles, type SelectOption } from "../../styles/selectStyles";
 import {
-  type ProjectFilterVM
-} from "../../types/project.types";
+  mergeSelectStyles,
+  useSelectStyles,
+  type SelectOption,
+} from "../../styles/selectStyles";
+import { type ProjectFilterVM } from "../../types/project.types";
 import ProjectCard from "./components/ProjectCard";
+import { useTheme } from "../../context/ThemeContext";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -159,8 +162,6 @@ const ProjectsPage: React.FC = () => {
   const [budgetMax, setBudgetMax] = useState("");
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
 
-  const styles = useSelectStyles<number>();
-
   // Debounce title search
   useEffect(() => {
     const t = setTimeout(() => {
@@ -191,6 +192,19 @@ const ProjectsPage: React.FC = () => {
     setSelectedCategoryIds([]);
     setPage(1);
   };
+
+  // __ Style for react-select _____________________
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
+  const styles = mergeSelectStyles(useSelectStyles<number>(), {
+    control: (base) => ({
+      ...base,
+      backgroundColor: isDark ? "#111827" : "#f9fafb",
+      borderColor: isDark ? "#4b5563" : "#e5e7eb",
+      color: isDark ? "#f9fafb" : "#111827",
+    }),
+  });
 
   // ── API ────────────────────────────────────────────────────────────────────
   const filter: ProjectFilterVM = {
@@ -318,7 +332,6 @@ const ProjectsPage: React.FC = () => {
               isMulti
               options={categoryOptions}
               onChange={handleCategoryChange}
-              // isLoading={isCategoriesLoading}
               styles={styles}
               placeholder="Select categories…"
               noOptionsMessage={() => "No categories available"}

@@ -1,13 +1,12 @@
 import { useMemo } from "react";
-import type { StylesConfig } from "react-select";
+import type { CSSObjectWithLabel, StylesConfig } from "react-select";
 import { useTheme } from "../context/ThemeContext";
 
 // ─── Shared react-select styles matched to the project's design system ────────
 //
 // Dynamic usage (React component) — реагує на toggleTheme без перезавантаження:
 //   import { useSelectStyles } from "../../../styles/selectStyles";
-//   const styles = useSelectStyles();
-//   <Select styles={styles} ... />
+//   <Select styles={useSelectStyles<number>()} ... />
 //
 // Статичне використання (якщо тема відома заздалегідь):
 //   import { buildSelectStyles } from "../../../styles/selectStyles";
@@ -22,7 +21,9 @@ export interface SelectOption<T = number | string> {
  * Hook — повертає стилі, які автоматично оновлюються при toggleTheme.
  * Мемоізується по `theme`, тому об'єкт стилів не перестворюється зайво.
  */
-export function useSelectStyles<T = number | string>(): StylesConfig<SelectOption<T>, true> {
+export function useSelectStyles<T = number | string>(): StylesConfig<
+  SelectOption<T>
+> {
   const { theme } = useTheme();
   // useMemo гарантує, що новий об'єкт стилів створюється лише коли тема змінилась,
   // але ЗАВЖДИ після зміни theme — react-select отримає новий референс і перемалює себе.
@@ -32,20 +33,20 @@ export function useSelectStyles<T = number | string>(): StylesConfig<SelectOptio
 /** Будує StylesConfig для заданого стану теми. */
 export function buildSelectStyles<T = number | string>(
   isDark: boolean,
-): StylesConfig<SelectOption<T>, true> {
+): StylesConfig<SelectOption<T>> {
   // ── Палітра ──────────────────────────────────────────────────────────────────
-  const bg          = isDark ? "#1f2937" : "#F9FAFB";          // gray-800  / gray-50
-  const bgHover     = isDark ? "#374151" : "#dddddd";          // gray-700  / gray-200
-  const border      = isDark ? "#4b5563" : "#d1d5db";          // gray-600  / gray-300
-  const text        = isDark ? "#f9fafb" : "#111827";          // gray-50   / gray-900
-  const placeholder = isDark ? "#6b7280" : "#9ca3af";          // gray-500  / gray-400
-  const indicator   = isDark ? "#6b7280" : "#9ca3af";
+  const bg = isDark ? "#1f2937" : "#F9FAFB";
+  const bgHover = isDark ? "#374151" : "#dddddd";
+  const border = isDark ? "#4b5563" : "#d1d5db";
+  const text = isDark ? "#f9fafb" : "#111827";
+  const placeholder = isDark ? "#6b7280" : "#9ca3af";
+  const indicator = isDark ? "#6b7280" : "#9ca3af";
 
   // ── Акцентний колір (indigo-600) ─────────────────────────────────────────────
-  const primary       = "#2563eb";
-  const primaryLight  = isDark ? "rgba(37,99,235,0.25)" : "rgba(37,99,235,0.10)";
-  const multiValueBg  = isDark ? "rgba(37,99,235,0.30)" : "rgba(37,99,235,0.12)";
-  const multiValueText = isDark ? "#bfdbfe" : "#1e40af";       // blue-200  / blue-800
+  const primary = "#1976d2";
+  const primaryLight = isDark ? "rgba(37,99,235,0.25)" : "rgba(37,99,235,0.10)";
+  const multiValueBg = isDark ? "rgba(37,99,235,0.30)" : "rgba(37,99,235,0.12)";
+  const multiValueText = isDark ? "#bfdbfe" : "#1e40af";
 
   return {
     control: (base, state) => ({
@@ -152,7 +153,9 @@ export function buildSelectStyles<T = number | string>(
       ...base,
       color: indicator,
       padding: "0 8px",
-      transform: state.selectProps.menuIsOpen ? "rotate(180deg)" : "rotate(0deg)",
+      transform: state.selectProps.menuIsOpen
+        ? "rotate(180deg)"
+        : "rotate(0deg)",
       transition: "transform 200ms",
       "&:hover": { color: primary },
     }),
@@ -175,4 +178,29 @@ export function buildSelectStyles<T = number | string>(
       fontSize: "0.875rem",
     }),
   };
+}
+
+// ── Функція для злиття базових стилів з кастомними override ────────────────────
+export function mergeSelectStyles<T = number | string>(
+  base: StylesConfig<SelectOption<T>>,
+  overrides: Partial<StylesConfig<SelectOption<T>>>
+): StylesConfig<SelectOption<T>> {
+  const merged = { ...base };
+
+  (Object.keys(overrides) as Array<keyof typeof overrides>).forEach((key) => {
+    const overrideFn = overrides[key];
+    const baseFn = merged[key];
+
+    if (overrideFn) {
+      merged[key] = ((provided: CSSObjectWithLabel, state: any) => {
+        const baseResult = typeof baseFn === "function"
+          ? baseFn(provided, state)
+          : provided;
+        const overrideResult = overrideFn(baseResult, state);
+        return { ...baseResult, ...overrideResult };
+      }) as any;
+    }
+  });
+
+  return merged;
 }
