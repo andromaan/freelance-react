@@ -16,6 +16,7 @@ import "./Notifications.scss";
 import NotificationsHeader from "./components/Header/NotificationsHeader";
 import NotificationsFilters from "./components/Filters/NotificationsFilters";
 import NotificationsList from "./components/List/NotificationsList";
+import Pagination from "../../components/ui/Pagination";
 import type { SelectOption } from "../../styles/selectStyles";
 
 const PAGE_SIZE = 10;
@@ -148,88 +149,7 @@ const Notifications: React.FC = () => {
       />
 
       {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-1 mt-8">
-          {/* Prev */}
-          <button
-            onClick={() => {
-              setPage((p) => Math.max(1, p - 1));
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-            disabled={page === 1}
-            className="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-
-          {/* Page numbers */}
-          {visiblePages.reduce<React.ReactNode[]>((acc, p, idx, arr) => {
-            if (idx > 0 && p - (arr[idx - 1] as number) > 1) {
-              acc.push(
-                <span
-                  key={`dots-${p}`}
-                  className="w-9 h-9 flex items-center justify-center text-gray-400 text-sm"
-                >
-                  …
-                </span>,
-              );
-            }
-            acc.push(
-              <button
-                key={p}
-                onClick={() => {
-                  setPage(p);
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
-                className={`inline-flex items-center justify-center w-9 h-9 rounded-lg text-sm font-medium border transition-colors ${
-                  p === page
-                    ? "bg-primary text-white border-primary"
-                    : "border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-                }`}
-              >
-                {p}
-              </button>,
-            );
-            return acc;
-          }, [])}
-
-          {/* Next */}
-          <button
-            onClick={() => {
-              setPage((p) => Math.min(totalPages, p + 1));
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-            disabled={page === totalPages}
-            className="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
-        </div>
-      )}
+      <Pagination page={page} totalPages={totalPages} onChange={setPage} />
     </div>
   );
 };
