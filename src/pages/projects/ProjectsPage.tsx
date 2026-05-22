@@ -436,7 +436,14 @@ const ProjectsPage: React.FC = () => {
         )}
 
         {/* ── Pagination ── */}
-        <Pagination page={page} totalPages={totalPages} onChange={setPage} />
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          onChange={(p) => {
+            setPage(p);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        />
       </div>
     </div>
   );
