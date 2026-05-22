@@ -6,10 +6,11 @@ import {
   SubmitButton,
   inputClass,
 } from "../../../components/ui/FormKit";
-import { useCreateBidMutation } from "../../../services/bids/bidsApi";
-import type { CreateBidVM } from "../../../types/bid.types";
+import { useUpdateBidMutation } from "../../../services/bids/bidsApi";
+import { toast } from "react-toastify";
+import type { BidVM, UpdateBidVM } from "../../../types/bid.types";
 
-// ─── Form types ───────────────────────────────────────────────────────────────
+// ─── Form state ───────────────────────────────────────────────────────────────
 
 interface FormState {
   amount: string;
@@ -21,21 +22,14 @@ interface FormErrors {
   message?: string;
 }
 
-const EMPTY: FormState = { amount: "", message: "" };
-
-// ─── Validation ───────────────────────────────────────────────────────────────
-
 function validate(f: FormState): FormErrors {
   const e: FormErrors = {};
-
   const amount = parseFloat(f.amount);
-  if (!f.amount || isNaN(amount)) e.amount = "Please enter your bid amount";
+  if (!f.amount || isNaN(amount)) e.amount = "Please enter a bid amount";
   else if (amount <= 0) e.amount = "Amount must be a positive number";
-
   if (!f.message.trim()) e.message = "Cover letter is required";
   else if (f.message.trim().length < 20)
-    e.message = "At least 20 characters — describe your approach";
-
+    e.message = "At least 20 characters required";
   return e;
 }
 
@@ -44,43 +38,35 @@ function validate(f: FormState): FormErrors {
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  projectId: string;
-  /** Optional: project budget for a hint label */
-  projectBudget?: number;
+  bid: BidVM;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-const AddBidModal: React.FC<Props> = ({
-  isOpen,
-  onClose,
-  projectId,
-  projectBudget,
-}) => {
+const EditBidModal: React.FC<Props> = ({ isOpen, onClose, bid }) => {
   const amountId = useId();
   const messageId = useId();
 
-  const [createBid, { isLoading }] = useCreateBidMutation();
+  const [updateBid, { isLoading }] = useUpdateBidMutation();
 
-  const [form, setForm] = useState<FormState>(EMPTY);
+  const [form, setForm] = useState<FormState>({
+    amount: String(bid.amount),
+    message: bid.message,
+  });
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Partial<Record<keyof FormState, boolean>>>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  // Reset on open
+  // Sync form when bid changes or modal opens
   useEffect(() => {
     if (!isOpen) return;
-    setForm(EMPTY);
+    setForm({ amount: String(bid.amount), message: bid.message });
     setErrors({});
     setTouched({});
     setSubmitError(null);
-  }, [isOpen]);
+  }, [isOpen, bid]);
 
-  // ── Handlers ──────────────────────────────────────────────────────────────
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target as { name: keyof FormState; value: string };
     setForm((p) => ({ ...p, [name]: value }));
     if (touched[name]) {
@@ -89,9 +75,7 @@ const AddBidModal: React.FC<Props> = ({
     }
   };
 
-  const handleBlur = (
-    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name } = e.target as { name: keyof FormState };
     setTouched((p) => ({ ...p, [name]: true }));
     const errs = validate(form);
@@ -101,68 +85,45 @@ const AddBidModal: React.FC<Props> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitError(null);
-
     const errs = validate(form);
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
       setTouched({ amount: true, message: true });
       return;
     }
-
-    const payload: CreateBidVM = {
-      projectId,
+    const payload: UpdateBidVM = {
       amount: parseFloat(form.amount),
       message: form.message.trim(),
     };
-
     try {
-      await createBid(payload).unwrap();
+      const result = await updateBid({ id: bid.id, data: payload }).unwrap();
+      toast.success(result.message ?? "Bid updated successfully!");
       onClose();
     } catch (err: any) {
-      let message =
-        err?.data?.message ??
-        err?.data?.title ??
-        "Failed to submit bid. Please try again.";
-      if (err?.status === 403)
-        message = "You don't have permission to bid on this project.";
-      if (err?.status === 409)
-        message = "You have already placed a bid on this project.";
+      const message = err?.data?.message ?? err?.data?.title ?? "Failed to update bid.";
       setSubmitError(message);
     }
   };
-
-  // ── Render ────────────────────────────────────────────────────────────────
 
   return (
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
-      title="Place a Bid"
-      description="Submit your proposal for this project."
+      title="Edit Bid"
+      description="Update your bid amount and cover letter."
       size="md"
       preventBackdropClose
     >
       <form
-        id="add-bid-form"
+        id="edit-bid-form"
         onSubmit={handleSubmit}
         noValidate
-        aria-label="Place a bid form"
+        aria-label="Edit bid form"
         className="space-y-5"
       >
-        {/* Server error */}
         {submitError && <FormErrorAlert message={submitError} />}
 
-        {/* Amount */}
-        <FormField
-          id={amountId}
-          label={
-            projectBudget
-              ? `Your Bid ($) — project budget: $${projectBudget.toLocaleString("en-US")}`
-              : "Your Bid ($)"
-          }
-          required
-          error={errors.amount}
-        >
+        <FormField id={amountId} label="Bid Amount ($)" required error={errors.amount}>
           <input
             type="number"
             id={amountId}
@@ -173,18 +134,11 @@ const AddBidModal: React.FC<Props> = ({
             value={form.amount}
             onChange={handleChange}
             onBlur={handleBlur}
-            placeholder="0.00"
             className={inputClass}
           />
         </FormField>
 
-        {/* Cover letter */}
-        <FormField
-          id={messageId}
-          label="Cover Letter"
-          required
-          error={errors.message}
-        >
+        <FormField id={messageId} label="Cover Letter" required error={errors.message}>
           <textarea
             id={messageId}
             name="message"
@@ -193,22 +147,19 @@ const AddBidModal: React.FC<Props> = ({
             value={form.message}
             onChange={handleChange}
             onBlur={handleBlur}
-            placeholder="Describe your relevant experience, approach, and why you're a great fit for this project…"
+            placeholder="Describe your approach and why you're a great fit…"
             className={`${inputClass} resize-none`}
           />
         </FormField>
 
-        {/* Character counter hint */}
         <p className="text-xs text-gray-400 dark:text-gray-500 -mt-3 text-right">
           {form.message.trim().length} / 20 min characters
         </p>
 
-        {/* Required legend + actions */}
         <div className="flex items-center justify-end gap-3 pt-2 border-t border-gray-100 dark:border-gray-700/60">
           <p className="text-xs text-gray-400 dark:text-gray-500 mr-auto">
             <span aria-hidden="true">* </span>Required fields
           </p>
-
           <button
             type="button"
             onClick={onClose}
@@ -218,17 +169,15 @@ const AddBidModal: React.FC<Props> = ({
                        border border-gray-300 dark:border-gray-600
                        hover:bg-gray-50 dark:hover:bg-gray-800
                        focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60
-                       disabled:opacity-50 disabled:cursor-not-allowed
-                       transition-colors"
+                       disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Cancel
           </button>
-
           <SubmitButton
-            form="add-bid-form"
+            form="edit-bid-form"
             isLoading={isLoading}
-            label="Submit Bid"
-            loadingLabel="Submitting…"
+            label="Save Changes"
+            loadingLabel="Saving…"
           />
         </div>
       </form>
@@ -236,4 +185,4 @@ const AddBidModal: React.FC<Props> = ({
   );
 };
 
-export default AddBidModal;
+export default EditBidModal;

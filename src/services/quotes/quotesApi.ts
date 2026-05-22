@@ -1,6 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithRefresh } from "../api/baseQueryWithRefresh";
-import type { QuoteVM } from "../../types/quote.types";
+import type { QuoteVM, CreateQuoteVM } from "../../types/quote.types";
+import type { ApiResponse } from "../../types/response.types";
 
 export const quotesApi = createApi({
   reducerPath: "quotesApi",
@@ -14,7 +15,29 @@ export const quotesApi = createApi({
       }),
       transformResponse: (response: any) => response.data ?? response,
     }),
+
+    getQuotesByFreelancer: builder.query<QuoteVM[], void>({
+      query: () => ({
+        url: "/Quote/by-freelancer",
+        method: "GET",
+      }),
+      providesTags: ["Quote"],
+      transformResponse: (response: any) => response.data ?? response,
+    }),
+
+    createQuote: builder.mutation<ApiResponse<QuoteVM>, CreateQuoteVM>({
+      query: (data) => ({
+        url: "/Quote",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Quote"],
+    }),
   }),
 });
 
-export const { useGetQuotesByProjectQuery } = quotesApi;
+export const {
+  useGetQuotesByProjectQuery,
+  useGetQuotesByFreelancerQuery,
+  useCreateQuoteMutation,
+} = quotesApi;

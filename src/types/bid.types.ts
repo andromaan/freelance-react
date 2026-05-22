@@ -16,6 +16,11 @@ export interface CreateBidVM {
   message: string;
 }
 
+export interface UpdateBidVM {
+  amount?: number;
+  message: string;
+}
+
 export interface UpdateBidIsInterestVM {
   bidId: string;
   isInteresting: boolean;

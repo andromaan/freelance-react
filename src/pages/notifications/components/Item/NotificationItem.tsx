@@ -27,13 +27,42 @@ const NotificationItem: React.FC<Props> = ({
       {n.linkAddress && (
         <Link
           to={n.linkAddress}
-          className={`text-xs font-semibold text-blue-400 hover:underline absolute top-2 right-4 ${
+          className={`flex items-center gap-1 text-xs font-semibold text-blue-400 hover:underline absolute top-2 right-4 ${
             !n.isRead
               ? "text-blue-500 dark:text-blue-400"
               : "text-blue-600 dark:text-blue-400"
           }`}
         >
-          Check it →
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            transform="scale(0.85)"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+            />
+          </svg>
+          Check it
+          <svg
+            className="w-4 h-4"
+            transform="scale(-1,1)"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
         </Link>
       )}
 
@@ -77,7 +106,7 @@ const NotificationItem: React.FC<Props> = ({
           n.isRead
             ? "text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
             : "text-gray-400 hover:text-green-500 hover:bg-green-50 dark:hover:bg-green-900/20"
-        }`}
+        } ${n.linkAddress && "mt-3"}`}
       >
         {isToggling ? (
           <svg

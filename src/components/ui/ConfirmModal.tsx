@@ -55,7 +55,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       onClose={onClose}
       title={title}
       size="sm"
-      preventBackdropClose={isLoading}
+      preventBackdropClose
     >
       {description && (
         <p className="mb-6 text-sm leading-relaxed text-gray-500 dark:text-gray-400">

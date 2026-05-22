@@ -8,3 +8,9 @@ export interface QuoteVM {
   modifiedAt: string;
   createdBy: string;
 }
+
+export interface CreateQuoteVM {
+  projectId: string;
+  amount: number;
+  message: string;
+}

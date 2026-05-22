@@ -1,11 +1,12 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithRefresh } from "../api/baseQueryWithRefresh";
 import type {
   BidVM,
   CreateBidVM,
   UpdateBidIsInterestVM,
+  UpdateBidVM,
 } from "../../types/bid.types";
 import type { ApiResponse } from "../../types/response.types";
+import { baseQueryWithRefresh } from "../api/baseQueryWithRefresh";
 
 export const bidsApi = createApi({
   reducerPath: "bidsApi",
@@ -21,12 +22,34 @@ export const bidsApi = createApi({
       transformResponse: (response: any) => response.data ?? response,
     }),
 
+    getBidsByFreelancer: builder.query<BidVM[], void>({
+      query: () => ({
+        url: "/Bid/by-freelancer",
+        method: "GET",
+      }),
+      providesTags: ["Bid"],
+      transformResponse: (response: any) => response.data ?? response,
+    }),
+
     createBid: builder.mutation<ApiResponse<BidVM>, CreateBidVM>({
       query: (data) => ({
         url: "/Bid",
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Bid"],
+    }),
+
+    updateBid: builder.mutation<
+      ApiResponse<BidVM>,
+      { id: string; data: UpdateBidVM }
+    >({
+      query: ({ id, data }) => ({
+        url: `/Bid/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      transformResponse: (response: ApiResponse<BidVM>) => response,
       invalidatesTags: ["Bid"],
     }),
 
@@ -46,6 +69,8 @@ export const bidsApi = createApi({
 
 export const {
   useGetBidsByProjectQuery,
+  useGetBidsByFreelancerQuery,
   useCreateBidMutation,
   useUpdateBidIsInterestMutation,
+  useUpdateBidMutation,
 } = bidsApi;

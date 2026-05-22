@@ -26,6 +26,7 @@ import MyProjectQuotesPage from "../pages/my-project/MyProjectQuotesPage";
 import ProjectsPage from "../pages/projects/ProjectsPage";
 import ProjectPage from "../pages/project/ProjectPage";
 import ProjectBidsPage from "../pages/project/ProjectBidsPage";
+import MyProfilePage from "../pages/profile/MyProfilePage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -52,6 +53,22 @@ const AppRoutes: React.FC = () => {
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
 
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <MyProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/:tab"
+          element={
+            <ProtectedRoute>
+              <MyProfilePage />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/notifications"
           element={
