@@ -46,6 +46,14 @@ export const quotesApi = createApi({
       transformResponse: (response: ApiResponse<QuoteVM>) => response,
       invalidatesTags: ["Quote"],
     }),
+
+    deleteQuote: builder.mutation<ApiResponse<void>, string>({
+      query: (id) => ({
+        url: `/Quote/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Quote"],
+    }),
   }),
 });
 
@@ -54,4 +62,5 @@ export const {
   useGetQuotesByFreelancerQuery,
   useCreateQuoteMutation,
   useUpdateQuoteMutation,
+  useDeleteQuoteMutation,
 } = quotesApi;

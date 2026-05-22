@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useGetBidsByFreelancerQuery } from "../../services/bids/bidsApi";
+import {
+  useDeleteBidMutation,
+  useGetBidsByFreelancerQuery,
+} from "../../services/bids/bidsApi";
 import type { BidVM } from "../../types/bid.types";
+import ConfirmModal from "../../components/ui/ConfirmModal";
+import DeleteIcon from "../../components/icons/DeleteIcon";
 
 const InterestBadge: React.FC<{ value?: boolean | null }> = ({ value }) => {
   if (value === true)
@@ -94,9 +99,15 @@ interface BidCardProps {
   bid: BidVM;
   onSubmitQuote: (bid: BidVM) => void;
   onEditBid: (bid: BidVM) => void;
+  onDeleteBid: (bid: BidVM) => void;
 }
 
-const BidCard: React.FC<BidCardProps> = ({ bid, onSubmitQuote, onEditBid }) => (
+const BidCard: React.FC<BidCardProps> = ({
+  bid,
+  onSubmitQuote,
+  onEditBid,
+  onDeleteBid,
+}) => (
   <article className="shadow-lg bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 flex flex-col gap-3">
     {/* Top row */}
     <div className="flex items-start justify-between gap-3 flex-wrap">
@@ -141,56 +152,65 @@ const BidCard: React.FC<BidCardProps> = ({ bid, onSubmitQuote, onEditBid }) => (
         View Project
       </Link>
 
-      {/* Submit Quote CTA — only when employer marked interesting */}
-      {bid.isInteresting === true ? (
+      <div className="ml-auto flex items-center gap-2">
+        {/* Submit Quote CTA — only when employer marked interesting */}
+        {bid.isInteresting === true ? (
+          <button
+            type="button"
+            onClick={() => onSubmitQuote(bid)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold
+                       bg-primary hover:bg-primary-hover text-white
+                       transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60
+                       shadow-sm hover:shadow-md"
+          >
+            <svg
+              className="w-3.5 h-3.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            Submit Quote
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => onEditBid(bid)}
+            className="p-2 rounded-lg text-gray-400 hover:text-amber-500 dark:text-gray-500 dark:hover:text-amber-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/70"
+            title="Edit Bid"
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+              />
+            </svg>
+          </button>
+        )}
+
+        {/* Delete button */}
         <button
           type="button"
-          onClick={() => onSubmitQuote(bid)}
-          className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold
-                     bg-primary hover:bg-primary-hover text-white
-                     transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60
-                     shadow-sm hover:shadow-md"
+          onClick={() => onDeleteBid(bid)}
+          className="p-2 rounded-lg text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500/70"
+          title="Delete"
         >
-          <svg
-            className="w-3.5 h-3.5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-          Submit Quote
+          <DeleteIcon className="w-5 h-5" />
         </button>
-      ) : (
-        <button
-          type="button"
-          onClick={() => onEditBid(bid)}
-          className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold
-             bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white
-             transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/70 focus-visible:ring-offset-2
-             shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <svg
-            className="w-3.5 h-3.5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-            />
-          </svg>
-          Edit Bid
-        </button>
-      )}
+      </div>
     </div>
   </article>
 );
@@ -224,7 +244,9 @@ interface MyBidsTabProps {
 
 const MyBidsTab: React.FC<MyBidsTabProps> = ({ onSubmitQuote, onEditBid }) => {
   const { data: bids = [], isLoading } = useGetBidsByFreelancerQuery();
+  const [deleteBid, { isLoading: isDeleting }] = useDeleteBidMutation();
   const [filter, setFilter] = useState<InterestFilter>("all");
+  const [deleteTarget, setDeleteTarget] = useState<BidVM | null>(null);
 
   if (isLoading) {
     return (
@@ -338,11 +360,45 @@ const MyBidsTab: React.FC<MyBidsTabProps> = ({ onSubmitQuote, onEditBid }) => {
                 bid={bid}
                 onSubmitQuote={onSubmitQuote}
                 onEditBid={onEditBid}
+                onDeleteBid={setDeleteTarget}
               />
             </li>
           ))}
         </ul>
       )}
+
+      {/* Delete confirmation modal */}
+      <ConfirmModal
+        isOpen={deleteTarget !== null}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={async () => {
+          if (!deleteTarget) return;
+          try {
+            await deleteBid(deleteTarget.id).unwrap();
+          } catch {
+            // Error is handled by toast in API
+          }
+          setDeleteTarget(null);
+        }}
+        title="Delete Bid?"
+        description={
+          <>
+            Are you sure you want to delete this bid for{" "}
+            <strong>
+              $
+              {deleteTarget?.amount.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+              })}
+            </strong>
+            ?
+            <br />
+            This action cannot be undone.
+          </>
+        }
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        isLoading={isDeleting}
+      />
     </div>
   );
 };

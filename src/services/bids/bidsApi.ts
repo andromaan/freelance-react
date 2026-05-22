@@ -64,6 +64,14 @@ export const bidsApi = createApi({
       }),
       invalidatesTags: ["Bid"],
     }),
+
+    deleteBid: builder.mutation<ApiResponse<void>, string>({
+      query: (id) => ({
+        url: `/Bid/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Bid"],
+    }),
   }),
 });
 
@@ -73,4 +81,5 @@ export const {
   useCreateBidMutation,
   useUpdateBidIsInterestMutation,
   useUpdateBidMutation,
+  useDeleteBidMutation,
 } = bidsApi;

@@ -50,6 +50,7 @@ const ProjectPage: React.FC = () => {
         <ProjectHeader
           projectId={project.id}
           projectBudget={project.budget}
+          projectStatus={project.status}
         />
 
         <ProjectMeta project={project} />

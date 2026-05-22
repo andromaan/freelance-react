@@ -1,20 +1,24 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useGetQuotesByFreelancerQuery } from "../../services/quotes/quotesApi";
+import { useDeleteQuoteMutation, useGetQuotesByFreelancerQuery } from "../../services/quotes/quotesApi";
 import type { QuoteVM } from "../../types/quote.types";
+import ConfirmModal from "../../components/ui/ConfirmModal";
+import DeleteIcon from "../../components/icons/DeleteIcon";
 
 // ─── Quote card ─────────────────────────────────────────────────────────────────
 
 interface QuoteCardProps {
   quote: QuoteVM;
   onEditQuote: (quote: QuoteVM) => void;
+  onDeleteQuote: (quote: QuoteVM) => void;
 }
 
-const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onEditQuote }) => (
+const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onEditQuote, onDeleteQuote }) => (
   <article className="shadow-lg bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 flex flex-col gap-3">
     {/* Top row */}
     <div className="flex items-start justify-between gap-3 flex-wrap">
       <div>
-        <span className="text-xl font-bold text-primary tabular-nums">
+        <span className="text-xl font-bold text-green-500 tabular-nums">
           ${quote.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
         </span>
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 uppercase tracking-wide font-medium">
@@ -53,30 +57,34 @@ const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onEditQuote }) => (
         View Project
       </Link>
 
-      {/* Edit Quote button */}
-      <button
-        type="button"
-        onClick={() => onEditQuote(quote)}
-        className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold
-           bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white
-           transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/70 focus-visible:ring-offset-2
-           shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        <svg
-          className="w-3.5 h-3.5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+      <div className="ml-auto flex items-center gap-1">
+        {/* Edit Quote button */}
+        <button
+          type="button"
+          onClick={() => onEditQuote(quote)}
+          className="p-2 rounded-lg text-gray-400 hover:text-amber-500 dark:text-gray-500 dark:hover:text-amber-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/70"
+          title="Edit Quote"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-          />
-        </svg>
-        Edit Quote
-      </button>
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+            />
+          </svg>
+        </button>
+
+        {/* Delete button */}
+        <button
+          type="button"
+          onClick={() => onDeleteQuote(quote)}
+          className="p-2 rounded-lg text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500/70"
+          title="Delete"
+        >
+          <DeleteIcon className="w-5 h-5" />
+        </button>
+      </div>
     </div>
   </article>
 );
@@ -112,6 +120,8 @@ interface MyQuotesTabProps {
 
 const MyQuotesTab: React.FC<MyQuotesTabProps> = ({ onEditQuote }) => {
   const { data: quotes = [], isLoading } = useGetQuotesByFreelancerQuery();
+  const [deleteQuote, { isLoading: isDeleting }] = useDeleteQuoteMutation();
+  const [deleteTarget, setDeleteTarget] = useState<QuoteVM | null>(null);
 
   if (isLoading) {
     return (
@@ -158,13 +168,43 @@ const MyQuotesTab: React.FC<MyQuotesTabProps> = ({ onEditQuote }) => {
   }
 
   return (
-    <ul className="flex flex-col gap-3" aria-label="My quotes">
+    <div className="flex flex-col gap-3" aria-label="My quotes">
       {quotes.map((quote) => (
-        <li key={quote.id}>
-          <QuoteCard quote={quote} onEditQuote={onEditQuote} />
-        </li>
+        <QuoteCard
+          key={quote.id}
+          quote={quote}
+          onEditQuote={onEditQuote}
+          onDeleteQuote={setDeleteTarget}
+        />
       ))}
-    </ul>
+
+      {/* Delete confirmation modal */}
+      <ConfirmModal
+        isOpen={deleteTarget !== null}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={async () => {
+          if (!deleteTarget) return;
+          try {
+            await deleteQuote(deleteTarget.id).unwrap();
+          } catch {
+            // Error is handled by toast in API
+          }
+          setDeleteTarget(null);
+        }}
+        title="Delete Quote?"
+        description={
+          <>
+            Are you sure you want to delete this quote for{" "}
+            <strong>${deleteTarget?.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</strong>?
+            <br />
+            This action cannot be undone.
+          </>
+        }
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        isLoading={isDeleting}
+      />
+    </div>
   );
 };
 
