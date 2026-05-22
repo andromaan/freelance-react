@@ -5,7 +5,6 @@ import { notificationHubService } from "../services/signalr/notificationHubServi
 import { tokenStorage } from "../services/auth/tokenStorage";
 import { addNotification } from "../store/notificationSlice";
 import type { NotificationVM } from "../types/notification.types";
-import { NotificationTypeLabels } from "../types/notification.types";
 import type { AppDispatch } from "../store";
 
 export const useNotificationHub = (enabled: boolean) => {
@@ -24,7 +23,7 @@ export const useNotificationHub = (enabled: boolean) => {
     const handler = (notification: NotificationVM) => {
       dispatch(addNotification(notification));
 
-      const label = NotificationTypeLabels[notification.type] ?? "Notification";
+      const label = notification.type.split(/(?=[A-Z])/).join(" ");
       toast.info(`${label}: ${notification.message}`, {
         position: "bottom-right",
         autoClose: 5000,

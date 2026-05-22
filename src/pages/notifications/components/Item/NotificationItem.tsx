@@ -1,6 +1,5 @@
 import React from "react";
 import type { NotificationVM } from "../../../../types/notification.types";
-import { NotificationTypeLabels } from "../../../../types/notification.types";
 import { Link } from "react-router-dom";
 
 type Props = {
@@ -20,7 +19,7 @@ const NotificationItem: React.FC<Props> = ({
     <div
       className={`group relative flex items-start items-center gap-4 p-4 rounded-xl border transition-all duration-300 notification-item-enter ${
         !n.isRead
-          ? "bg-blue-50/60 dark:bg-blue-500/10 border-blue-300 dark:border-blue-900/30"
+          ? "bg-blue-50/60 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/50"
           : "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
       } ${isToggling ? "opacity-60 scale-[0.99]" : "opacity-100 scale-100"}`}
     >
@@ -83,7 +82,7 @@ const NotificationItem: React.FC<Props> = ({
                 : "text-blue-600 dark:text-blue-400"
             }`}
           >
-            {NotificationTypeLabels[n.type] ?? "Notifications"}
+            {n.type.split(/(?=[A-Z])/).join(" ")}
           </span>
 
           <span

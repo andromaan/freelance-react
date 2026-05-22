@@ -6,7 +6,6 @@ import {
   markAllAsRead,
   markAsRead,
 } from "../../store/notificationSlice";
-import { NotificationTypeLabels } from "../../types/notification.types";
 import type { AppDispatch } from "../../store";
 import {
   useToggleIsReadMutation,
@@ -160,7 +159,7 @@ const NotificationBell: React.FC = () => {
                       <Link to="/notifications">
                         <div className="flex-1 min-w-0">
                           <p className="text-xs font-semibold text-primary mb-0.5">
-                            {NotificationTypeLabels[n.type] ?? "Notifications"}
+                            {n.type.split(/(?=[A-Z])/).join(" ")}
                           </p>
                           <p className="text-sm text-gray-700 dark:text-gray-200 leading-snug">
                             {n.message}

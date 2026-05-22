@@ -222,6 +222,8 @@ const MyProfilePage: React.FC = () => {
         onClose={() => setQuoteTarget(null)}
         projectId={quoteTarget?.projectId ?? ""}
         projectTitle={undefined}
+        quoteAmount={quoteTarget?.amount}
+        proposalMessage={quoteTarget?.message}
       />
 
       {editBidTarget && (
