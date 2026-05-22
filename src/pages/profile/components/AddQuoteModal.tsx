@@ -54,7 +54,6 @@ const AddQuoteModal: React.FC<Props> = ({
   const messageId = useId();
   const [createQuote, { isLoading }] = useCreateQuoteMutation();
 
-  debugger;
   const [form, setForm] = useState<FormState>({
     amount: quoteAmount?.toString() ?? "",
     message: proposalMessage ?? "",
