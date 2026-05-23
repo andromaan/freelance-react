@@ -7,6 +7,7 @@ import {
 import type { BidVM } from "../../types/bid.types";
 import ConfirmModal from "../../components/ui/ConfirmModal";
 import DeleteIcon from "../../components/icons/DeleteIcon";
+import { useGetQuotesByFreelancerQuery } from "../../services/quotes/quotesApi";
 
 const InterestBadge: React.FC<{ value?: boolean | null }> = ({ value }) => {
   if (value === true)
@@ -100,6 +101,7 @@ interface BidCardProps {
   onSubmitQuote: (bid: BidVM) => void;
   onEditBid: (bid: BidVM) => void;
   onDeleteBid: (bid: BidVM) => void;
+  isQuoteSubmitted?: boolean;
 }
 
 const BidCard: React.FC<BidCardProps> = ({
@@ -107,6 +109,7 @@ const BidCard: React.FC<BidCardProps> = ({
   onSubmitQuote,
   onEditBid,
   onDeleteBid,
+  isQuoteSubmitted,
 }) => (
   <article className="shadow-lg bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 flex flex-col gap-3">
     {/* Top row */}
@@ -155,29 +158,54 @@ const BidCard: React.FC<BidCardProps> = ({
       <div className="ml-auto flex items-center gap-2">
         {/* Submit Quote CTA — only when employer marked interesting */}
         {bid.isInteresting === true ? (
-          <button
-            type="button"
-            onClick={() => onSubmitQuote(bid)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold
+          !isQuoteSubmitted ? (
+            <button
+              type="button"
+              onClick={() => onSubmitQuote(bid)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold
                        bg-primary hover:bg-primary-hover text-white
                        transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60
                        shadow-sm hover:shadow-md"
-          >
-            <svg
-              className="w-3.5 h-3.5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-            Submit Quote
-          </button>
+              <svg
+                className="w-3.5 h-3.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              Submit Quote
+            </button>
+          ) : (
+            <button
+              type="button"
+              disabled
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold
+             bg-green-600 text-white opacity-70 cursor-not-allowed
+             transition-colors shadow-sm"
+            >
+              <svg
+                className="w-3.5 h-3.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+              Quote Submitted
+            </button>
+          )
         ) : (
           <button
             type="button"
@@ -247,6 +275,8 @@ const MyBidsTab: React.FC<MyBidsTabProps> = ({ onSubmitQuote, onEditBid }) => {
   const [deleteBid, { isLoading: isDeleting }] = useDeleteBidMutation();
   const [filter, setFilter] = useState<InterestFilter>("all");
   const [deleteTarget, setDeleteTarget] = useState<BidVM | null>(null);
+
+  const { data: quotes = [] } = useGetQuotesByFreelancerQuery();
 
   if (isLoading) {
     return (
@@ -361,6 +391,9 @@ const MyBidsTab: React.FC<MyBidsTabProps> = ({ onSubmitQuote, onEditBid }) => {
                 onSubmitQuote={onSubmitQuote}
                 onEditBid={onEditBid}
                 onDeleteBid={setDeleteTarget}
+                isQuoteSubmitted={quotes.some(
+                  (q) => q.projectId === bid.projectId,
+                )}
               />
             </li>
           ))}

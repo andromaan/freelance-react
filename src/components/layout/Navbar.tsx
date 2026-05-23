@@ -11,6 +11,7 @@ import type { AppDispatch } from "../../store";
 import APP_ENV from "../../env";
 import { ROLES } from "../../constants/roles";
 import { useTheme } from "../../context/ThemeContext";
+import freelanceIconUrl from "../icons/FreelanceIcon.svg";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -57,19 +58,7 @@ const Navbar: React.FC = () => {
           to="/"
           className="flex items-center gap-2 text-xl font-bold text-primary hover:opacity-90 transition-opacity"
         >
-          <svg
-            className="w-8 h-8"
-            viewBox="0 0 32 32"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect width="32" height="32" rx="8" fill="#1976d2" />
-            <path
-              d="M8 22L14 10L20 18L23 14L26 22H8Z"
-              fill="white"
-              opacity="0.9"
-            />
-          </svg>
+          <img src={freelanceIconUrl} alt="Freelance" className="w-8 h-8" />
           <span>FreeLance</span>
         </Link>
 

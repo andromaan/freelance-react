@@ -15,11 +15,11 @@ const SenderInfo: React.FC<SenderInfoProps> = ({ createdBy }) => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center gap-3 mt-4">
-        <div className="w-10 h-10 rounded-full animate-pulse bg-gray-200 dark:bg-gray-700 flex-shrink-0" />
+      <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700 animate-pulse">
+        <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex-shrink-0" />
         <div className="flex flex-col gap-2 flex-1">
-          <div className="h-3 w-32 animate-pulse bg-gray-200 dark:bg-gray-700 rounded" />
-          <div className="h-3 w-48 animate-pulse bg-gray-200 dark:bg-gray-700 rounded" />
+          <div className="h-3 w-32 bg-gray-200 dark:bg-gray-700 rounded" />
+          <div className="h-3 w-48 bg-gray-200 dark:bg-gray-700 rounded" />
         </div>
       </div>
     );
@@ -31,28 +31,19 @@ const SenderInfo: React.FC<SenderInfoProps> = ({ createdBy }) => {
   const initial = label.charAt(0).toUpperCase();
 
   return (
-    <div className="flex items-center gap-3 mt-4">
-      <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm flex-shrink-0">
+    <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
+      <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm flex-shrink-0 uppercase">
         {initial}
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col min-w-0">
         {user.displayName && (
-          <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+          <span className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
             {user.displayName}
           </span>
         )}
-        <span className="text-sm text-gray-500 dark:text-gray-400">
-          {user.email}
-        </span>
+        <span className="text-sm text-gray-500 dark:text-gray-400 truncate">{user.email}</span>
         {user.country?.name && (
-          <span className="text-xs text-gray-400 dark:text-gray-500">
-            {user.country.name}
-          </span>
-        )}
-        {user.role?.name && (
-          <span className="text-xs text-gray-400 dark:text-gray-500">
-            {user.role.name}
-          </span>
+          <span className="text-xs text-gray-400 dark:text-gray-500">{user.country.name}</span>
         )}
       </div>
     </div>
@@ -66,42 +57,45 @@ interface QuoteCardProps {
 
 const QuoteCard: React.FC<QuoteCardProps> = ({ quote }) => {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-5">
-      <div className="flex items-start justify-between gap-4">
-        <span className="text-2xl font-bold text-green-500">
-          ${quote.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
-        </span>
-        <span className="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap pt-1">
-          {new Date(quote.createdAt).toLocaleDateString("uk-UA")}
-        </span>
+    <article className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-5">
+      <div className="flex items-start justify-between gap-4 mb-3">
+        <div>
+          <span className="text-2xl font-bold text-green-500 tabular-nums">
+            ${quote.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+          </span>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 uppercase tracking-wide font-medium">
+            {new Date(quote.createdAt).toLocaleDateString("uk-UA")}
+          </p>
+        </div>
       </div>
 
-      <p className="mt-3 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+      <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap mb-4">
         {quote.message}
       </p>
 
       <SenderInfo createdBy={quote.createdBy} />
-    </div>
+    </article>
   );
 };
 
 /* ─── Skeleton card ──────────────────────────────────────────────────────── */
 const SkeletonCard: React.FC = () => (
-  <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-5">
-    <div className="flex items-start justify-between gap-4">
-      <div className="h-7 w-28 animate-pulse bg-gray-200 dark:bg-gray-700 rounded" />
-      <div className="h-4 w-20 animate-pulse bg-gray-200 dark:bg-gray-700 rounded" />
+  <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-5 animate-pulse">
+    <div className="flex items-start justify-between gap-4 mb-3">
+      <div className="space-y-1.5">
+        <div className="h-7 w-28 bg-gray-200 dark:bg-gray-700 rounded" />
+        <div className="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded" />
+      </div>
     </div>
-    <div className="mt-3 space-y-2">
-      <div className="h-3 w-full animate-pulse bg-gray-200 dark:bg-gray-700 rounded" />
-      <div className="h-3 w-5/6 animate-pulse bg-gray-200 dark:bg-gray-700 rounded" />
-      <div className="h-3 w-4/6 animate-pulse bg-gray-200 dark:bg-gray-700 rounded" />
+    <div className="space-y-2 mb-4">
+      <div className="h-3 w-full bg-gray-200 dark:bg-gray-700 rounded" />
+      <div className="h-3 w-5/6 bg-gray-200 dark:bg-gray-700 rounded" />
     </div>
-    <div className="flex items-center gap-3 mt-4">
-      <div className="w-10 h-10 rounded-full animate-pulse bg-gray-200 dark:bg-gray-700 flex-shrink-0" />
-      <div className="flex flex-col gap-2 flex-1">
-        <div className="h-3 w-32 animate-pulse bg-gray-200 dark:bg-gray-700 rounded" />
-        <div className="h-3 w-48 animate-pulse bg-gray-200 dark:bg-gray-700 rounded" />
+    <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
+      <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700" />
+      <div className="space-y-1.5 flex-1">
+        <div className="h-3 w-32 bg-gray-200 dark:bg-gray-700 rounded" />
+        <div className="h-3 w-48 bg-gray-200 dark:bg-gray-700 rounded" />
       </div>
     </div>
   </div>

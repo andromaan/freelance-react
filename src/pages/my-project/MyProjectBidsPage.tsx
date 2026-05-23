@@ -101,11 +101,6 @@ const SenderInfo: React.FC<{ createdBy: string }> = ({ createdBy }) => {
         {user.country?.name && (
           <span className="text-xs text-gray-400 dark:text-gray-500">{user.country.name}</span>
         )}
-        {user.role?.name && (
-          <span className="text-xs font-medium mt-0.5 px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 w-fit">
-            {user.role.name}
-          </span>
-        )}
       </div>
     </div>
   );

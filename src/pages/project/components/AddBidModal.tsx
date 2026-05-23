@@ -8,6 +8,7 @@ import {
 } from "../../../components/ui/FormKit";
 import { useCreateBidMutation } from "../../../services/bids/bidsApi";
 import type { CreateBidVM } from "../../../types/bid.types";
+import { toast } from "react-toastify";
 
 // ─── Form types ───────────────────────────────────────────────────────────────
 
@@ -117,6 +118,8 @@ const AddBidModal: React.FC<Props> = ({
 
     try {
       await createBid(payload).unwrap();
+
+      toast.success("Bid submitted successfully");
       onClose();
     } catch (err: any) {
       let message =
