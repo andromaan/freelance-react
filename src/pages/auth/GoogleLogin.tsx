@@ -78,7 +78,7 @@ const GoogleLogin: React.FC = () => {
       navigate("/");
     } catch (error: any) {
       // Перевіряємо чи потрібен вибір ролі
-      if (error?.data === "role_required") {
+      if (error?.data?.accessToken === "role_required") {
         setPendingGoogleToken(credential);
         setShowRoleSelection(true);
         return;
