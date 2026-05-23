@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDeleteQuoteMutation, useGetQuotesByFreelancerQuery } from "../../services/quotes/quotesApi";
+import { useIsExistsByQuoteQuery } from "../../services/contracts/contractsApi";
 import type { QuoteVM } from "../../types/quote.types";
 import ConfirmModal from "../../components/ui/ConfirmModal";
 import DeleteIcon from "../../components/icons/DeleteIcon";
@@ -12,6 +13,26 @@ interface QuoteCardProps {
   onEditQuote: (quote: QuoteVM) => void;
   onDeleteQuote: (quote: QuoteVM) => void;
 }
+
+const ContractStatus: React.FC<{ quoteId: string }> = ({ quoteId }) => {
+  const { data: exists } = useIsExistsByQuoteQuery(quoteId, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  if (!exists) return null;
+
+  return (
+    <span
+      className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold
+                 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
+    >
+      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+      </svg>
+      Contracted
+    </span>
+  );
+};
 
 const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onEditQuote, onDeleteQuote }) => (
   <article className="shadow-lg bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 flex flex-col gap-3">
@@ -25,6 +46,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onEditQuote, onDeleteQuote
           Submitted {new Date(quote.createdAt).toLocaleDateString("uk-UA")}
         </p>
       </div>
+      <ContractStatus quoteId={quote.id} />
     </div>
 
     {/* Message */}
