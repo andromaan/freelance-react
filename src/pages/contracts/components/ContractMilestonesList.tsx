@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { format } from "date-fns";
+import ConfirmModal from "../../../components/ui/ConfirmModal";
 import {
   useGetContractMilestonesQuery,
   useUpdateContractMilestoneFreelancerMutation,
@@ -53,6 +54,12 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
   const [updateEmployerStatus, { isLoading: isEmployerUpdating }] =
     useUpdateContractMilestoneEmployerMutation();
 
+  const [confirmAction, setConfirmAction] = useState<{
+    id: string;
+    status: ContractMilestoneFreelancerStatus | ContractMilestoneEmployerStatus;
+    role: "freelancer" | "employer";
+  } | null>(null);
+
   const isUpdating = isFreelancerUpdating || isEmployerUpdating;
 
   const handleFreelancerUpdate = async (
@@ -61,6 +68,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
   ) => {
     try {
       await updateFreelancerStatus({ id, statusVM: { status } }).unwrap();
+      setConfirmAction(null);
     } catch (e) {
       console.error("Failed to update milestone status", e);
     }
@@ -72,8 +80,24 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
   ) => {
     try {
       await updateEmployerStatus({ id, statusVM: { status } }).unwrap();
+      setConfirmAction(null);
     } catch (e) {
       console.error("Failed to update milestone status", e);
+    }
+  };
+
+  const handleConfirm = () => {
+    if (!confirmAction) return;
+    if (confirmAction.role === "freelancer") {
+      handleFreelancerUpdate(
+        confirmAction.id,
+        confirmAction.status as ContractMilestoneFreelancerStatus
+      );
+    } else {
+      handleEmployerUpdate(
+        confirmAction.id,
+        confirmAction.status as ContractMilestoneEmployerStatus
+      );
     }
   };
 
@@ -165,10 +189,11 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                   <button
                     disabled={isUpdating}
                     onClick={() =>
-                      handleFreelancerUpdate(
-                        milestone.id,
-                        ContractMilestoneFreelancerStatus.InProgress,
-                      )
+                      setConfirmAction({
+                        id: milestone.id,
+                        status: ContractMilestoneFreelancerStatus.InProgress,
+                        role: "freelancer",
+                      })
                     }
                     className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors disabled:opacity-50"
                   >
@@ -179,10 +204,11 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                   <button
                     disabled={isUpdating}
                     onClick={() =>
-                      handleFreelancerUpdate(
-                        milestone.id,
-                        ContractMilestoneFreelancerStatus.Submitted,
-                      )
+                      setConfirmAction({
+                        id: milestone.id,
+                        status: ContractMilestoneFreelancerStatus.Submitted,
+                        role: "freelancer",
+                      })
                     }
                     className="px-4 py-2 text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 rounded-lg transition-colors disabled:opacity-50"
                   >
@@ -196,10 +222,11 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                   <button
                     disabled={isUpdating}
                     onClick={() =>
-                      handleEmployerUpdate(
-                        milestone.id,
-                        ContractMilestoneEmployerStatus.UnderReview,
-                      )
+                      setConfirmAction({
+                        id: milestone.id,
+                        status: ContractMilestoneEmployerStatus.UnderReview,
+                        role: "employer",
+                      })
                     }
                     className="px-4 py-2 text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors disabled:opacity-50"
                   >
@@ -211,10 +238,11 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                   <button
                     disabled={isUpdating}
                     onClick={() =>
-                      handleEmployerUpdate(
-                        milestone.id,
-                        ContractMilestoneEmployerStatus.Approved,
-                      )
+                      setConfirmAction({
+                        id: milestone.id,
+                        status: ContractMilestoneEmployerStatus.Approved,
+                        role: "employer",
+                      })
                     }
                     className="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors disabled:opacity-50"
                   >
@@ -226,10 +254,11 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                   <button
                     disabled={isUpdating}
                     onClick={() =>
-                      handleEmployerUpdate(
-                        milestone.id,
-                        ContractMilestoneEmployerStatus.InProgress,
-                      )
+                      setConfirmAction({
+                        id: milestone.id,
+                        status: ContractMilestoneEmployerStatus.InProgress,
+                        role: "employer",
+                      })
                     }
                     className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors disabled:opacity-50"
                   >
@@ -241,6 +270,17 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
           </div>
         </div>
       ))}
+
+      <ConfirmModal
+        isOpen={!!confirmAction}
+        onClose={() => setConfirmAction(null)}
+        onConfirm={handleConfirm}
+        title="Оновити статус етапу"
+        description="Ви впевнені, що хочете змінити статус цього етапу (milestone)?"
+        confirmLabel="Так, змінити"
+        cancelLabel="Скасувати"
+        isLoading={isUpdating}
+      />
     </div>
   );
 };

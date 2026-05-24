@@ -87,8 +87,23 @@ const ContractCard: React.FC<ContractCardProps> = ({ contract }) => {
           </div>
         </div>
 
-        <div className="flex items-center gap-3 self-end sm:self-auto text-primary text-sm font-medium">
-          View Contract &rarr;
+        <div className="flex items-center gap-1 self-end sm:self-auto text-primary text-sm font-medium">
+          View Contract{" "}
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            transform="scale(-1)"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            ></path>
+          </svg>
         </div>
       </div>
     </div>

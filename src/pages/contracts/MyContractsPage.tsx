@@ -83,7 +83,7 @@ const MyContractsPage: React.FC = () => {
             <button
               key={key}
               type="button"
-              onClick={() => navigate(`/contracts/${key}`)}
+              onClick={() => navigate(`/my-contracts/${key}`)}
               aria-current={activeTab === key ? "page" : undefined}
               className={`w-full flex items-center gap-3 px-5 py-3.5 text-sm font-medium text-left transition-colors border-r-2 ${
                 activeTab === key
@@ -108,7 +108,7 @@ const MyContractsPage: React.FC = () => {
             <button
               key={key}
               type="button"
-              onClick={() => navigate(`/contracts/${key}`)}
+              onClick={() => navigate(`/my-contracts/${key}`)}
               aria-current={activeTab === key ? "page" : undefined}
               className={`flex items-center gap-2 px-3 py-3.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
                 activeTab === key

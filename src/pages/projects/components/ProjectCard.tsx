@@ -24,71 +24,73 @@ const ProjectCard: React.FC<{ project: ProjectVM }> = ({ project }) => {
 
   return (
     <article className="group bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary/40 dark:hover:border-primary/40 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col">
-      {/* Card header */}
-      <div className="p-5 flex-1">
-        {/* Title */}
-        <h2 className="text-base font-semibold text-gray-900 dark:text-white leading-snug mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-          {project.title}
-        </h2>
+      <Link to={`/projects/${project.id}`} className="block">
+        {/* Card header */}
+        <div className="p-5 flex-1">
+          {/* Title */}
+          <h2 className="text-base font-semibold text-gray-900 dark:text-white leading-snug mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+            {project.title}
+          </h2>
 
-        {/* Description */}
-        <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-3 mb-4">
-          {project.description}
-        </p>
+          {/* Description */}
+          <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-3 mb-4">
+            {project.description}
+          </p>
 
-        <div className="flex flex-wrap gap-2 my-3">
-          {(project.categories?.length > 4
-            ? project.categories.slice(0, 4)
-            : project.categories
-          )?.map((c) => (
+          <div className="flex flex-wrap gap-2 my-3">
+            {(project.categories?.length > 4
+              ? project.categories.slice(0, 4)
+              : project.categories
+            )?.map((c) => (
+              <span
+                key={c.id}
+                className="text-[10px] px-2 py-0.5 rounded-full tracking-wider bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-medium"
+              >
+                {c.name}
+              </span>
+            ))}
+            {project.categories?.length > 4 && (
+              <span className="text-[10px] px-2 py-0.5 rounded-full tracking-wider bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-medium">
+                ...
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="px-5 pb-5 border-t border-gray-100 dark:border-gray-700 pt-4 flex items-center justify-between gap-3">
+          <div className="flex flex-col gap-0.5">
+            <span className="text-lg font-bold text-gray-900 dark:text-white tabular-nums">
+              ${project.budget.toLocaleString("en-US")}
+            </span>
             <span
-              key={c.id}
-              className="text-[10px] px-2 py-0.5 rounded-full tracking-wider bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-medium"
+              className={`text-xs flex items-center gap-1 ${due.urgent ? "text-red-500" : "text-gray-400 dark:text-gray-500"}`}
             >
-              {c.name}
+              <svg
+                className="w-3 h-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              {formatDeadline(project.deadline)} · {due.text}
             </span>
-          ))}
-          {project.categories?.length > 4 && (
-            <span className="text-[10px] px-2 py-0.5 rounded-full tracking-wider bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-medium">
-              ...
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div className="px-5 pb-5 border-t border-gray-100 dark:border-gray-700 pt-4 flex items-center justify-between gap-3">
-        <div className="flex flex-col gap-0.5">
-          <span className="text-lg font-bold text-gray-900 dark:text-white tabular-nums">
-            ${project.budget.toLocaleString("en-US")}
-          </span>
-          <span
-            className={`text-xs flex items-center gap-1 ${due.urgent ? "text-red-500" : "text-gray-400 dark:text-gray-500"}`}
+          </div>
+          <Link
+            to={`/projects/${project.id}`}
+            className="shrink-0 px-4 py-2 rounded-lg bg-primary hover:bg-primary-hover text-white text-xs font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
           >
-            <svg
-              className="w-3 h-3"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            {formatDeadline(project.deadline)} · {due.text}
-          </span>
+            View
+          </Link>
         </div>
-        <Link
-          to={`/projects/${project.id}`}
-          className="shrink-0 px-4 py-2 rounded-lg bg-primary hover:bg-primary-hover text-white text-xs font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
-        >
-          View
-        </Link>
-      </div>
+      </Link>
     </article>
   );
 };

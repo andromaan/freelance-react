@@ -156,7 +156,7 @@ const NotificationBell: React.FC = () => {
                     }`}
                   >
                     <div className="flex items-start gap-3 px-4 py-3">
-                      <Link to="/notifications">
+                      <Link to="/notifications" onClick={() => setOpen(false)}>
                         <div className="flex-1 min-w-0">
                           <p className="text-xs font-semibold text-primary mb-0.5">
                             {n.type.split(/(?=[A-Z])/).join(" ")}

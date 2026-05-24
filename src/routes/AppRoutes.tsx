@@ -73,7 +73,7 @@ const AppRoutes: React.FC = () => {
         />
         
         <Route
-          path="/contracts"
+          path="/my-contracts"
           element={
             <ProtectedRoute>
               <MyContractsPage />
@@ -81,7 +81,7 @@ const AppRoutes: React.FC = () => {
           }
         />
         <Route
-          path="/contracts/:tab"
+          path="/my-contracts/:tab"
           element={
             <ProtectedRoute>
               <MyContractsPage />

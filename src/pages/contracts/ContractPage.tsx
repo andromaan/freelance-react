@@ -34,7 +34,7 @@ const ContractPage: React.FC = () => {
       <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center gap-4">
         <span className="text-red-500">Contract not found or error loading contract.</span>
         <button
-          onClick={() => navigate("/contracts")}
+          onClick={() => navigate("/my-contracts")}
           className="text-primary hover:text-primary-hover underline"
         >
           Back to My Contracts
