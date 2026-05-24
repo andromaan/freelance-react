@@ -125,7 +125,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
 
   return (
     <div className="space-y-4">
-      {milestones.map((milestone, index) => (
+      {milestones.map((milestone, _index) => (
         <div
           key={milestone.id}
           className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4"
