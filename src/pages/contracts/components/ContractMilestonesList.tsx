@@ -132,9 +132,6 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
         >
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-1">
-              <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                Phase {index + 1}
-              </span>
               <span
                 className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${getStatusBadgeClass(milestone.status)}`}
               >

@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { getStatusText } from "../../../utils";
 
 interface Props {
   status: string;
@@ -7,7 +8,6 @@ interface Props {
 
 const ProjectHeader: React.FC<Props> = ({ status }) => {
   const navigate = useNavigate();
-  const getStatusText = (s: string) => s.split(/(?=[A-Z])/).join(" ");
 
   return (
     <div className="flex items-center justify-between mb-2">

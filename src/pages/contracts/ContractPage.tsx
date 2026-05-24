@@ -7,6 +7,7 @@ import { useGetContractByIdQuery } from "../../services/contracts/contractsApi";
 import { useGetProjectByIdQuery } from "../../services/projects/projectsApi";
 import { selectCurrentUser } from "../../store/userSlice";
 import ContractMilestonesList from "./components/ContractMilestonesList";
+import { getStatusText } from "../../utils";
 
 const ContractPage: React.FC = () => {
   const { contractId } = useParams<{ contractId: string }>();
@@ -53,7 +54,33 @@ const ContractPage: React.FC = () => {
   return (
     <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 font-sans pb-12 pt-8 px-4 sm:px-6 lg:px-8 transition-colors">
       <div className="max-w-5xl mx-auto space-y-6">
-        
+        <div className="flex items-center justify-between mb-2">
+          <button
+            type="button"
+            onClick={() => navigate("/my-contracts")}
+            className="flex items-center gap-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors text-sm font-medium"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            Back to My Contracts
+          </button>
+          <span className="text-sm font-bold tracking-wider px-3 py-1 rounded-full bg-primary/10 text-primary dark:text-white">
+            {getStatusText(contract.status).toUpperCase()}
+          </span>
+        </div>
+
         {/* Header */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
@@ -90,10 +117,7 @@ const ContractPage: React.FC = () => {
             </div>
           </div>
           <div className="flex flex-col items-end gap-2">
-            <span className="px-3 py-1 bg-primary/10 text-primary text-sm font-semibold rounded-full">
-              Status: {contract.status.split(/(?=[A-Z])/).join(" ")}
-            </span>
-            <span className="text-lg font-bold text-gray-900 dark:text-white">
+            <span className="text-xl font-bold text-gray-900 dark:text-white">
               ${contract.agreedRate}
             </span>
           </div>

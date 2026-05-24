@@ -5,6 +5,7 @@ import { ROLES } from "../../../constants/roles";
 import { selectCurrentUser } from "../../../store/userSlice";
 import AddBidModal from "./AddBidModal";
 import { ProjectStatus } from "../../../types/project.types";
+import { getStatusText } from "../../../utils";
 
 interface Props {
   projectId: string;
@@ -72,7 +73,7 @@ const ProjectHeader: React.FC<Props> = ({
             </button>
           ) : (
             <span className="text-sm font-bold tracking-wider px-3 py-1 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
-              {projectStatus.toUpperCase()}
+              {getStatusText(projectStatus).toUpperCase()}
             </span>
           ))}
       </div>
