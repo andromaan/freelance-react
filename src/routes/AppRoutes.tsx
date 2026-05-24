@@ -27,6 +27,8 @@ import ProjectsPage from "../pages/projects/ProjectsPage";
 import ProjectPage from "../pages/project/ProjectPage";
 import ProjectBidsPage from "../pages/project/ProjectBidsPage";
 import MyProfilePage from "../pages/profile/MyProfilePage";
+import MyContractsPage from "../pages/contracts/MyContractsPage";
+import ContractPage from "../pages/contracts/ContractPage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -69,6 +71,32 @@ const AppRoutes: React.FC = () => {
             </ProtectedRoute>
           }
         />
+        
+        <Route
+          path="/contracts"
+          element={
+            <ProtectedRoute>
+              <MyContractsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/contracts/:tab"
+          element={
+            <ProtectedRoute>
+              <MyContractsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/contract/:contractId"
+          element={
+            <ProtectedRoute>
+              <ContractPage />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/notifications"
           element={

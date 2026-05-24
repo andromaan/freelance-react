@@ -12,6 +12,7 @@ import { quotesApi } from "../services/quotes/quotesApi";
 import { projectMilestonesApi } from "../services/project-milestones/project-milestonesApi";
 import { categoriesApi } from "../services/categories/categoriesApi";
 import { contractsApi } from "../services/contracts/contractsApi";
+import { contractMilestonesApi } from "../services/contract-milestone/contractMilestoneApi";
 
 export const store = configureStore({
   reducer: {
@@ -27,6 +28,7 @@ export const store = configureStore({
     [projectMilestonesApi.reducerPath]: projectMilestonesApi.reducer,
     [categoriesApi.reducerPath]: categoriesApi.reducer,
     [contractsApi.reducerPath]: contractsApi.reducer,
+    [contractMilestonesApi.reducerPath]: contractMilestonesApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -42,6 +44,7 @@ export const store = configureStore({
       projectMilestonesApi.middleware,
       categoriesApi.middleware,
       contractsApi.middleware,
+      contractMilestonesApi.middleware,
     ),
 });
 
