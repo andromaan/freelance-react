@@ -9,7 +9,7 @@ const NotFound: React.FC = () => {
       <div className="text-center max-w-lg">
         {/* 404 number */}
         <div className="relative mb-6 select-none">
-          <span className="text-[160px] sm:text-[200px] font-black text-gray-100 dark:text-gray-800 leading-none block">
+          <span className="text-[160px] sm:text-[200px] font-black text-gray-400 dark:text-gray-800 leading-none block">
             404
           </span>
           <div className="absolute inset-0 flex mt-6 items-center justify-center">
@@ -31,12 +31,12 @@ const NotFound: React.FC = () => {
 
         {/* Text */}
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3">
-          Сторінку не знайдено
+          Oops! Page not found.
         </h1>
         <p className="text-gray-500 dark:text-gray-400 text-base mb-8 leading-relaxed">
-          Схоже, ця сторінка не існує або була переміщена.
+          It looks like the page you're looking for doesn't exist or has been moved.
           <br />
-          Перевірте адресу або поверніться на головну.
+          Please check the URL or return to the homepage.
         </p>
 
         {/* Actions */}
@@ -45,13 +45,13 @@ const NotFound: React.FC = () => {
             to="/"
             className="bg-primary hover:bg-primary-hover text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm"
           >
-            На головну
+            Back to Home
           </Link>
           <button
             onClick={() => navigate(-1)}
             className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 font-semibold px-6 py-3 rounded-xl transition-colors text-sm"
           >
-            Назад
+            Back
           </button>
         </div>
       </div>

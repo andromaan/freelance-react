@@ -17,8 +17,18 @@ import ProtectedRoute from "./ProtectedRoute";
 import GuestRoute from "./GuestRoute";
 
 // Protected pages
-import Notifications from "../pages/notifications/Notifications";
+import Notifications from "../pages/notifications/NotificationsPage";
 import WalletPage from "../pages/wallet/WalletPage";
+import MyProjectsPage from "../pages/my-projects/MyProjectsPage";
+import MyProjectPage from "../pages/my-project/MyProjectPage";
+import MyProjectBidsPage from "../pages/my-project/MyProjectBidsPage";
+import MyProjectQuotesPage from "../pages/my-project/MyProjectQuotesPage";
+import ProjectsPage from "../pages/projects/ProjectsPage";
+import ProjectPage from "../pages/project/ProjectPage";
+import ProjectBidsPage from "../pages/project/ProjectBidsPage";
+import MyProfilePage from "../pages/profile/MyProfilePage";
+import MyContractsPage from "../pages/contracts/MyContractsPage";
+import ContractPage from "../pages/contracts/ContractPage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -41,37 +51,112 @@ const AppRoutes: React.FC = () => {
         }
       />
 
-      {/* ── Публічні маршрути з Layout ────────────────────────────────── */}
-      <Route
-        path="/"
-        element={
-          <Layout>
-            <Home />
-          </Layout>
-        }
-      />
+      {/* ── Маршрути з Layout ─────────────────────────────────────────── */}
+      <Route element={<Layout />}>
+        <Route path="/" element={<Home />} />
 
-      {/* ── Захищені маршрути (потрібна авторизація) ─────────────────── */}
-      <Route
-        path="/notifications"
-        element={
-          <ProtectedRoute>
-            <Layout>
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <MyProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/:tab"
+          element={
+            <ProtectedRoute>
+              <MyProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/my-contracts"
+          element={
+            <ProtectedRoute>
+              <MyContractsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-contracts/:tab"
+          element={
+            <ProtectedRoute>
+              <MyContractsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/contract/:contractId"
+          element={
+            <ProtectedRoute>
+              <ContractPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute>
               <Notifications />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/wallet"
-        element={
-          <ProtectedRoute>
-            <Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/wallet"
+          element={
+            <ProtectedRoute>
               <WalletPage />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/my-projects">
+          <Route
+            index
+            element={
+              <ProtectedRoute>
+                <MyProjectsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path=":projectId"
+            element={
+              <ProtectedRoute>
+                <MyProjectPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path=":projectId/bids"
+            element={
+              <ProtectedRoute>
+                <MyProjectBidsPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path=":projectId/quotes"
+            element={
+              <ProtectedRoute>
+                <MyProjectQuotesPage />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+
+        <Route path="projects">
+          <Route index element={<ProjectsPage />} />
+          <Route path=":projectId" element={<ProjectPage />} />
+          <Route path=":projectId/bids" element={<ProjectBidsPage />} />
+        </Route>
+      </Route>
 
       {/* ── Fallback ──────────────────────────────────────────────────── */}
       <Route path="*" element={<NotFound />} />

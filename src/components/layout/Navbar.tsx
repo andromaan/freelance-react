@@ -9,6 +9,9 @@ import { clearNotifications } from "../../store/notificationSlice";
 import NotificationBell from "../notifications/NotificationBell";
 import type { AppDispatch } from "../../store";
 import APP_ENV from "../../env";
+import { ROLES } from "../../constants/roles";
+import { useTheme } from "../../context/ThemeContext";
+import freelanceIconUrl from "../icons/FreelanceIcon.svg";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -18,6 +21,7 @@ const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const { theme, toggleTheme } = useTheme();
 
   // Close user dropdown on outside click
   useEffect(() => {
@@ -54,19 +58,7 @@ const Navbar: React.FC = () => {
           to="/"
           className="flex items-center gap-2 text-xl font-bold text-primary hover:opacity-90 transition-opacity"
         >
-          <svg
-            className="w-8 h-8"
-            viewBox="0 0 32 32"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect width="32" height="32" rx="8" fill="#1976d2" />
-            <path
-              d="M8 22L14 10L20 18L23 14L26 22H8Z"
-              fill="white"
-              opacity="0.9"
-            />
-          </svg>
+          <img src={freelanceIconUrl} alt="Freelance" className="w-8 h-8" />
           <span>FreeLance</span>
         </Link>
 
@@ -76,24 +68,60 @@ const Navbar: React.FC = () => {
             to="/"
             className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors"
           >
-            Головна
+            Home
           </Link>
           <Link
-            to="/jobs"
+            to="/projects"
             className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors"
           >
-            Вакансії
+            Projects
           </Link>
           <Link
             to="/freelancers"
             className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors"
           >
-            Фрілансери
+            Freelancers
           </Link>
         </div>
 
         {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center gap-3">
+          <button
+            onClick={toggleTheme}
+            className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+            aria-label="Toggle theme"
+          >
+            {theme === "dark" ? (
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 3v1m0 16v1m8.66-8.66h-1M4.34 12H3m15.36 4.95l-.7-.7M6.34 6.34l-.7-.7m12.02 0l-.7.7M6.34 17.66l-.7.7M12 8a4 4 0 100 8 4 4 0 000-8z"
+                />
+              </svg>
+            ) : (
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                />
+              </svg>
+            )}
+          </button>
+
           {isAuthenticated ? (
             <>
               <NotificationBell />
@@ -160,15 +188,24 @@ const Navbar: React.FC = () => {
                       className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
                       onClick={() => setUserMenuOpen(false)}
                     >
-                      Мій профіль
+                      My Profile
                     </Link>
+                    {user?.role?.name === ROLES.EMPLOYER && (
+                      <Link
+                        to="/my-projects"
+                        className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+                        onClick={() => setUserMenuOpen(false)}
+                      >
+                        My Projects
+                      </Link>
+                    )}
                     <Link
-                      to="/wallet"
-                      className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
-                      onClick={() => setUserMenuOpen(false)}
-                    >
-                      Гаманець
-                    </Link>
+                        to="/my-contracts"
+                        className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+                        onClick={() => setUserMenuOpen(false)}
+                      >
+                        My Contracts
+                      </Link>
                     <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
                     <button
                       onClick={() => {
@@ -177,7 +214,7 @@ const Navbar: React.FC = () => {
                       }}
                       className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
                     >
-                      Вийти
+                      Logout
                     </button>
                   </div>
                 )}
@@ -189,13 +226,13 @@ const Navbar: React.FC = () => {
                 to="/login"
                 className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
               >
-                Увійти
+                Login
               </Link>
               <Link
                 to="/register"
                 className="text-sm font-medium bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg transition-colors"
               >
-                Реєстрація
+                Register
               </Link>
             </>
           )}
@@ -247,21 +284,21 @@ const Navbar: React.FC = () => {
             className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
             onClick={() => setMenuOpen(false)}
           >
-            Головна
+            Home
           </Link>
           <Link
             to="/jobs"
             className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
             onClick={() => setMenuOpen(false)}
           >
-            Вакансії
+            Projects
           </Link>
           <Link
             to="/freelancers"
             className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
             onClick={() => setMenuOpen(false)}
           >
-            Фрілансери
+            Freelancers
           </Link>
           <div className="border-t border-gray-200 dark:border-gray-700 pt-2 mt-1 flex flex-col gap-2">
             {isAuthenticated ? (
@@ -287,7 +324,7 @@ const Navbar: React.FC = () => {
                   className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
                   onClick={() => setMenuOpen(false)}
                 >
-                  Мій профіль
+                  My Profile
                 </Link>
                 <button
                   onClick={() => {
@@ -296,7 +333,7 @@ const Navbar: React.FC = () => {
                   }}
                   className="text-left text-sm font-medium text-red-600 py-2"
                 >
-                  Вийти
+                  Logout
                 </button>
               </>
             ) : (
@@ -306,17 +343,56 @@ const Navbar: React.FC = () => {
                   className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
                   onClick={() => setMenuOpen(false)}
                 >
-                  Увійти
+                  Login
                 </Link>
                 <Link
                   to="/register"
                   className="bg-primary text-white text-sm font-medium py-2 px-4 rounded-lg text-center"
                   onClick={() => setMenuOpen(false)}
                 >
-                  Реєстрація
+                  Register
                 </Link>
               </>
             )}
+          </div>
+          <div className="border-t border-gray-200 dark:border-gray-700 py-2 flex items-center justify-between">
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Тема
+            </span>
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+            >
+              {theme === "dark" ? (
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 3v1m0 16v1m8.66-8.66h-1M4.34 12H3m15.36 4.95l-.7-.7M6.34 6.34l-.7-.7m12.02 0l-.7.7M6.34 17.66l-.7.7M12 8a4 4 0 100 8 4 4 0 000-8z"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                  />
+                </svg>
+              )}
+            </button>
           </div>
         </div>
       )}

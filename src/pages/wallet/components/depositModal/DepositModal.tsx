@@ -54,16 +54,16 @@ const DepositModal: React.FC<DepositModalProps> = ({
   const handleAmountNext = () => {
     const val = parseFloat(amountInput);
     if (!amountInput || isNaN(val) || val <= 0) {
-      setAmountError("Введіть коректну суму");
+      setAmountError("Enter a valid amount");
       return;
     }
     if (val < 10) {
-      setAmountError(`Мінімальна сума — ${formatCurrencyAmount(10, currency)}`);
+      setAmountError(`Minimum amount — ${formatCurrencyAmount(10, currency)}`);
       return;
     }
     if (val > 50000) {
       setAmountError(
-        `Максимальна сума — ${formatCurrencyAmount(50000, currency)}`,
+        `Maximum amount — ${formatCurrencyAmount(50000, currency)}`,
       );
       return;
     }
@@ -80,7 +80,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
         {/* Шапка модалки */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            {step === "amount" ? "Сума поповнення" : "Оплата"}
+            {step === "amount" ? "Enter Amount" : "Payment"}
           </h2>
           <button
             onClick={onClose}

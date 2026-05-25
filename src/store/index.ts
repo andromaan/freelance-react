@@ -6,6 +6,13 @@ import userReducer from "./userSlice";
 import notificationReducer from "./notificationSlice";
 import { notificationApi } from "../services/notification/notificationApi";
 import { walletApi } from "../services/wallet/walletApi";
+import { projectsApi } from "../services/projects/projectsApi";
+import { bidsApi } from "../services/bids/bidsApi";
+import { quotesApi } from "../services/quotes/quotesApi";
+import { projectMilestonesApi } from "../services/project-milestones/project-milestonesApi";
+import { categoriesApi } from "../services/categories/categoriesApi";
+import { contractsApi } from "../services/contracts/contractsApi";
+import { contractMilestonesApi } from "../services/contract-milestone/contractMilestoneApi";
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +22,13 @@ export const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
     [notificationApi.reducerPath]: notificationApi.reducer,
     [walletApi.reducerPath]: walletApi.reducer,
+    [projectsApi.reducerPath]: projectsApi.reducer,
+    [bidsApi.reducerPath]: bidsApi.reducer,
+    [quotesApi.reducerPath]: quotesApi.reducer,
+    [projectMilestonesApi.reducerPath]: projectMilestonesApi.reducer,
+    [categoriesApi.reducerPath]: categoriesApi.reducer,
+    [contractsApi.reducerPath]: contractsApi.reducer,
+    [contractMilestonesApi.reducerPath]: contractMilestonesApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -24,6 +38,13 @@ export const store = configureStore({
       userApi.middleware,
       notificationApi.middleware,
       walletApi.middleware,
+      projectsApi.middleware,
+      bidsApi.middleware,
+      quotesApi.middleware,
+      projectMilestonesApi.middleware,
+      categoriesApi.middleware,
+      contractsApi.middleware,
+      contractMilestonesApi.middleware,
     ),
 });
 

@@ -1,0 +1,81 @@
+import React from "react";
+import Select from "react-select";
+import { useTheme } from "../../../../context/ThemeContext";
+import {
+  mergeSelectStyles,
+  useSelectStyles,
+  type SelectOption,
+} from "../../../../styles/selectStyles";
+
+type Props = {
+  isReadFilter: boolean | null;
+  typeFilter: SelectOption<number> | null;
+  notificationTypes: Array<{ name: string; value: number }>;
+  onChange: (newIsRead: boolean | null, newType: SelectOption<number> | null) => void;
+};
+
+const isReadOptions = [
+  { label: "All", value: null },
+  { label: "Unread", value: false },
+  { label: "Read", value: true },
+];
+
+const NotificationsFilters: React.FC<Props> = ({
+  isReadFilter,
+  typeFilter,
+  notificationTypes,
+  onChange,
+}) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
+  const styles = mergeSelectStyles(useSelectStyles<number>(), {
+    control: (base) => ({
+      ...base,
+      backgroundColor: isDark ? "#1F2937" : "#FFFFFF",
+      borderColor: isDark ? "#374151" : "#e5e7eb",
+      color: isDark ? "#f9fafb" : "#111827",
+    }),
+    input: (base) => ({ ...base, color: isDark ? "#d1d5db" : "#4b5563" }),
+    singleValue: (base) => ({
+      ...base,
+      color: isDark ? "#d1d5db" : "#4b5563",
+    }),
+  });
+
+  return (
+    <div className="flex flex-wrap gap-3 mb-6">
+      <div className="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+        {isReadOptions.map((opt) => (
+          <button
+            key={String(opt.value)}
+            onClick={() => onChange(opt.value, typeFilter)}
+            className={`px-4 py-2 text-sm transition-colors ${
+              isReadFilter === opt.value
+                ? "bg-primary text-white"
+                : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+            }`}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+
+      <Select<SelectOption<number>>
+        inputId="notification-type-select"
+        options={notificationTypes.map((t) => ({
+          label: t.name.split(/(?=[A-Z])/).join(" "),
+          value: t.value,
+        }))}
+        value={typeFilter}
+        isClearable
+        onChange={(v) => onChange(isReadFilter, v)}
+        placeholder="Filter by type…"
+        styles={styles}
+        className="w-60"
+      />
+    </div>
+  );
+};
+
+export default NotificationsFilters;

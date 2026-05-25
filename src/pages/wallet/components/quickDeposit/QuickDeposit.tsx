@@ -10,7 +10,7 @@ const QuickDeposit: React.FC<QuickDepositProps> = ({ currency, onSelect }) => {
   return (
     <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-5">
       <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-        Швидке поповнення
+        Quick Deposit
       </p>
       <div className="flex flex-wrap gap-2">
         {PRESET_AMOUNTS.map((amt) => (

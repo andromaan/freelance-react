@@ -20,7 +20,7 @@ const AmountStep: React.FC<AmountStepProps> = ({
     <div className="flex flex-col gap-5">
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Введіть суму ({currency})
+          Enter Amount ({currency})
         </label>
         <input
           type="number"
@@ -30,7 +30,7 @@ const AmountStep: React.FC<AmountStepProps> = ({
           value={amountInput}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && onNext()}
-          placeholder="Наприклад: 500"
+          placeholder="For example: 500"
           autoFocus
           className={`w-full px-3 py-3 border-2 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-base transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${
             amountError
@@ -43,7 +43,7 @@ const AmountStep: React.FC<AmountStepProps> = ({
         )}
       </div>
 
-      {/* Пресети */}
+      {/* Preset Amounts */}
       <div className="flex flex-wrap gap-2">
         {PRESET_AMOUNTS.map((amt) => (
           <button
@@ -64,9 +64,25 @@ const AmountStep: React.FC<AmountStepProps> = ({
       <button
         type="button"
         onClick={onNext}
-        className="w-full py-3 text-sm font-semibold rounded-lg bg-primary hover:bg-primary-hover text-white transition-colors"
+        className="flex items-center justify-center gap-1 w-full py-3 text-sm font-semibold 
+        rounded-lg bg-primary hover:bg-primary-hover text-white transition-colors"
       >
-        Далі →
+        Next
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          transform="scale(-1)"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          ></path>
+        </svg>
       </button>
     </div>
   );

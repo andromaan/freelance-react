@@ -30,15 +30,14 @@ const Footer: React.FC = () => {
               FreeLance
             </Link>
             <p className="text-sm text-gray-400 leading-relaxed">
-              Платформа для з'єднання фрілансерів та роботодавців. Знаходьте
-              роботу або талановитих виконавців.
+              A platform for connecting freelancers and employers. Find work or talented professionals.
             </p>
           </div>
 
           {/* For freelancers */}
           <div>
             <h4 className="text-white text-sm font-semibold mb-4 uppercase tracking-wide">
-              Фрілансерам
+              Freelancers
             </h4>
             <ul className="space-y-2 text-sm">
               <li>
@@ -46,7 +45,7 @@ const Footer: React.FC = () => {
                   to="/jobs"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Знайти роботу
+                  Find Work
                 </Link>
               </li>
               <li>
@@ -54,7 +53,7 @@ const Footer: React.FC = () => {
                   to="/register"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Зареєструватися
+                  Register
                 </Link>
               </li>
               <li>
@@ -62,7 +61,7 @@ const Footer: React.FC = () => {
                   to="/profile"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Мій профіль
+                  My Profile
                 </Link>
               </li>
             </ul>
@@ -71,7 +70,7 @@ const Footer: React.FC = () => {
           {/* For employers */}
           <div>
             <h4 className="text-white text-sm font-semibold mb-4 uppercase tracking-wide">
-              Роботодавцям
+              Employers
             </h4>
             <ul className="space-y-2 text-sm">
               <li>
@@ -79,7 +78,7 @@ const Footer: React.FC = () => {
                   to="/freelancers"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Знайти фрілансера
+                  Find Freelancers
                 </Link>
               </li>
               <li>
@@ -87,7 +86,7 @@ const Footer: React.FC = () => {
                   to="/post-job"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Опублікувати вакансію
+                  Post a Job
                 </Link>
               </li>
               <li>
@@ -95,7 +94,7 @@ const Footer: React.FC = () => {
                   to="/register"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Зареєструватися
+                  Register
                 </Link>
               </li>
             </ul>
@@ -104,7 +103,7 @@ const Footer: React.FC = () => {
           {/* Info */}
           <div>
             <h4 className="text-white text-sm font-semibold mb-4 uppercase tracking-wide">
-              Інформація
+              Information
             </h4>
             <ul className="space-y-2 text-sm">
               <li>
@@ -112,7 +111,7 @@ const Footer: React.FC = () => {
                   to="/about"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Про нас
+                  About Us
                 </Link>
               </li>
               <li>
@@ -120,7 +119,7 @@ const Footer: React.FC = () => {
                   to="/terms"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Умови користування
+                  Terms of Service
                 </Link>
               </li>
               <li>
@@ -128,7 +127,7 @@ const Footer: React.FC = () => {
                   to="/privacy"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Конфіденційність
+                  Privacy Policy
                 </Link>
               </li>
             </ul>
@@ -138,7 +137,7 @@ const Footer: React.FC = () => {
         {/* Bottom bar */}
         <div className="border-t border-gray-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-gray-500">
-            © {year} FreeLance. Всі права захищені.
+            © {year} FreeLance. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <a

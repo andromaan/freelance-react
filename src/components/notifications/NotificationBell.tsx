@@ -6,7 +6,6 @@ import {
   markAllAsRead,
   markAsRead,
 } from "../../store/notificationSlice";
-import { NotificationTypeLabels } from "../../types/notification.types";
 import type { AppDispatch } from "../../store";
 import {
   useToggleIsReadMutation,
@@ -19,10 +18,10 @@ const formatTime = (iso: string) => {
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffMin = Math.floor(diffMs / 60000);
-  if (diffMin < 1) return "щойно";
-  if (diffMin < 60) return `${diffMin} хв тому`;
+  if (diffMin < 1) return "just now";
+  if (diffMin < 60) return `${diffMin} min ago`;
   const diffH = Math.floor(diffMin / 60);
-  if (diffH < 24) return `${diffH} год тому`;
+  if (diffH < 24) return `${diffH} hours ago`;
   return date.toLocaleDateString("uk-UA");
 };
 
@@ -85,7 +84,7 @@ const NotificationBell: React.FC = () => {
       <button
         onClick={handleOpen}
         className="relative p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-        aria-label="Сповіщення"
+        aria-label="Notifications"
       >
         <svg
           className="w-6 h-6"
@@ -113,14 +112,14 @@ const NotificationBell: React.FC = () => {
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-700">
             <span className="text-sm font-semibold text-gray-900 dark:text-white">
-              Сповіщення
+              Notifications
             </span>
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAll}
                 className="text-xs text-blue-400 hover:underline"
               >
-                Позначити всі прочитаними
+                Mark all as read
               </button>
             )}
           </div>
@@ -142,7 +141,7 @@ const NotificationBell: React.FC = () => {
                     d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                   />
                 </svg>
-                <p className="text-sm">Немає сповіщень</p>
+                <p className="text-sm">No notifications</p>
               </div>
             ) : (
               notifications.map((n) => {
@@ -157,23 +156,24 @@ const NotificationBell: React.FC = () => {
                     }`}
                   >
                     <div className="flex items-start gap-3 px-4 py-3">
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-primary mb-0.5">
-                          {NotificationTypeLabels[n.type] ?? "Сповіщення"}
-                        </p>
-                        <p className="text-sm text-gray-700 dark:text-gray-200 leading-snug">
-                          {n.message}
-                        </p>
-                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                          {formatTime(n.sentAt)}
-                        </p>
-                      </div>
-
+                      <Link to="/notifications" onClick={() => setOpen(false)}>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-semibold text-primary mb-0.5">
+                            {n.type.split(/(?=[A-Z])/).join(" ")}
+                          </p>
+                          <p className="text-sm text-gray-700 dark:text-gray-200 leading-snug">
+                            {n.message}
+                          </p>
+                          <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                            {formatTime(n.sentAt)}
+                          </p>
+                        </div>
+                      </Link>
                       {/* Mark as read button — shown only for unread */}
                       {!n.isRead && (
                         <button
                           onClick={() => handleMarkAsRead(n.id)}
-                          title="Позначити прочитаним"
+                          title="Mark as read"
                           className="flex-shrink-0 mt-0.5 p-1 rounded-md text-gray-400 hover:text-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors opacity-0 group-hover:opacity-100"
                         >
                           <svg
@@ -205,7 +205,7 @@ const NotificationBell: React.FC = () => {
               onClick={() => setOpen(false)}
               className="block text-center text-xs text-blue-400 hover:underline"
             >
-              Переглянути всі сповіщення
+              View all notifications
             </Link>
           </div>
         </div>

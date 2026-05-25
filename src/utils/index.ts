@@ -1,0 +1,1 @@
+export const getStatusText = (s: string) => s.split(/(?=[A-Z])/).join(" ");

@@ -12,7 +12,12 @@ export const userApi = createApi({
       transformResponse: (response: any) => response.data ?? response,
       providesTags: ["User"],
     }),
+
+    getUserById: builder.query<UserVM, string>({
+      query: (userId) => `User/${userId}`,
+      transformResponse: (response: any) => response.data ?? response,
+    }),
   }),
 });
 
-export const { useGetMyselfQuery } = userApi;
+export const { useGetMyselfQuery, useGetUserByIdQuery } = userApi;
