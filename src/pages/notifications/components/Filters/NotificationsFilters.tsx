@@ -6,6 +6,7 @@ import {
   useSelectStyles,
   type SelectOption,
 } from "../../../../styles/selectStyles";
+import { getStatusText } from "../../../../utils";
 
 type Props = {
   isReadFilter: boolean | null;
@@ -64,7 +65,7 @@ const NotificationsFilters: React.FC<Props> = ({
       <Select<SelectOption<number>>
         inputId="notification-type-select"
         options={notificationTypes.map((t) => ({
-          label: t.name.split(/(?=[A-Z])/).join(" "),
+          label: getStatusText(t.name),
           value: t.value,
         }))}
         value={typeFilter}

@@ -1,6 +1,7 @@
 import React from "react";
 import type { NotificationVM } from "../../../../types/notification.types";
 import { Link } from "react-router-dom";
+import { getStatusText } from "../../../../utils";
 
 type Props = {
   n: NotificationVM;
@@ -82,7 +83,7 @@ const NotificationItem: React.FC<Props> = ({
                 : "text-blue-600 dark:text-blue-400"
             }`}
           >
-            {n.type.split(/(?=[A-Z])/).join(" ")}
+            {getStatusText(n.type)}
           </span>
 
           <span
