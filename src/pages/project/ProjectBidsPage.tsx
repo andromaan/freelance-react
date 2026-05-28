@@ -1,14 +1,13 @@
 import React from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import { useGetProjectByIdQuery } from "../../services/projects/projectsApi";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useGetBidsByProjectQuery } from "../../services/bids/bidsApi";
-import { useGetUserByIdQuery } from "../../services/user/userApi";
+import { useGetProjectByIdQuery } from "../../services/projects/projectsApi";
 import {
   useGetAverageRatingQuery,
   useGetReviewsByEmailQuery,
 } from "../../services/reviews/reviewsApi";
+import { useGetUserByIdQuery } from "../../services/user/userApi";
 import type { BidVM } from "../../types/bid.types";
-import APP_ENV from "../../env";
 import { userImageUrl } from "../../utils";
 
 /* ─── SenderInfo ─────────────────────────────────────────────────────────── */

@@ -32,7 +32,6 @@ import {
 } from "../../components/ui/FormKit";
 import { useSelectStyles, type SelectOption } from "../../styles/selectStyles";
 import { toast } from "react-toastify";
-import APP_ENV from "../../env";
 import { userImageUrl } from "../../utils";
 
 export const EditProfileTab: React.FC = () => {
@@ -327,6 +326,21 @@ export const EditProfileTab: React.FC = () => {
                     </span>
                   )}
                 </div>
+                {avatarPreview && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAvatarPreview(null);
+                      setSelectedAvatar(null);
+                    }}
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-md hover:bg-red-600 transition-colors z-10"
+                    title="Cancel selection"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
                 <label
                   htmlFor="avatar-upload"
                   className="absolute inset-0 flex items-center justify-center bg-black/50 text-white text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity rounded-full cursor-pointer text-center px-2"

@@ -9,7 +9,6 @@ import { useGetUserByIdQuery } from "../../services/user/userApi";
 import { useGetAverageRatingQuery, useGetReviewsByEmailQuery } from "../../services/reviews/reviewsApi";
 import ConfirmModal from "../../components/ui/ConfirmModal";
 import type { BidVM } from "../../types/bid.types";
-import APP_ENV from "../../env";
 import { userImageUrl } from "../../utils";
 
 // ─── Filter ───────────────────────────────────────────────────────────────────

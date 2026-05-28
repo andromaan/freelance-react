@@ -9,7 +9,6 @@ import {
 import { useGetLanguagesQuery } from "../../services/languages/languagesApi";
 import { useGetCompletedContractsByFreelancerQuery } from "../../services/contracts/contractsApi";
 import ReviewCard from "./components/ReviewCard";
-import APP_ENV from "../../env";
 import { userImageUrl } from "../../utils";
 
 const FreelancerProfilePage: React.FC = () => {
@@ -287,6 +286,57 @@ const FreelancerProfilePage: React.FC = () => {
                 </div>
               )}
             </div>
+
+            {/* Portfolio */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">
+                Portfolio
+              </h2>
+              {freelancer.portfolio && freelancer.portfolio.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {freelancer.portfolio.map((item) => (
+                    <a
+                      key={item.id}
+                      href={item.portfolioUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block p-4 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-primary/50 dark:hover:border-primary/50 bg-gray-50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-all group"
+                    >
+                      <h4 className="font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors line-clamp-1">
+                        {item.title}
+                      </h4>
+                      {item.description && (
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">
+                          {item.description}
+                        </p>
+                      )}
+                      {item.portfolioUrl && (
+                        <div className="text-[10px] text-gray-400 mt-3 flex items-center gap-1 font-medium group-hover:text-primary transition-colors">
+                          <svg
+                            className="w-3 h-3"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                            />
+                          </svg>
+                          View Link &rarr;
+                        </div>
+                      )}
+                    </a>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                  Portfolio is empty.
+                </p>
+              )}
+            </div>
           </div>
 
           {/* Right Column */}
@@ -301,7 +351,7 @@ const FreelancerProfilePage: React.FC = () => {
                   {freelancer.skills.map((skill) => (
                     <span
                       key={skill.id}
-                      className="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-primary/10 text-primary dark:bg-primary/20"
+                      className="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-primary/10 text-primary dark:bg-primary/20 dark:text-sky-300"
                     >
                       {skill.name}
                     </span>
@@ -347,52 +397,6 @@ const FreelancerProfilePage: React.FC = () => {
               )}
             </div>
 
-            {/* Portfolio */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">
-                Portfolio
-              </h2>
-              {freelancer.portfolio && freelancer.portfolio.length > 0 ? (
-                <div className="space-y-4">
-                  {freelancer.portfolio.map((item) => (
-                    <a
-                      key={item.id}
-                      href={item.portfolioUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block p-3 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-primary/50 dark:hover:border-primary/50 bg-gray-50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-all group"
-                    >
-                      <h4 className="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-primary transition-colors">
-                        {item.title}
-                      </h4>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">
-                        {item.description}
-                      </p>
-                      <div className="text-[10px] text-gray-400 mt-2 flex items-center gap-1">
-                        <svg
-                          className="w-3 h-3"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                          />
-                        </svg>
-                        View Project
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-gray-500 dark:text-gray-400 text-sm">
-                  Portfolio is empty.
-                </p>
-              )}
-            </div>
           </div>
         </div>
       </div>

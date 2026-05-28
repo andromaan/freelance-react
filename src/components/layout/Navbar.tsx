@@ -8,7 +8,6 @@ import { selectCurrentUser, clearUser } from "../../store/userSlice";
 import { clearNotifications } from "../../store/notificationSlice";
 import NotificationBell from "../notifications/NotificationBell";
 import type { AppDispatch } from "../../store";
-import APP_ENV from "../../env";
 import { ROLES } from "../../constants/roles";
 import { useTheme } from "../../context/ThemeContext";
 import freelanceIconUrl from "../icons/FreelanceIcon.svg";

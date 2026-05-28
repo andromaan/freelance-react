@@ -1,10 +1,9 @@
 import React from "react";
-import { useGetContractByIdQuery } from "../../../services/contracts/contractsApi";
-import { useGetProjectByIdQuery } from "../../../services/projects/projectsApi";
+import { useGetProjectByContractIdQuery } from "../../../services/projects/projectsApi";
 import { useGetUserByIdQuery } from "../../../services/user/userApi";
 import type { ReviewVM } from "../../../types/review.types";
-import APP_ENV from "../../../env";
 import { userImageUrl } from "../../../utils";
+import { Link } from "react-router-dom";
 
 interface ReviewCardProps {
   review: ReviewVM;
@@ -28,19 +27,16 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
 };
 
 const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
-  // Fetch the contract to get projectId
-  const { data: contract, isLoading: isContractLoading } = useGetContractByIdQuery(review.contractId);
-  
   // Fetch the project to get title and categories
-  const { data: project, isLoading: isProjectLoading } = useGetProjectByIdQuery(
-    contract?.projectId || "",
-    { skip: !contract?.projectId }
-  );
+  const { data: project, isLoading: isProjectLoading } =
+    useGetProjectByContractIdQuery(review.contractId);
 
   // Fetch Employer who left the review
-  const { data: employer, isLoading: isEmployerLoading } = useGetUserByIdQuery(review.reviewerId);
+  const { data: employer, isLoading: isEmployerLoading } = useGetUserByIdQuery(
+    review.reviewerId,
+  );
 
-  const isLoading = isContractLoading || isProjectLoading || isEmployerLoading;
+  const isLoading = isProjectLoading || isEmployerLoading;
 
   if (isLoading) {
     return (
@@ -48,7 +44,10 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
         <div className="flex items-center gap-2 mb-3">
           <div className="flex gap-1">
             {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="w-4 h-4 bg-gray-200 dark:bg-gray-700 rounded-full" />
+              <div
+                key={i}
+                className="w-4 h-4 bg-gray-200 dark:bg-gray-700 rounded-full"
+              />
             ))}
           </div>
           <div className="w-24 h-4 bg-gray-200 dark:bg-gray-700 rounded ml-auto" />
@@ -56,8 +55,8 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
         <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2" />
         <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-4/5 mb-4" />
         <div className="flex items-center gap-2 border-t border-gray-100 dark:border-gray-700 pt-3">
-           <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700" />
-           <div className="w-20 h-3 bg-gray-200 dark:bg-gray-700 rounded" />
+          <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700" />
+          <div className="w-20 h-3 bg-gray-200 dark:bg-gray-700 rounded" />
         </div>
       </div>
     );
@@ -71,12 +70,15 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
     <article className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-100 dark:border-gray-700 shadow-sm flex flex-col h-full">
       <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
         <StarRating rating={review.rating} />
-        
+
         {/* Project Categories */}
         {project?.categories && project.categories.length > 0 && (
           <div className="flex gap-1 flex-wrap justify-end">
             {project.categories.slice(0, 2).map((cat) => (
-              <span key={cat.id} className="text-[10px] font-medium px-2 py-0.5 rounded bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+              <span
+                key={cat.id}
+                className="text-[10px] font-medium px-2 py-0.5 rounded bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300"
+              >
                 {cat.name}
               </span>
             ))}
@@ -100,21 +102,45 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
       </p>
 
       {/* Employer Info */}
-      <div className="border-t border-gray-100 dark:border-gray-700 pt-3 mt-auto flex items-center gap-2">
-        {employer?.avatarImg ? (
-          <img
-            src={userImageUrl(employer.avatarImg)}
-            alt={employer.displayName || "Employer Avatar"}
-            className="w-6 h-6 rounded-full object-cover border border-gray-200 dark:border-gray-700"
-          />
-        ) : (
-          <div className="w-6 h-6 rounded-full bg-primary/10 text-primary text-[10px] font-bold flex items-center justify-center border border-primary/20">
-            {employerInitial}
-          </div>
-        )}
-        <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
-          {employer?.displayName || employer?.email || "Unknown Employer"}
-        </span>
+      <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-700">
+        <div className=" pt-3 mt-auto flex items-center gap-2">
+          {employer?.avatarImg ? (
+            <img
+              src={userImageUrl(employer.avatarImg)}
+              alt={employer.displayName || "Employer Avatar"}
+              className="w-6 h-6 rounded-full object-cover border border-gray-200 dark:border-gray-700"
+            />
+          ) : (
+            <div className="w-6 h-6 rounded-full bg-primary/10 text-primary text-[10px] font-bold flex items-center justify-center border border-primary/20">
+              {employerInitial}
+            </div>
+          )}
+          <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+            {employer?.displayName || employer?.email || "Unknown Employer"}
+          </span>
+        </div>
+
+        <div className="flex">
+          <Link
+            to={`/projects/${project?.id}`}
+            className="text-xs text-primary mt-1 inline-block flex gap-1 items-center"
+          >
+            <svg
+              className="w-3.5 h-3.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              />
+            </svg>
+            View Project
+          </Link>
+        </div>
       </div>
     </article>
   );

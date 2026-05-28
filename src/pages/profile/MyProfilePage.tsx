@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { ROLES } from "../../constants/roles";
-import APP_ENV from "../../env";
 import { selectCurrentUser } from "../../store/userSlice";
 import type { BidVM } from "../../types/bid.types";
 import type { QuoteVM } from "../../types/quote.types";
