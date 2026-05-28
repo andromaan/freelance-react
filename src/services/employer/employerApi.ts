@@ -16,6 +16,15 @@ export const employerApi = createApi({
       transformResponse: (response: any) => response.data ?? response,
     }),
 
+    getEmployerByEmail: builder.query<EmployerVM, string>({
+      query: (email) => ({
+        url: `/Employer/${email}`,
+        method: "GET",
+      }),
+      providesTags: (_result, _error, email) => [{ type: "Employer", id: email }],
+      transformResponse: (response: any) => response.data ?? response,
+    }),
+
     updateEmployer: builder.mutation<void, { companyName: string | null; companyWebsite: string | null }>({
       query: (body) => ({
         url: "/Employer",
@@ -27,4 +36,4 @@ export const employerApi = createApi({
   }),
 });
 
-export const { useGetEmployerQuery, useUpdateEmployerMutation } = employerApi;
+export const { useGetEmployerQuery, useGetEmployerByEmailQuery, useUpdateEmployerMutation } = employerApi;

@@ -5,6 +5,7 @@ import ProjectHeader from "./components/ProjectHeader";
 import ProjectMeta from "./components/ProjectMeta";
 import ProjectMilestones from "./components/ProjectMilestones";
 import ProjectResponses from "./components/ProjectResponses";
+import ProjectEmployer from "./components/ProjectEmployer";
 
 const ProjectPage: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -61,6 +62,7 @@ const ProjectPage: React.FC = () => {
           </div>
 
           <div className="md:col-span-2 space-y-6">
+            <ProjectEmployer createdBy={project.createdBy} />
             <ProjectResponses projectId={project.id} />
           </div>
         </div>

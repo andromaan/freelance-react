@@ -19,6 +19,7 @@ export interface ProjectVM {
   deadline: string;
   categories: CategoriesVM[];
   status: ProjectStatus;
+  createdBy: string;
 
   // Optional counts for UI
   bidsCount?: number;

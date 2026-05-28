@@ -30,6 +30,7 @@ import ProjectBidsPage from "../pages/project/ProjectBidsPage";
 import MyProfilePage from "../pages/profile/MyProfilePage";
 import MyContractsPage from "../pages/contracts/MyContractsPage";
 import FreelancerProfilePage from "../pages/freelancer/FreelancerProfilePage";
+import EmployerProfilePage from "../pages/employer/EmployerProfilePage";
 import ContractPage from "../pages/contracts/ContractPage";
 
 const AppRoutes: React.FC = () => {
@@ -70,6 +71,14 @@ const AppRoutes: React.FC = () => {
           element={
             <ProtectedRoute>
               <FreelancerProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employers/:userId"
+          element={
+            <ProtectedRoute>
+              <EmployerProfilePage />
             </ProtectedRoute>
           }
         />
