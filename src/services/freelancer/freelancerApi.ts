@@ -7,15 +7,15 @@ export const freelancerApi = createApi({
   baseQuery: baseQueryWithRefresh,
   tagTypes: ["Freelancer"],
   endpoints: (builder) => ({
-    getFreelancerByUserId: builder.query<FreelancerVM, string>({
-      query: (userId) => ({
-        url: `/Freelancer/${userId}`,
+    getFreelancerByEmail: builder.query<FreelancerVM, string>({
+      query: (email) => ({
+        url: `/Freelancer/${email}`,
         method: "GET",
       }),
-      providesTags: (result, error, userId) => [{ type: "Freelancer", id: userId }],
+      providesTags: (_result, _error, email) => [{ type: "Freelancer", id: email }],
       transformResponse: (response: any) => response.data ?? response,
     }),
   }),
 });
 
-export const { useGetFreelancerByUserIdQuery } = freelancerApi;
+export const { useGetFreelancerByEmailQuery } = freelancerApi;

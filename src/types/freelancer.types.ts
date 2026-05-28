@@ -1,4 +1,5 @@
 export interface FreelancerVM {
+    id: string;
     bio: string;
     location: string;
     skills: SkillVM[];
