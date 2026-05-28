@@ -24,7 +24,39 @@ export const freelancerApi = createApi({
       }),
       invalidatesTags: ["Freelancer"],
     }),
+
+    updateFreelancerSkills: builder.mutation<void, { skillIds: number[] }>({
+      query: (body) => ({
+        url: "/Freelancer/skills",
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["Freelancer"],
+    }),
+
+    addPortfolio: builder.mutation<void, { title: string; description?: string; portfolioUrl?: string }>({
+      query: (body) => ({
+        url: "/FreelancerPortfolio",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Freelancer"],
+    }),
+
+    removePortfolio: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/FreelancerPortfolio/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Freelancer"],
+    }),
   }),
 });
 
-export const { useGetFreelancerByEmailQuery, useUpdateFreelancerMutation } = freelancerApi;
+export const { 
+  useGetFreelancerByEmailQuery, 
+  useUpdateFreelancerMutation,
+  useUpdateFreelancerSkillsMutation,
+  useAddPortfolioMutation,
+  useRemovePortfolioMutation
+} = freelancerApi;

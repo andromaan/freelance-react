@@ -18,6 +18,7 @@ import { freelancerApi } from "../services/freelancer/freelancerApi";
 import { languagesApi } from "../services/languages/languagesApi";
 import { employerApi } from "../services/employer/employerApi";
 import { countriesApi } from "../services/countries/countriesApi";
+import { skillsApi } from "../services/skills/skillsApi";
 
 export const store = configureStore({
   reducer: {
@@ -39,6 +40,7 @@ export const store = configureStore({
     [languagesApi.reducerPath]: languagesApi.reducer,
     [employerApi.reducerPath]: employerApi.reducer,
     [countriesApi.reducerPath]: countriesApi.reducer,
+    [skillsApi.reducerPath]: skillsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -59,7 +61,8 @@ export const store = configureStore({
       freelancerApi.middleware,
       languagesApi.middleware,
       employerApi.middleware,
-      countriesApi.middleware
+      countriesApi.middleware,
+      skillsApi.middleware
     ),
 });
 

@@ -13,6 +13,9 @@ import {
 import {
   useGetFreelancerByEmailQuery,
   useUpdateFreelancerMutation,
+  useUpdateFreelancerSkillsMutation,
+  useAddPortfolioMutation,
+  useRemovePortfolioMutation,
 } from "../../services/freelancer/freelancerApi";
 import {
   useGetEmployerQuery,
@@ -20,6 +23,7 @@ import {
 } from "../../services/employer/employerApi";
 import { useGetCountriesQuery } from "../../services/countries/countriesApi";
 import { useGetLanguagesQuery } from "../../services/languages/languagesApi";
+import { useGetSkillsQuery } from "../../services/skills/skillsApi";
 import {
   FormField,
   inputClass,
@@ -42,6 +46,9 @@ export const EditProfileTab: React.FC = () => {
   const { data: countries = [] } = useGetCountriesQuery();
   const { data: allLanguages = [] } = useGetLanguagesQuery();
   const { data: proficiencies = [] } = useGetProficiencyLevelsQuery();
+  const { data: allSkills = [] } = useGetSkillsQuery(undefined, {
+    skip: !isFreelancer,
+  });
 
   const { data: freelancer } = useGetFreelancerByEmailQuery(email, {
     skip: !isFreelancer || !email,
@@ -61,9 +68,18 @@ export const EditProfileTab: React.FC = () => {
     useRemoveUserLanguageMutation();
   const [updateAvatar, { isLoading: isUpdatingAvatar }] =
     useUpdateAvatarMutation();
+  const [updateSkills, { isLoading: isUpdatingSkills }] =
+    useUpdateFreelancerSkillsMutation();
+  const [addPortfolio, { isLoading: isAddingPortfolio }] =
+    useAddPortfolioMutation();
+  const [removePortfolio, { isLoading: isRemovingPortfolio }] =
+    useRemovePortfolioMutation();
 
   const isUpdating =
-    isUpdatingUser || isUpdatingFreelancer || isUpdatingEmployer;
+    isUpdatingUser ||
+    isUpdatingFreelancer ||
+    isUpdatingEmployer ||
+    isUpdatingSkills;
 
   // ─── Local State ───
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -84,6 +100,14 @@ export const EditProfileTab: React.FC = () => {
   // Freelancer
   const [bio, setBio] = useState("");
   const [location, setLocation] = useState("");
+  const [selectedSkills, setSelectedSkills] = useState<
+    readonly SelectOption<number>[]
+  >([]);
+
+  // Portfolio
+  const [portTitle, setPortTitle] = useState("");
+  const [portDesc, setPortDesc] = useState("");
+  const [portUrl, setPortUrl] = useState("");
 
   // Employer
   const [companyName, setCompanyName] = useState("");
@@ -106,6 +130,11 @@ export const EditProfileTab: React.FC = () => {
     if (freelancer) {
       setBio(freelancer.bio || "");
       setLocation(freelancer.location || "");
+      if (freelancer.skills) {
+        setSelectedSkills(
+          freelancer.skills.map((s) => ({ value: s.id, label: s.name })),
+        );
+      }
     }
   }, [freelancer]);
 
@@ -128,6 +157,10 @@ export const EditProfileTab: React.FC = () => {
   const profOptions = useMemo(
     () => proficiencies.map((p) => ({ value: p.value, label: p.name })),
     [proficiencies],
+  );
+  const skillOptions = useMemo(
+    () => allSkills.map((s) => ({ value: s.id, label: s.name })),
+    [allSkills],
   );
 
   // ─── Handlers ───
@@ -176,6 +209,9 @@ export const EditProfileTab: React.FC = () => {
           bio: bio || null,
           location: location || null,
         }).unwrap();
+        await updateSkills({
+          skillIds: selectedSkills.map((s) => s.value),
+        }).unwrap();
       } else {
         await updateEmployer({
           companyName: companyName || null,
@@ -216,9 +252,42 @@ export const EditProfileTab: React.FC = () => {
       await removeLanguage(langId).unwrap();
     } catch (err: any) {
       console.error(err);
-      setErrorMsg(
+      toast.error(
         err?.data?.title || err?.data?.message || "Could not remove language.",
       );
+    }
+  };
+
+  const handleAddPortfolio = async () => {
+    if (!portTitle.trim()) {
+      toast.error("Portfolio title is required.");
+      return;
+    }
+    try {
+      await addPortfolio({
+        title: portTitle,
+        description: portDesc || undefined,
+        portfolioUrl: portUrl || undefined,
+      }).unwrap();
+      setPortTitle("");
+      setPortDesc("");
+      setPortUrl("");
+      toast.success("Portfolio item added.");
+    } catch (err: any) {
+      console.error(err);
+      toast.error(
+        err?.data?.title || err?.data?.message || "Could not add portfolio.",
+      );
+    }
+  };
+
+  const handleRemovePortfolio = async (id: string) => {
+    try {
+      await removePortfolio(id).unwrap();
+      toast.success("Portfolio item removed.");
+    } catch (err: any) {
+      console.error(err);
+      toast.error("Could not remove portfolio item.");
     }
   };
 
@@ -230,14 +299,12 @@ export const EditProfileTab: React.FC = () => {
     <div className="space-y-6 max-w-3xl pb-10">
       {errorMsg && <FormErrorAlert message={errorMsg} />}
 
-      {/* Main Form */}
       <form
         id="edit-profile-form"
         onSubmit={handleSubmit}
         className="space-y-6"
       >
         <div className="flex gap-6 flex-col lg:flex-row">
-          {/* Avatar Card */}
           <div className="w-1/2 bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
             <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-3 border-b border-gray-100 dark:border-gray-700">
               Profile Picture
@@ -291,14 +358,10 @@ export const EditProfileTab: React.FC = () => {
                     />
                   )}
                 </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-                  Recommended: Square image.
-                </p>
               </div>
             </div>
           </div>
 
-          {/* Basic Info Card */}
           <div className="w-1/2 bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
             <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-3 border-b border-gray-100 dark:border-gray-700">
               Basic Information
@@ -328,12 +391,10 @@ export const EditProfileTab: React.FC = () => {
           </div>
         </div>
 
-        {/* Role Specific Card */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
           <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-3 border-b border-gray-100 dark:border-gray-700">
             {isFreelancer ? "Freelancer Details" : "Company Details"}
           </h2>
-
           <div className="space-y-5">
             {isFreelancer ? (
               <>
@@ -344,10 +405,13 @@ export const EditProfileTab: React.FC = () => {
                     onChange={(e) => setBio(e.target.value)}
                     placeholder="Tell clients about yourself, your skills, and your experience..."
                     className={inputClass + " resize-y "}
-                    style={{ fieldSizing: "content", minHeight: "3lh", maxHeight: "10lh" }}
+                    style={{
+                      fieldSizing: "content",
+                      minHeight: "3lh",
+                      maxHeight: "10lh",
+                    }}
                   />
                 </FormField>
-
                 <FormField id="location" label="Location / Timezone">
                   <input
                     id="location"
@@ -371,7 +435,6 @@ export const EditProfileTab: React.FC = () => {
                     className={inputClass}
                   />
                 </FormField>
-
                 <FormField id="companyWebsite" label="Company Website">
                   <input
                     id="companyWebsite"
@@ -388,13 +451,147 @@ export const EditProfileTab: React.FC = () => {
         </div>
       </form>
 
-      {/* Languages Card */}
+      {isFreelancer && (
+        <>
+          {/* Skills Card */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-3 border-b border-gray-100 dark:border-gray-700">
+              Skills
+            </h2>
+            <div className="max-w-xl">
+              <FormField id="skills" label="Selected Skills">
+                <Select
+                  isMulti
+                  inputId="skills"
+                  options={skillOptions}
+                  value={selectedSkills}
+                  onChange={(newValue) => setSelectedSkills(newValue)}
+                  styles={selectStyles}
+                  placeholder="Select skills..."
+                  menuPlacement="auto"
+                />
+              </FormField>
+            </div>
+          </div>
+
+          {/* Portfolio Card */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-3 border-b border-gray-100 dark:border-gray-700">
+              Portfolio
+            </h2>
+
+            <div className="mb-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl p-5 border border-gray-100 dark:border-gray-700">
+              <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-4 uppercase tracking-wider">
+                Add New Item
+              </h3>
+              <div className="space-y-4 max-w-xl">
+                <FormField id="portTitle" label="Title" required>
+                  <input
+                    id="portTitle"
+                    type="text"
+                    value={portTitle}
+                    onChange={(e) => setPortTitle(e.target.value)}
+                    placeholder="Project Name"
+                    className={inputClass}
+                  />
+                </FormField>
+                <FormField id="portDesc" label="Description">
+                  <textarea
+                    id="portDesc"
+                    rows={3}
+                    value={portDesc}
+                    onChange={(e) => setPortDesc(e.target.value)}
+                    placeholder="Short description..."
+                    className={inputClass + " resize-y"}
+                  />
+                </FormField>
+                <FormField id="portUrl" label="Link (URL)">
+                  <input
+                    id="portUrl"
+                    type="url"
+                    value={portUrl}
+                    onChange={(e) => setPortUrl(e.target.value)}
+                    placeholder="https://..."
+                    className={inputClass}
+                  />
+                </FormField>
+                <div className="pt-2">
+                  <button
+                    type="button"
+                    onClick={handleAddPortfolio}
+                    disabled={isAddingPortfolio || !portTitle.trim()}
+                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors disabled:opacity-60"
+                  >
+                    {isAddingPortfolio ? "Adding..." : "Add to Portfolio"}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {freelancer?.portfolio && freelancer.portfolio.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {freelancer.portfolio.map((item) => (
+                    <div
+                      key={item.id}
+                      className="p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-700 relative group"
+                    >
+                      <h3 className="font-semibold text-gray-900 dark:text-white line-clamp-1 pr-6">
+                        {item.title}
+                      </h3>
+                      {item.description && (
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">
+                          {item.description}
+                        </p>
+                      )}
+                      {item.portfolioUrl && (
+                        <a
+                          href={item.portfolioUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-sm text-primary hover:underline mt-2 inline-block"
+                        >
+                          View Link &rarr;
+                        </a>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => handleRemovePortfolio(item.id)}
+                        disabled={isRemovingPortfolio}
+                        className="absolute top-3 right-3 p-1.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-md"
+                        title="Remove Portfolio Item"
+                      >
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  No portfolio items yet.
+                </p>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+
       <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
         <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-3 border-b border-gray-100 dark:border-gray-700">
           Languages
         </h2>
-
-        {/* Add New Language */}
         <div className="flex items-end gap-3 flex-wrap mb-6">
           <div className="flex-1 min-w-[200px]">
             <FormField id="add-language" label="Language">
@@ -431,8 +628,6 @@ export const EditProfileTab: React.FC = () => {
             {isAddingLang ? "Adding..." : "Add"}
           </button>
         </div>
-
-        {/* Existing Languages List */}
         <div className="space-y-2">
           {user?.languages && user.languages.length > 0 ? (
             user.languages.map((lang) => {
