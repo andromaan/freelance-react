@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useGetProjectByIdQuery } from "../../services/projects/projectsApi";
 import { useGetBidsByProjectQuery } from "../../services/bids/bidsApi";
 import { useGetUserByIdQuery } from "../../services/user/userApi";
@@ -31,13 +31,13 @@ const SenderInfo: React.FC<SenderInfoProps> = ({ createdBy }) => {
   const initial = label.charAt(0).toUpperCase();
 
   return (
-    <div className="flex items-center gap-3 mt-4">
-      <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm flex-shrink-0">
+    <Link to={`/freelancers/${createdBy}`} className="flex items-center gap-3 mt-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 p-2 -mx-2 rounded-lg transition-colors group cursor-pointer">
+      <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm flex-shrink-0 group-hover:bg-primary/20 transition-colors">
         {initial}
       </div>
       <div className="flex flex-col">
         {user.displayName && (
-          <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+          <span className="text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:text-primary transition-colors">
             {user.displayName}
           </span>
         )}
@@ -50,7 +50,7 @@ const SenderInfo: React.FC<SenderInfoProps> = ({ createdBy }) => {
           </span>
         )}
       </div>
-    </div>
+    </Link>
   );
 };
 

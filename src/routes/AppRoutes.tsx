@@ -28,6 +28,7 @@ import ProjectPage from "../pages/project/ProjectPage";
 import ProjectBidsPage from "../pages/project/ProjectBidsPage";
 import MyProfilePage from "../pages/profile/MyProfilePage";
 import MyContractsPage from "../pages/contracts/MyContractsPage";
+import FreelancerProfilePage from "../pages/freelancer/FreelancerProfilePage";
 import ContractPage from "../pages/contracts/ContractPage";
 
 const AppRoutes: React.FC = () => {
@@ -60,6 +61,14 @@ const AppRoutes: React.FC = () => {
           element={
             <ProtectedRoute>
               <MyProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/freelancers/:userId"
+          element={
+            <ProtectedRoute>
+              <FreelancerProfilePage />
             </ProtectedRoute>
           }
         />

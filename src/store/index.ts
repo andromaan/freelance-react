@@ -14,6 +14,7 @@ import { categoriesApi } from "../services/categories/categoriesApi";
 import { contractsApi } from "../services/contracts/contractsApi";
 import { contractMilestonesApi } from "../services/contract-milestone/contractMilestoneApi";
 import { reviewsApi } from "../services/reviews/reviewsApi";
+import { freelancerApi } from "../services/freelancer/freelancerApi";
 
 export const store = configureStore({
   reducer: {
@@ -31,6 +32,7 @@ export const store = configureStore({
     [contractsApi.reducerPath]: contractsApi.reducer,
     [contractMilestonesApi.reducerPath]: contractMilestonesApi.reducer,
     [reviewsApi.reducerPath]: reviewsApi.reducer,
+    [freelancerApi.reducerPath]: freelancerApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -48,6 +50,7 @@ export const store = configureStore({
       contractsApi.middleware,
       contractMilestonesApi.middleware,
       reviewsApi.middleware,
+      freelancerApi.middleware,
     ),
 });
 
