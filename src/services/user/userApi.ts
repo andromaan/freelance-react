@@ -48,6 +48,15 @@ export const userApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+
+    updateAvatar: builder.mutation<void, FormData>({
+      query: (body) => ({
+        url: "/User/update-avatar",
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
@@ -57,5 +66,6 @@ export const {
   useUpdateUserMutation,
   useGetProficiencyLevelsQuery,
   useAddUserLanguageMutation,
-  useRemoveUserLanguageMutation
+  useRemoveUserLanguageMutation,
+  useUpdateAvatarMutation
 } = userApi;
