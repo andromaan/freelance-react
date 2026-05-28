@@ -7,6 +7,7 @@ import {
   useGetAverageRatingQuery,
 } from "../../services/reviews/reviewsApi";
 import { useGetLanguagesQuery } from "../../services/languages/languagesApi";
+import { useGetCompletedContractsCountQuery } from "../../services/contracts/contractsApi";
 import ReviewCard from "./components/ReviewCard";
 import APP_ENV from "../../env";
 
@@ -34,7 +35,12 @@ const FreelancerProfilePage: React.FC = () => {
     skip: !email,
   });
 
-  const isLoading = isUserLoading || isFreelancerLoading || isRatingLoading;
+  // 4. Fetch Completed Contracts
+  const { data: completedContracts = 0, isLoading: isCompletedContractsLoading } = useGetCompletedContractsCountQuery(freelancer?.id || "", {
+    skip: !freelancer?.id,
+  });
+
+  const isLoading = isUserLoading || isFreelancerLoading || isRatingLoading || isCompletedContractsLoading;
 
   if (isLoading) {
     return (
@@ -131,6 +137,21 @@ const FreelancerProfilePage: React.FC = () => {
                   </span>
                   <span className="text-gray-500 dark:text-gray-400">
                     ({reviews.length} review{reviews.length !== 1 ? 's' : ''})
+                  </span>
+                </div>
+
+                <span className="hidden sm:inline text-gray-300 dark:text-gray-600">•</span>
+                
+                {/* Completed Contracts */}
+                <div className="flex items-center gap-1.5" title={`${completedContracts} completed contracts`}>
+                  <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="font-semibold text-gray-900 dark:text-white">
+                    {completedContracts}
+                  </span>
+                  <span className="text-gray-500 dark:text-gray-400">
+                    completed {completedContracts === 1 ? 'contract' : 'contracts'}
                   </span>
                 </div>
               </div>
