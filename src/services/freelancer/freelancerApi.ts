@@ -1,6 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithRefresh } from "../api/baseQueryWithRefresh";
-import type { FreelancerVM } from "../../types/freelancer.types";
+import type { FreelancerVM, FreelancerFilterVM, SearchFreelancerVM } from "../../types/freelancer.types";
+import type { PaginatedItemsVM } from "../../types/pagination.types";
 
 export const freelancerApi = createApi({
   reducerPath: "freelancerApi",
@@ -13,6 +14,36 @@ export const freelancerApi = createApi({
         method: "GET",
       }),
       providesTags: (_result, _error, email) => [{ type: "Freelancer", id: email }],
+      transformResponse: (response: any) => response.data ?? response,
+    }),
+
+    searchFreelancers: builder.query<PaginatedItemsVM<SearchFreelancerVM>, FreelancerFilterVM>({
+      query: (params) => {
+        const queryParams = new URLSearchParams();
+        
+        queryParams.append("Page", params.page.toString());
+        queryParams.append("PageSize", params.pageSize.toString());
+        
+        if (params.name) queryParams.append("Name", params.name);
+        if (params.email) queryParams.append("Email", params.email);
+        if (params.minRating !== undefined) queryParams.append("MinRating", params.minRating.toString());
+        
+        if (params.skillIds && params.skillIds.length > 0) {
+          params.skillIds.forEach(id => queryParams.append("SkillIds", id.toString()));
+        }
+        if (params.languageIds && params.languageIds.length > 0) {
+          params.languageIds.forEach(id => queryParams.append("LanguageIds", id.toString()));
+        }
+        if (params.countryIds && params.countryIds.length > 0) {
+          params.countryIds.forEach(id => queryParams.append("CountryIds", id.toString()));
+        }
+
+        return {
+          url: `/Freelancer/search?${queryParams.toString()}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["Freelancer"],
       transformResponse: (response: any) => response.data ?? response,
     }),
 
@@ -55,6 +86,7 @@ export const freelancerApi = createApi({
 
 export const { 
   useGetFreelancerByEmailQuery, 
+  useSearchFreelancersQuery,
   useUpdateFreelancerMutation,
   useUpdateFreelancerSkillsMutation,
   useAddPortfolioMutation,
