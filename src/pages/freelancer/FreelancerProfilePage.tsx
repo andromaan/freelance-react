@@ -6,6 +6,7 @@ import {
   useGetReviewsByEmailQuery,
   useGetAverageRatingQuery,
 } from "../../services/reviews/reviewsApi";
+import { useGetLanguagesQuery } from "../../services/languages/languagesApi";
 import ReviewCard from "./components/ReviewCard";
 import APP_ENV from "../../env";
 
@@ -15,6 +16,9 @@ const FreelancerProfilePage: React.FC = () => {
 
   // 1. Fetch User
   const { data: user, isLoading: isUserLoading } = useGetUserByIdQuery(userId!);
+  
+  // Fetch Languages dictionary
+  const { data: languagesList } = useGetLanguagesQuery();
   
   // 2. Fetch Freelancer details
   const { data: freelancer, isLoading: isFreelancerLoading } = useGetFreelancerByUserIdQuery(userId!, {
@@ -86,12 +90,9 @@ const FreelancerProfilePage: React.FC = () => {
         </button>
 
         {/* Header Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm relative overflow-hidden">
-          {/* Background decoration */}
-          <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-primary/20 to-primary/5 dark:from-primary/10 dark:to-transparent" />
-          
-          <div className="relative flex flex-col sm:flex-row gap-6 sm:items-end mt-12 sm:mt-16">
-            <div className="relative shrink-0">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm mt-12 sm:mt-16">
+          <div className="relative flex flex-col sm:flex-row gap-6 sm:items-end">
+            <div className="relative shrink-0 -mt-16 sm:-mt-20">
               {user.avatarImg ? (
                 <img
                   src={`${APP_ENV.API_URL}/${user.avatarImg}`}
@@ -105,7 +106,7 @@ const FreelancerProfilePage: React.FC = () => {
               )}
             </div>
             
-            <div className="flex-1 pb-2">
+            <div className="flex-1 pb-2 mt-2 sm:mt-0">
               <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
                 {user.displayName || user.email}
               </h1>
@@ -193,6 +194,28 @@ const FreelancerProfilePage: React.FC = () => {
                 </div>
               ) : (
                 <p className="text-gray-500 dark:text-gray-400 text-sm">No skills added.</p>
+              )}
+            </div>
+
+            {/* Languages */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">Languages</h2>
+              {user.languages && user.languages.length > 0 ? (
+                <div className="flex flex-col gap-3">
+                  {user.languages.map((lang) => {
+                    const langName = languagesList?.find((l) => l.id === lang.languageId)?.name || `Language ${lang.languageId}`;
+                    return (
+                      <div key={lang.languageId} className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">{langName}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-md">
+                          {lang.proficiencyLevel}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="text-gray-500 dark:text-gray-400 text-sm">No languages specified.</p>
               )}
             </div>
 

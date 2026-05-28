@@ -10,10 +10,8 @@ export interface CountryVM {
 }
 
 export interface UserLanguageVM {
-  id: number;
-  languageName: string;
-  proficiencyLevel: number;
-  proficiencyLevelName?: string;
+  languageId: number;
+  proficiencyLevel: string;
 }
 
 export interface UserVM {

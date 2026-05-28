@@ -1,7 +1,9 @@
 import React from "react";
 import { useGetContractByIdQuery } from "../../../services/contracts/contractsApi";
 import { useGetProjectByIdQuery } from "../../../services/projects/projectsApi";
+import { useGetUserByIdQuery } from "../../../services/user/userApi";
 import type { ReviewVM } from "../../../types/review.types";
+import APP_ENV from "../../../env";
 
 interface ReviewCardProps {
   review: ReviewVM;
@@ -34,7 +36,10 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
     { skip: !contract?.projectId }
   );
 
-  const isLoading = isContractLoading || isProjectLoading;
+  // Fetch Employer who left the review
+  const { data: employer, isLoading: isEmployerLoading } = useGetUserByIdQuery(review.reviewerId);
+
+  const isLoading = isContractLoading || isProjectLoading || isEmployerLoading;
 
   if (isLoading) {
     return (
@@ -48,13 +53,21 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
           <div className="w-24 h-4 bg-gray-200 dark:bg-gray-700 rounded ml-auto" />
         </div>
         <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2" />
-        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-4/5" />
+        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-4/5 mb-4" />
+        <div className="flex items-center gap-2 border-t border-gray-100 dark:border-gray-700 pt-3">
+           <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700" />
+           <div className="w-20 h-3 bg-gray-200 dark:bg-gray-700 rounded" />
+        </div>
       </div>
     );
   }
 
+  const employerInitial = employer?.displayName
+    ? employer.displayName.charAt(0).toUpperCase()
+    : employer?.email?.charAt(0).toUpperCase() || "?";
+
   return (
-    <article className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-100 dark:border-gray-700 shadow-sm">
+    <article className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-100 dark:border-gray-700 shadow-sm flex flex-col h-full">
       <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
         <StarRating rating={review.rating} />
         
@@ -81,9 +94,27 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
         </h4>
       )}
 
-      <p className="text-sm text-gray-600 dark:text-gray-300 italic">
+      <p className="text-sm text-gray-600 dark:text-gray-300 italic mb-4 flex-1">
         "{review.reviewText || "No written review provided."}"
       </p>
+
+      {/* Employer Info */}
+      <div className="border-t border-gray-100 dark:border-gray-700 pt-3 mt-auto flex items-center gap-2">
+        {employer?.avatarImg ? (
+          <img
+            src={`${APP_ENV.API_URL}/${employer.avatarImg}`}
+            alt={employer.displayName || "Employer Avatar"}
+            className="w-6 h-6 rounded-full object-cover border border-gray-200 dark:border-gray-700"
+          />
+        ) : (
+          <div className="w-6 h-6 rounded-full bg-primary/10 text-primary text-[10px] font-bold flex items-center justify-center border border-primary/20">
+            {employerInitial}
+          </div>
+        )}
+        <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+          {employer?.displayName || employer?.email || "Unknown Employer"}
+        </span>
+      </div>
     </article>
   );
 };
