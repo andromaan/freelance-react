@@ -15,7 +15,16 @@ export const freelancerApi = createApi({
       providesTags: (_result, _error, email) => [{ type: "Freelancer", id: email }],
       transformResponse: (response: any) => response.data ?? response,
     }),
+
+    updateFreelancer: builder.mutation<void, { bio: string | null; location: string | null }>({
+      query: (body) => ({
+        url: "/Freelancer",
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["Freelancer"],
+    }),
   }),
 });
 
-export const { useGetFreelancerByEmailQuery } = freelancerApi;
+export const { useGetFreelancerByEmailQuery, useUpdateFreelancerMutation } = freelancerApi;

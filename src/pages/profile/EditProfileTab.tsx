@@ -1,24 +1,330 @@
-import type React from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { useSelector } from "react-redux";
+import Select from "react-select";
+import { selectCurrentUser } from "../../store/userSlice";
+import { ROLES } from "../../constants/roles";
+import { 
+  useUpdateUserMutation,
+  useGetProficiencyLevelsQuery,
+  useAddUserLanguageMutation,
+  useRemoveUserLanguageMutation
+} from "../../services/user/userApi";
+import { useGetFreelancerByEmailQuery, useUpdateFreelancerMutation } from "../../services/freelancer/freelancerApi";
+import { useGetEmployerQuery, useUpdateEmployerMutation } from "../../services/employer/employerApi";
+import { useGetCountriesQuery } from "../../services/countries/countriesApi";
+import { useGetLanguagesQuery } from "../../services/languages/languagesApi";
+import { FormField, inputClass, SubmitButton, FormErrorAlert } from "../../components/ui/FormKit";
+import { useSelectStyles, type SelectOption } from "../../styles/selectStyles";
 
-// ─── Tab panels ───────────────────────────────────────────────────────────────
-export const EditProfileTab: React.FC = () => (
-  <div className="flex flex-col items-center justify-center py-24 text-center">
-    <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mb-4">
-      <svg
-        className="w-7 h-7 text-gray-400"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+export const EditProfileTab: React.FC = () => {
+  const user = useSelector(selectCurrentUser);
+  const isFreelancer = user?.role?.name === ROLES.FREELANCER;
+  const email = user?.email || "";
+
+  // ─── Styles ───
+  const selectStyles = useSelectStyles<number>();
+
+  // ─── API Hooks ───
+  const { data: countries = [] } = useGetCountriesQuery();
+  const { data: allLanguages = [] } = useGetLanguagesQuery();
+  const { data: proficiencies = [] } = useGetProficiencyLevelsQuery();
+  
+  const { data: freelancer } = useGetFreelancerByEmailQuery(email, { skip: !isFreelancer || !email });
+  const { data: employer } = useGetEmployerQuery(undefined, { skip: isFreelancer });
+
+  const [updateUser, { isLoading: isUpdatingUser }] = useUpdateUserMutation();
+  const [updateFreelancer, { isLoading: isUpdatingFreelancer }] = useUpdateFreelancerMutation();
+  const [updateEmployer, { isLoading: isUpdatingEmployer }] = useUpdateEmployerMutation();
+  const [addLanguage, { isLoading: isAddingLang }] = useAddUserLanguageMutation();
+  const [removeLanguage, { isLoading: isRemovingLang }] = useRemoveUserLanguageMutation();
+
+  const isUpdating = isUpdatingUser || isUpdatingFreelancer || isUpdatingEmployer;
+
+  // ─── Local State ───
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  // User
+  const [displayName, setDisplayName] = useState(user?.displayName || "");
+  const [selectedCountry, setSelectedCountry] = useState<SelectOption<number> | null>(null);
+
+  // Language Adding
+  const [langToAdd, setLangToAdd] = useState<SelectOption<number> | null>(null);
+  const [profToAdd, setProfToAdd] = useState<SelectOption<number> | null>(null);
+
+  // Freelancer
+  const [bio, setBio] = useState("");
+  const [location, setLocation] = useState("");
+
+  // Employer
+  const [companyName, setCompanyName] = useState("");
+  const [companyWebsite, setCompanyWebsite] = useState("");
+
+  // Init Data
+  useEffect(() => {
+    if (user) {
+      setDisplayName(user.displayName || "");
+      if (user.country?.id) {
+        setSelectedCountry({ value: user.country.id, label: user.country.name });
+      }
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (freelancer) {
+      setBio(freelancer.bio || "");
+      setLocation(freelancer.location || "");
+    }
+  }, [freelancer]);
+
+  useEffect(() => {
+    if (employer) {
+      setCompanyName(employer.companyName || "");
+      setCompanyWebsite(employer.companyWebsite || "");
+    }
+  }, [employer]);
+
+  // Options
+  const countryOptions = useMemo(() => countries.map(c => ({ value: c.id, label: c.name })), [countries]);
+  const langOptions = useMemo(() => allLanguages.map(l => ({ value: l.id, label: l.name })), [allLanguages]);
+  const profOptions = useMemo(() => proficiencies.map(p => ({ value: p.value, label: p.name })), [proficiencies]);
+
+  // ─── Handlers ───
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSuccessMsg(null);
+    setErrorMsg(null);
+
+    if (!selectedCountry) {
+      setErrorMsg("Country is required.");
+      return;
+    }
+
+    try {
+      await updateUser({ displayName: displayName || null, countryId: selectedCountry.value }).unwrap();
+
+      if (isFreelancer) {
+        await updateFreelancer({ bio: bio || null, location: location || null }).unwrap();
+      } else {
+        await updateEmployer({ companyName: companyName || null, companyWebsite: companyWebsite || null }).unwrap();
+      }
+
+      setSuccessMsg("Profile updated successfully.");
+    } catch (err: any) {
+      console.error(err);
+      setErrorMsg(err?.data?.title || err?.data?.message || "An error occurred while updating profile.");
+    }
+  };
+
+  const handleAddLanguage = async () => {
+    if (!langToAdd || profToAdd === null) return;
+    try {
+      await addLanguage({ languageId: langToAdd.value, proficiencyLevel: profToAdd.value }).unwrap();
+      setLangToAdd(null);
+      setProfToAdd(null);
+    } catch (err: any) {
+      console.error(err);
+      setErrorMsg(err?.data?.title || err?.data?.message || "Could not add language.");
+    }
+  };
+
+  const handleRemoveLanguage = async (langId: number) => {
+    try {
+      await removeLanguage(langId).unwrap();
+    } catch (err: any) {
+      console.error(err);
+      setErrorMsg(err?.data?.title || err?.data?.message || "Could not remove language.");
+    }
+  };
+
+  return (
+    <div className="space-y-6 max-w-3xl pb-10">
+      
+      {errorMsg && <FormErrorAlert message={errorMsg} />}
+      {successMsg && (
+        <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 text-sm font-medium border border-emerald-200 dark:border-emerald-800 flex items-center gap-2 shadow-sm">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+          {successMsg}
+        </div>
+      )}
+
+      {/* Main Form */}
+      <form id="edit-profile-form" onSubmit={handleSubmit} className="space-y-6">
+        
+        {/* Basic Info Card */}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-3 border-b border-gray-100 dark:border-gray-700">
+            Basic Information
+          </h2>
+          <div className="space-y-5 max-w-xl">
+            <FormField id="displayName" label="Display Name">
+              <input
+                id="displayName"
+                type="text"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                placeholder="e.g. John Doe"
+                className={inputClass}
+              />
+            </FormField>
+
+            <FormField id="countryId" label="Country" required>
+              <Select<SelectOption<number>>
+                inputId="countryId"
+                options={countryOptions}
+                value={selectedCountry}
+                onChange={setSelectedCountry}
+                styles={selectStyles}
+                placeholder="Select a country..."
+              />
+            </FormField>
+          </div>
+        </div>
+
+        {/* Role Specific Card */}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-3 border-b border-gray-100 dark:border-gray-700">
+            {isFreelancer ? "Freelancer Details" : "Company Details"}
+          </h2>
+          
+          <div className="space-y-5 max-w-xl">
+            {isFreelancer ? (
+              <>
+                <FormField id="bio" label="Bio">
+                  <textarea
+                    id="bio"
+                    rows={5}
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                    placeholder="Tell clients about yourself, your skills, and your experience..."
+                    className={inputClass + " resize-y"}
+                  />
+                </FormField>
+
+                <FormField id="location" label="Location / Timezone">
+                  <input
+                    id="location"
+                    type="text"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="e.g. New York, USA"
+                    className={inputClass}
+                  />
+                </FormField>
+              </>
+            ) : (
+              <>
+                <FormField id="companyName" label="Company Name">
+                  <input
+                    id="companyName"
+                    type="text"
+                    value={companyName}
+                    onChange={(e) => setCompanyName(e.target.value)}
+                    placeholder="e.g. Acme Corp"
+                    className={inputClass}
+                  />
+                </FormField>
+
+                <FormField id="companyWebsite" label="Company Website">
+                  <input
+                    id="companyWebsite"
+                    type="url"
+                    value={companyWebsite}
+                    onChange={(e) => setCompanyWebsite(e.target.value)}
+                    placeholder="https://acme-corp.com"
+                    className={inputClass}
+                  />
+                </FormField>
+              </>
+            )}
+          </div>
+        </div>
+      </form>
+
+      {/* Languages Card */}
+      <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-3 border-b border-gray-100 dark:border-gray-700">
+          Languages
+        </h2>
+        
+        {/* Existing Languages List */}
+        <div className="mb-6 space-y-2">
+          {user?.languages && user.languages.length > 0 ? (
+            user.languages.map((lang) => {
+              const langName = allLanguages.find((l) => l.id === lang.languageId)?.name || `Language ${lang.languageId}`;
+              return (
+                <div key={lang.languageId} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-700">
+                  <div className="flex items-center gap-3">
+                    <span className="font-semibold text-gray-800 dark:text-gray-200">{langName}</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
+                      {lang.proficiencyLevel}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveLanguage(lang.languageId)}
+                    disabled={isRemovingLang}
+                    className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-md transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                  </button>
+                </div>
+              );
+            })
+          ) : (
+            <p className="text-sm text-gray-500 dark:text-gray-400">No languages added yet.</p>
+          )}
+        </div>
+
+        {/* Add New Language */}
+        <div className="flex items-end gap-3 flex-wrap">
+          <div className="flex-1 min-w-[200px]">
+            <FormField id="add-language" label="Language">
+              <Select<SelectOption<number>>
+                inputId="add-language"
+                options={langOptions}
+                value={langToAdd}
+                onChange={setLangToAdd}
+                styles={selectStyles}
+                placeholder="Select language..."
+                menuPlacement="auto"
+              />
+            </FormField>
+          </div>
+          <div className="flex-1 min-w-[200px]">
+            <FormField id="add-proficiency" label="Proficiency Level">
+              <Select<SelectOption<number>>
+                inputId="add-proficiency"
+                options={profOptions}
+                value={profToAdd}
+                onChange={setProfToAdd}
+                styles={selectStyles}
+                placeholder="Select level..."
+                menuPlacement="auto"
+              />
+            </FormField>
+          </div>
+          <button
+            type="button"
+            onClick={handleAddLanguage}
+            disabled={!langToAdd || profToAdd === null || isAddingLang}
+            className="px-4 py-[9px] h-[38px] mb-[2px] rounded-lg font-semibold text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            {isAddingLang ? "Adding..." : "Add"}
+          </button>
+        </div>
+      </div>
+
+      {/* Save Profile Button */}
+      <div className="pt-4 flex justify-end">
+        <SubmitButton
+          form="edit-profile-form"
+          isLoading={isUpdating}
+          label="Save Profile Changes"
+          loadingLabel="Saving..."
         />
-      </svg>
+      </div>
+
     </div>
-    <p className="text-gray-600 dark:text-gray-300 font-medium">Edit Profile</p>
-    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Coming soon</p>
-  </div>
-);
+  );
+};
