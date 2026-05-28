@@ -12,6 +12,7 @@ import APP_ENV from "../../env";
 import { ROLES } from "../../constants/roles";
 import { useTheme } from "../../context/ThemeContext";
 import freelanceIconUrl from "../icons/FreelanceIcon.svg";
+import { userImageUrl } from "../../utils";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -154,7 +155,7 @@ const Navbar: React.FC = () => {
                 >
                   {user?.avatarImg ? (
                     <img
-                      src={`${APP_ENV.API_URL}/${user.avatarImg}`}
+                      src={userImageUrl(user.avatarImg)}
                       alt="avatar"
                       className="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-gray-700"
                     />
@@ -306,7 +307,7 @@ const Navbar: React.FC = () => {
                 <div className="flex items-center gap-3 py-2">
                   {user?.avatarImg ? (
                     <img
-                      src={`${APP_ENV.API_URL}/${user.avatarImg}`}
+                      src={userImageUrl(user.avatarImg)}
                       alt="avatar"
                       className="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-gray-700"
                     />

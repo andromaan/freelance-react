@@ -10,6 +10,7 @@ import { useGetLanguagesQuery } from "../../services/languages/languagesApi";
 import { useGetCompletedContractsByFreelancerQuery } from "../../services/contracts/contractsApi";
 import ReviewCard from "./components/ReviewCard";
 import APP_ENV from "../../env";
+import { userImageUrl } from "../../utils";
 
 const FreelancerProfilePage: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
@@ -142,7 +143,7 @@ const FreelancerProfilePage: React.FC = () => {
             <div className="relative shrink-0 -mt-16 sm:-mt-20">
               {user.avatarImg ? (
                 <img
-                  src={`${APP_ENV.API_URL}/${user.avatarImg}`}
+                  src={userImageUrl(user.avatarImg)}
                   alt={user.displayName || "Avatar"}
                   className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-md bg-white dark:bg-gray-800"
                 />

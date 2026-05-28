@@ -10,6 +10,7 @@ import { useGetAverageRatingQuery, useGetReviewsByEmailQuery } from "../../servi
 import ConfirmModal from "../../components/ui/ConfirmModal";
 import type { BidVM } from "../../types/bid.types";
 import APP_ENV from "../../env";
+import { userImageUrl } from "../../utils";
 
 // ─── Filter ───────────────────────────────────────────────────────────────────
 
@@ -96,7 +97,7 @@ const SenderInfo: React.FC<{ createdBy: string }> = ({ createdBy }) => {
     <Link to={`/freelancers/${createdBy}`} className="flex items-center gap-4 mt-4 bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-xl transition-all group cursor-pointer border border-transparent hover:border-gray-200 dark:hover:border-gray-700">
       <div className="relative flex-shrink-0">
         {user.avatarImg ? (
-          <img src={`${APP_ENV.API_URL}/${user.avatarImg}`} alt={user.displayName || "Avatar"} className="w-12 h-12 rounded-full object-cover border-2 border-white dark:border-gray-700 shadow-sm" />
+          <img src={userImageUrl(user.avatarImg)} alt={user.displayName || "Avatar"} className="w-12 h-12 rounded-full object-cover border-2 border-white dark:border-gray-700 shadow-sm" />
         ) : (
           <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-lg shadow-sm border-2 border-white dark:border-gray-700">
             {initial}

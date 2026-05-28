@@ -9,6 +9,7 @@ import {
 } from "../../services/reviews/reviewsApi";
 import type { BidVM } from "../../types/bid.types";
 import APP_ENV from "../../env";
+import { userImageUrl } from "../../utils";
 
 /* ─── SenderInfo ─────────────────────────────────────────────────────────── */
 interface SenderInfoProps {
@@ -51,7 +52,7 @@ const SenderInfo: React.FC<SenderInfoProps> = ({ createdBy }) => {
       <div className="relative flex-shrink-0">
         {user.avatarImg ? (
           <img
-            src={`${APP_ENV.API_URL}/${user.avatarImg}`}
+            src={userImageUrl(user.avatarImg)}
             alt={user.displayName || "Avatar"}
             className="w-12 h-12 rounded-full object-cover border-2 border-white dark:border-gray-700 shadow-sm"
           />

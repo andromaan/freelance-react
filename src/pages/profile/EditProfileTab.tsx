@@ -33,6 +33,7 @@ import {
 import { useSelectStyles, type SelectOption } from "../../styles/selectStyles";
 import { toast } from "react-toastify";
 import APP_ENV from "../../env";
+import { userImageUrl } from "../../utils";
 
 export const EditProfileTab: React.FC = () => {
   const user = useSelector(selectCurrentUser);
@@ -315,7 +316,7 @@ export const EditProfileTab: React.FC = () => {
                   {avatarPreview || user?.avatarImg ? (
                     <img
                       src={
-                        avatarPreview || `${APP_ENV.API_URL}/${user?.avatarImg}`
+                        avatarPreview || userImageUrl(user?.avatarImg?? "")
                       }
                       alt="Avatar"
                       className="w-full h-full object-cover"

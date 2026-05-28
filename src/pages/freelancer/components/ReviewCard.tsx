@@ -4,6 +4,7 @@ import { useGetProjectByIdQuery } from "../../../services/projects/projectsApi";
 import { useGetUserByIdQuery } from "../../../services/user/userApi";
 import type { ReviewVM } from "../../../types/review.types";
 import APP_ENV from "../../../env";
+import { userImageUrl } from "../../../utils";
 
 interface ReviewCardProps {
   review: ReviewVM;
@@ -102,7 +103,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
       <div className="border-t border-gray-100 dark:border-gray-700 pt-3 mt-auto flex items-center gap-2">
         {employer?.avatarImg ? (
           <img
-            src={`${APP_ENV.API_URL}/${employer.avatarImg}`}
+            src={userImageUrl(employer.avatarImg)}
             alt={employer.displayName || "Employer Avatar"}
             className="w-6 h-6 rounded-full object-cover border border-gray-200 dark:border-gray-700"
           />

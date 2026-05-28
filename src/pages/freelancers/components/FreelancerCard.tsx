@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import type { SearchFreelancerVM } from "../../../types/freelancer.types";
-import APP_ENV from "../../../env";
+import { userImageUrl } from "../../../utils";
 
 interface Props {
   freelancer: SearchFreelancerVM;
@@ -9,7 +9,7 @@ interface Props {
 
 const FreelancerCard: React.FC<Props> = ({ freelancer }) => {
   const firstLetter = (freelancer.displayName || freelancer.email || "?")[0].toUpperCase();
-  const avatarUrl = freelancer.avatarImg ? `${APP_ENV.API_URL}/${freelancer.avatarImg}` : null;
+  const avatarUrl = freelancer.avatarImg ? userImageUrl(freelancer.avatarImg) : null;
   const rating = freelancer.rating > 0 ? freelancer.rating.toFixed(1) : "No rating yet";
 
   return (
