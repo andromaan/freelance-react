@@ -3,6 +3,7 @@ import Select from "react-select";
 import { useSearchFreelancersQuery } from "../../services/freelancer/freelancerApi";
 import { useGetCountriesQuery } from "../../services/countries/countriesApi";
 import { useGetSkillsQuery } from "../../services/skills/skillsApi";
+import { useGetLanguagesQuery } from "../../services/languages/languagesApi";
 import {
   mergeSelectStyles,
   useSelectStyles,
@@ -51,6 +52,7 @@ const FreelancersPage: React.FC = () => {
   const [minRating, setMinRating] = useState("");
   const [selectedSkillIds, setSelectedSkillIds] = useState<number[]>([]);
   const [selectedCountryIds, setSelectedCountryIds] = useState<number[]>([]);
+  const [selectedLanguageIds, setSelectedLanguageIds] = useState<number[]>([]);
 
   // Debounce name search
   useEffect(() => {
@@ -71,13 +73,19 @@ const FreelancersPage: React.FC = () => {
     setPage(1);
   };
 
+  const handleLanguagesChange = (selected: readonly SelectOption<number>[]) => {
+    setSelectedLanguageIds(selected.map((o) => o.value));
+    setPage(1);
+  };
+
   const handleRatingChange = () => setPage(1);
 
   const hasFilters =
     nameSearch !== "" ||
     minRating !== "" ||
     selectedSkillIds.length > 0 ||
-    selectedCountryIds.length > 0;
+    selectedCountryIds.length > 0 ||
+    selectedLanguageIds.length > 0;
 
   const clearFilters = () => {
     setNameInput("");
@@ -85,6 +93,7 @@ const FreelancersPage: React.FC = () => {
     setMinRating("");
     setSelectedSkillIds([]);
     setSelectedCountryIds([]);
+    setSelectedLanguageIds([]);
     setPage(1);
   };
 
@@ -109,11 +118,13 @@ const FreelancersPage: React.FC = () => {
     ...(minRating !== "" && !isNaN(Number(minRating)) && { minRating: Number(minRating) }),
     ...(selectedSkillIds.length > 0 && { skillIds: selectedSkillIds }),
     ...(selectedCountryIds.length > 0 && { countryIds: selectedCountryIds }),
+    ...(selectedLanguageIds.length > 0 && { languageIds: selectedLanguageIds }),
   };
 
   const { data, isFetching, isLoading } = useSearchFreelancersQuery(filter);
   const { data: skills = [] } = useGetSkillsQuery();
   const { data: countries = [] } = useGetCountriesQuery();
+  const { data: languages = [] } = useGetLanguagesQuery();
 
   const freelancers = data?.items ?? [];
   const totalPages = data?.pageCount ?? 1;
@@ -129,6 +140,7 @@ const FreelancersPage: React.FC = () => {
 
   const skillOptions = useMemo(() => skills.map((s) => ({ label: s.name, value: s.id })), [skills]);
   const countryOptions = useMemo(() => countries.map((c) => ({ label: c.name, value: c.id })), [countries]);
+  const languageOptions = useMemo(() => languages.map((l) => ({ label: l.name, value: l.id })), [languages]);
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
@@ -146,7 +158,7 @@ const FreelancersPage: React.FC = () => {
 
         {/* ── Filters ── */}
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
             {/* Search */}
             <div className="relative">
               <label htmlFor={searchId} className="sr-only">
@@ -212,9 +224,20 @@ const FreelancersPage: React.FC = () => {
               value={countryOptions.filter((o) => selectedCountryIds.includes(o.value))}
             />
 
+            {/* Languages */}
+            <Select<SelectOption<number>, true>
+              isMulti
+              options={languageOptions}
+              onChange={handleLanguagesChange}
+              styles={styles}
+              placeholder="Select languages…"
+              noOptionsMessage={() => "No languages available"}
+              value={languageOptions.filter((o) => selectedLanguageIds.includes(o.value))}
+            />
+
             {/* Clear filters */}
             {hasFilters && (
-              <div className="md:col-span-2 lg:col-span-4 flex items-center">
+              <div className="md:col-span-2 lg:col-span-5 flex items-center">
                 <button
                   type="button"
                   onClick={clearFilters}
