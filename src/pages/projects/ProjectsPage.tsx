@@ -226,6 +226,7 @@ const ProjectsPage: React.FC = () => {
               options={categoryOptions}
               onChange={handleCategoryChange}
               styles={styles}
+              className="lg:col-span-2"
               placeholder="Select categories…"
               noOptionsMessage={() => "No categories available"}
               aria-label="Select project categories"

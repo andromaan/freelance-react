@@ -160,7 +160,7 @@ const FreelancersPage: React.FC = () => {
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
             {/* Search */}
-            <div className="relative">
+            <div className="lg:col-span-2 relative relative">
               <label htmlFor={searchId} className="sr-only">
                 Search by name
               </label>
@@ -209,6 +209,7 @@ const FreelancersPage: React.FC = () => {
               onChange={handleSkillsChange}
               styles={styles}
               placeholder="Select skills…"
+              className="lg:col-span-2"
               noOptionsMessage={() => "No skills available"}
               value={skillOptions.filter((o) => selectedSkillIds.includes(o.value))}
             />
@@ -219,6 +220,7 @@ const FreelancersPage: React.FC = () => {
               options={countryOptions}
               onChange={handleCountriesChange}
               styles={styles}
+              className="lg:col-span-2"
               placeholder="Select countries…"
               noOptionsMessage={() => "No countries available"}
               value={countryOptions.filter((o) => selectedCountryIds.includes(o.value))}
@@ -231,13 +233,14 @@ const FreelancersPage: React.FC = () => {
               onChange={handleLanguagesChange}
               styles={styles}
               placeholder="Select languages…"
+              className="lg:col-span-2"
               noOptionsMessage={() => "No languages available"}
               value={languageOptions.filter((o) => selectedLanguageIds.includes(o.value))}
             />
 
             {/* Clear filters */}
             {hasFilters && (
-              <div className="md:col-span-2 lg:col-span-5 flex items-center">
+              <div className="flex items-center">
                 <button
                   type="button"
                   onClick={clearFilters}
