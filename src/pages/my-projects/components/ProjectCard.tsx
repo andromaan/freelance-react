@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ProjectStatus, type ProjectVM } from "../../../types/project.types";
+import { getStatusText } from "../../../utils";
 
 interface Props {
   project: ProjectVM;
@@ -54,13 +55,6 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
 
   const dueSoon = isFuture && diffInDays <= 3;
   const dueClass = dueSoon ? "text-xs text-red-400" : "text-xs text-gray-400";
-
-  const getStatusText = () => {
-    const str = project.status;
-    const words = str.split(/(?=[A-Z])/);
-
-    return words.join(" ");
-  };
 
   const isInProgress = project.status === ProjectStatus.InProgress;
 
@@ -203,7 +197,7 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
                         Status
                       </p>
                       <p className="text-sm font-medium text-gray-900 dark:text-white">
-                        {getStatusText()}
+                        {getStatusText(project.status)}
                       </p>
                     </div>
                     <div>
@@ -228,7 +222,7 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
             ) : (
               <div className="flex justify-between items-center mt-3">
                 <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">
-                  {getStatusText()}
+                  {getStatusText(project.status)}
                 </span>
                 <Link
                   to={`/my-projects/${project.id}`}

@@ -17,7 +17,55 @@ export const userApi = createApi({
       query: (userId) => `User/${userId}`,
       transformResponse: (response: any) => response.data ?? response,
     }),
+
+    updateUser: builder.mutation<void, { displayName: string | null; countryId: number }>({
+      query: (body) => ({
+        url: "/User",
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["User"],
+    }),
+
+    getProficiencyLevels: builder.query<{ name: string; value: number }[], void>({
+      query: () => "/User/proficiency-levels",
+      transformResponse: (response: any) => response.data ?? response,
+    }),
+
+    addUserLanguage: builder.mutation<void, { languageId: number; proficiencyLevel: number }>({
+      query: (body) => ({
+        url: "/User/languages",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["User"],
+    }),
+
+    removeUserLanguage: builder.mutation<void, number>({
+      query: (languageId) => ({
+        url: `/User/languages/${languageId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["User"],
+    }),
+
+    updateAvatar: builder.mutation<void, FormData>({
+      query: (body) => ({
+        url: "/User/update-avatar",
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
-export const { useGetMyselfQuery, useGetUserByIdQuery } = userApi;
+export const { 
+  useGetMyselfQuery, 
+  useGetUserByIdQuery, 
+  useUpdateUserMutation,
+  useGetProficiencyLevelsQuery,
+  useAddUserLanguageMutation,
+  useRemoveUserLanguageMutation,
+  useUpdateAvatarMutation
+} = userApi;

@@ -6,6 +6,7 @@ import { tokenStorage } from "../services/auth/tokenStorage";
 import { addNotification } from "../store/notificationSlice";
 import type { NotificationVM } from "../types/notification.types";
 import type { AppDispatch } from "../store";
+import { getStatusText } from "../utils";
 
 export const useNotificationHub = (enabled: boolean) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -23,7 +24,7 @@ export const useNotificationHub = (enabled: boolean) => {
     const handler = (notification: NotificationVM) => {
       dispatch(addNotification(notification));
 
-      const label = notification.type.split(/(?=[A-Z])/).join(" ");
+      const label = getStatusText(notification.type);
       toast.info(`${label}: ${notification.message}`, {
         position: "bottom-right",
         autoClose: 5000,

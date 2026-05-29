@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { ROLES } from "../../constants/roles";
-import APP_ENV from "../../env";
 import { selectCurrentUser } from "../../store/userSlice";
 import type { BidVM } from "../../types/bid.types";
 import type { QuoteVM } from "../../types/quote.types";
@@ -12,6 +11,7 @@ import EditQuoteModal from "./components/EditQuoteModal";
 import { EditProfileTab } from "./EditProfileTab";
 import MyQuotesTab from "./MyQuotesTab";
 import MyBidsTab from "./MyBidsTab";
+import { userImageUrl } from "../../utils";
 
 // ─── Tab config ───────────────────────────────────────────────────────────────
 
@@ -119,7 +119,7 @@ const MyProfilePage: React.FC = () => {
         <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex flex-col items-center gap-3">
           {user?.avatarImg ? (
             <img
-              src={`${APP_ENV.API_URL}/${user.avatarImg}`}
+              src={userImageUrl(user.avatarImg)}
               alt="avatar"
               className="w-20 h-20 rounded-full object-cover border-2 border-primary/30"
             />

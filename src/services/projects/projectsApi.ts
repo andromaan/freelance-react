@@ -35,6 +35,16 @@ export const projectsApi = createApi({
       providesTags: ["Project"],
     }),
 
+    getProjectByContractId: builder.query<ProjectVM, string>({
+      query: (contractId) => ({
+        url: `/Project/by-contract/${contractId}`,
+        method: "GET",
+      }),
+      transformResponse: (response: { data: ProjectVM }) =>
+        response.data ?? response,
+      providesTags: ["Project"],
+    }),
+
     // Get project with filters
     getProjectsFiltered: builder.query<
       PaginatedItemsVM<ProjectVM>,
@@ -99,6 +109,7 @@ export const {
   useGetProjectByIdQuery,
   useGetProjectsFilteredQuery,
   useGetProjectsByEmployerQuery,
+  useGetProjectByContractIdQuery,
   useUpdateProjectMutation,
   useUpdateProjectCategoriesMutation,
   useCreateProjectMutation,

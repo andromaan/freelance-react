@@ -12,6 +12,7 @@ import {
   useReadAllMutation,
 } from "../../services/notification/notificationApi";
 import { Link } from "react-router-dom";
+import { getStatusText } from "../../utils";
 
 const formatTime = (iso: string) => {
   const date = new Date(iso);
@@ -159,7 +160,7 @@ const NotificationBell: React.FC = () => {
                       <Link to="/notifications" onClick={() => setOpen(false)}>
                         <div className="flex-1 min-w-0">
                           <p className="text-xs font-semibold text-primary mb-0.5">
-                            {n.type.split(/(?=[A-Z])/).join(" ")}
+                            {getStatusText(n.type)}
                           </p>
                           <p className="text-sm text-gray-700 dark:text-gray-200 leading-snug">
                             {n.message}

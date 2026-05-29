@@ -94,6 +94,15 @@ export const contractsApi = createApi({
         { type: "ContractMilestone", id: result?.data?.contractId },
       ],
     }),
+
+    getCompletedContractsByFreelancer: builder.query<ContractVM[], string>({
+      query: (freelancerId) => ({
+        url: `/Contract/completed-by-freelancer-id/${freelancerId}`,
+        method: "GET",
+      }),
+      providesTags: ["Contract"],
+      transformResponse: (response: any) => response.data ?? response,
+    }),
   }),
 });
 
@@ -106,4 +115,5 @@ export const {
   useGetContractMilestonesQuery,
   useUpdateContractMilestoneFreelancerMutation,
   useUpdateContractMilestoneEmployerMutation,
+  useGetCompletedContractsByFreelancerQuery,
 } = contractsApi;

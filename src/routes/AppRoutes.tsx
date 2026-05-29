@@ -24,10 +24,13 @@ import MyProjectPage from "../pages/my-project/MyProjectPage";
 import MyProjectBidsPage from "../pages/my-project/MyProjectBidsPage";
 import MyProjectQuotesPage from "../pages/my-project/MyProjectQuotesPage";
 import ProjectsPage from "../pages/projects/ProjectsPage";
+import FreelancersPage from "../pages/freelancers/FreelancersPage";
 import ProjectPage from "../pages/project/ProjectPage";
 import ProjectBidsPage from "../pages/project/ProjectBidsPage";
 import MyProfilePage from "../pages/profile/MyProfilePage";
 import MyContractsPage from "../pages/contracts/MyContractsPage";
+import FreelancerProfilePage from "../pages/freelancer/FreelancerProfilePage";
+import EmployerProfilePage from "../pages/employer/EmployerProfilePage";
 import ContractPage from "../pages/contracts/ContractPage";
 
 const AppRoutes: React.FC = () => {
@@ -60,6 +63,22 @@ const AppRoutes: React.FC = () => {
           element={
             <ProtectedRoute>
               <MyProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/freelancers/:userId"
+          element={
+            <ProtectedRoute>
+              <FreelancerProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employers/:userId"
+          element={
+            <ProtectedRoute>
+              <EmployerProfilePage />
             </ProtectedRoute>
           }
         />
@@ -155,6 +174,10 @@ const AppRoutes: React.FC = () => {
           <Route index element={<ProjectsPage />} />
           <Route path=":projectId" element={<ProjectPage />} />
           <Route path=":projectId/bids" element={<ProjectBidsPage />} />
+        </Route>
+
+        <Route path="freelancers">
+          <Route index element={<FreelancersPage />} />
         </Route>
       </Route>
 

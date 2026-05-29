@@ -11,6 +11,7 @@ import {
   ContractMilestoneEmployerStatus,
   ContractMilestoneFreelancerStatus,
 } from "../../../types/contract-milestone.types";
+import { getStatusText } from "../../../utils";
 
 interface ContractMilestonesListProps {
   contractId: string;
@@ -34,10 +35,6 @@ const getStatusBadgeClass = (status: string) => {
     default:
       return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300";
   }
-};
-
-const getStatusLabel = (status: string) => {
-  return status.split(/(?=[A-Z])/).join(" ");
 };
 
 const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
@@ -135,7 +132,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
               <span
                 className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${getStatusBadgeClass(milestone.status)}`}
               >
-                {getStatusLabel(milestone.status)}
+                {getStatusText(milestone.status)}
               </span>
             </div>
             <p className="text-gray-900 dark:text-white font-medium mb-2">
