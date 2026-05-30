@@ -1,4 +1,7 @@
 import React from "react";
+import { selectCurrentUser } from "../../../../store/userSlice";
+import { useSelector } from "react-redux";
+import { ROLES } from "../../../../constants/roles";
 
 interface BalanceCardProps {
   formattedBalance: string | null;
@@ -11,6 +14,8 @@ const BalanceCard: React.FC<BalanceCardProps> = ({
   isLoading,
   onDeposit,
 }) => {
+  const user = useSelector(selectCurrentUser);
+
   return (
     <div className="bg-gradient-to-br from-primary to-blue-700 dark:from-blue-900 dark:to-blue-950 rounded-2xl p-6 text-white shadow-lg mb-6">
       <p className="text-sm text-blue-100 mb-1">Current Balance</p>
@@ -21,7 +26,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({
           {formattedBalance ?? "—"}
         </p>
       )}
-      <button
+     {user?.role?.name === ROLES.EMPLOYER && (<button
         onClick={onDeposit}
         className="mt-5 inline-flex items-center gap-2 bg-white text-primary font-semibold text-sm px-5 py-2.5 rounded-xl hover:bg-blue-50 transition-colors"
       >
@@ -39,7 +44,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({
           />
         </svg>
         Deposit
-      </button>
+      </button>)}
     </div>
   );
 };

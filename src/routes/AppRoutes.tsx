@@ -66,22 +66,7 @@ const AppRoutes: React.FC = () => {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/freelancers/:userId"
-          element={
-            <ProtectedRoute>
-              <FreelancerProfilePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/employers/:userId"
-          element={
-            <ProtectedRoute>
-              <EmployerProfilePage />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/employers/:userId" element={<EmployerProfilePage />} />
         <Route
           path="/profile/:tab"
           element={
@@ -90,7 +75,7 @@ const AppRoutes: React.FC = () => {
             </ProtectedRoute>
           }
         />
-        
+
         <Route
           path="/my-contracts"
           element={
@@ -178,6 +163,10 @@ const AppRoutes: React.FC = () => {
 
         <Route path="freelancers">
           <Route index element={<FreelancersPage />} />
+          <Route
+            path="/freelancers/:userId"
+            element={<FreelancerProfilePage />}
+          />
         </Route>
       </Route>
 

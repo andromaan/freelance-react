@@ -3,6 +3,9 @@ import { useGetBalanceQuery } from "../../services/wallet/walletApi";
 import BalanceCard from "./components/balanceCard/BalanceCard";
 import QuickDeposit from "./components/quickDeposit/QuickDeposit";
 import DepositModal from "./components/depositModal/DepositModal";
+import { selectCurrentUser } from "../../store/userSlice";
+import { useSelector } from "react-redux";
+import { ROLES } from "../../constants/roles";
 
 const WalletPage: React.FC = () => {
   const {
@@ -13,6 +16,7 @@ const WalletPage: React.FC = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [presetAmount, setPresetAmount] = useState<number | undefined>();
+  const user = useSelector(selectCurrentUser);
 
   const currency = wallet?.currency ?? "UAH";
 
@@ -51,16 +55,18 @@ const WalletPage: React.FC = () => {
         isLoading={balanceLoading}
         onDeposit={openModal}
       />
-
-      <QuickDeposit currency={currency} onSelect={openModalWithPreset} />
-
-      <DepositModal
-        show={showModal}
-        currency={currency}
-        presetAmount={presetAmount}
-        onClose={() => setShowModal(false)}
-        onSuccess={handleSuccess}
-      />
+      {user?.role?.name === ROLES.EMPLOYER && (
+        <>
+          <QuickDeposit currency={currency} onSelect={openModalWithPreset} />
+          <DepositModal
+            show={showModal}
+            currency={currency}
+            presetAmount={presetAmount}
+            onClose={() => setShowModal(false)}
+            onSuccess={handleSuccess}
+          />
+        </>
+      )}
     </div>
   );
 };
