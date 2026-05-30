@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useGetUserByIdQuery } from "../../../services/user/userApi";
-import APP_ENV from "../../../env";
 import { userImageUrl } from "../../../utils";
 
 interface Props {

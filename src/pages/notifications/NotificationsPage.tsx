@@ -123,11 +123,6 @@ const Notifications: React.FC = () => {
     setTypeFilter(newType);
   };
 
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-  const visiblePages = pages.filter(
-    (p) => p === 1 || p === totalPages || Math.abs(p - page) <= 2,
-  );
-
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 notification-page-enter">
       <NotificationsHeader readingAll={readingAll} onReadAll={handleReadAll} />

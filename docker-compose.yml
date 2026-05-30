@@ -1,12 +1,12 @@
 services:
   react:
-    # image: androman/freelance-react:latest
     build:
       context: .
       dockerfile: Dockerfile
     restart: always
     ports:
-      - "3000:3000"
+      - "3000:80"
+    # Ці змінні будуть прочитані з файлу .env і передані в запущений контейнер
     environment:
       DISABLE_HTTPS: "true"
       VITE_API_URL: ${VITE_API_URL}
