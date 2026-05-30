@@ -58,7 +58,7 @@ const Navbar: React.FC = () => {
           to="/"
           className="flex items-center gap-2 text-xl font-bold text-primary hover:opacity-90 transition-opacity"
         >
-          <img src={freelanceIconUrl} alt="Freelance" className="w-8 h-8" />
+          <img src={freelanceIconUrl} alt="Freelance platform logo" className="w-8 h-8" />
           <span>FreeLance</span>
         </Link>
 
@@ -127,6 +127,7 @@ const Navbar: React.FC = () => {
               <NotificationBell />
               <Link
                 to="/wallet"
+                aria-label="Wallet"
                 className="text-gray-600 dark:text-gray-300 transition-colors p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <svg
@@ -155,7 +156,7 @@ const Navbar: React.FC = () => {
                   {user?.avatarImg ? (
                     <img
                       src={userImageUrl(user.avatarImg)}
-                      alt="avatar"
+                      alt=""
                       className="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-gray-700"
                     />
                   ) : (
@@ -307,7 +308,7 @@ const Navbar: React.FC = () => {
                   {user?.avatarImg ? (
                     <img
                       src={userImageUrl(user.avatarImg)}
-                      alt="avatar"
+                      alt=""
                       className="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-gray-700"
                     />
                   ) : (

@@ -141,10 +141,11 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label htmlFor="reviewText" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Ваш коментар (необов'язково)
           </label>
           <textarea
+            id="reviewText"
             className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:text-white transition-all resize-none shadow-sm"
             rows={4}
             value={reviewText}

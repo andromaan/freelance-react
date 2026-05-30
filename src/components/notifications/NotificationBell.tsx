@@ -174,6 +174,7 @@ const NotificationBell: React.FC = () => {
                       {!n.isRead && (
                         <button
                           onClick={() => handleMarkAsRead(n.id)}
+                          aria-label="Mark as read"
                           title="Mark as read"
                           className="flex-shrink-0 mt-0.5 p-1 rounded-md text-gray-400 hover:text-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors opacity-0 group-hover:opacity-100"
                         >

@@ -169,8 +169,9 @@ const GoogleLogin: React.FC = () => {
               To complete registration, please select your role:
             </p>
             <div className="flex flex-col gap-3 mb-6">
-              <label className="flex items-center px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer transition-all hover:border-primary hover:bg-blue-50 dark:hover:bg-blue-900/20 bg-white dark:bg-gray-700">
+              <label htmlFor="role-freelancer" className="flex items-center px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer transition-all hover:border-primary hover:bg-blue-50 dark:hover:bg-blue-900/20 bg-white dark:bg-gray-700">
                 <input
+                  id="role-freelancer"
                   type="radio"
                   name="role"
                   value={UserRoles.FREELANCER}
@@ -183,8 +184,9 @@ const GoogleLogin: React.FC = () => {
                   Freelancer
                 </span>
               </label>
-              <label className="flex items-center px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer transition-all hover:border-primary hover:bg-blue-50 dark:hover:bg-blue-900/20 bg-white dark:bg-gray-700">
+              <label htmlFor="role-employer" className="flex items-center px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer transition-all hover:border-primary hover:bg-blue-50 dark:hover:bg-blue-900/20 bg-white dark:bg-gray-700">
                 <input
+                  id="role-employer"
                   type="radio"
                   name="role"
                   value={UserRoles.EMPLOYER}

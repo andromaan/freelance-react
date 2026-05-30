@@ -198,6 +198,7 @@ const FreelancersPage: React.FC = () => {
                   setMinRating(e.target.value);
                   handleRatingChange();
                 }}
+                aria-label="Minimum rating"
                 className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
               />
             </div>
@@ -208,6 +209,7 @@ const FreelancersPage: React.FC = () => {
               options={skillOptions}
               onChange={handleSkillsChange}
               styles={styles}
+              aria-label="Filter by skills"
               placeholder="Select skills…"
               className="lg:col-span-2"
               noOptionsMessage={() => "No skills available"}
@@ -220,6 +222,7 @@ const FreelancersPage: React.FC = () => {
               options={countryOptions}
               onChange={handleCountriesChange}
               styles={styles}
+              aria-label="Filter by countries"
               className="lg:col-span-2"
               placeholder="Select countries…"
               noOptionsMessage={() => "No countries available"}
@@ -232,6 +235,7 @@ const FreelancersPage: React.FC = () => {
               options={languageOptions}
               onChange={handleLanguagesChange}
               styles={styles}
+              aria-label="Filter by languages"
               placeholder="Select languages…"
               className="lg:col-span-2"
               noOptionsMessage={() => "No languages available"}
@@ -245,6 +249,7 @@ const FreelancersPage: React.FC = () => {
                   type="button"
                   onClick={clearFilters}
                   className="flex items-center gap-1.5 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+                  aria-label="Clear filters"
                 >
                   <svg
                     className="w-4 h-4"
@@ -296,6 +301,7 @@ const FreelancersPage: React.FC = () => {
                 type="button"
                 onClick={clearFilters}
                 className="mt-4 px-4 py-2 rounded-lg text-sm font-medium bg-primary hover:bg-primary-hover text-white transition-colors"
+                aria-label="Clear filters"
               >
                 Clear filters
               </button>
