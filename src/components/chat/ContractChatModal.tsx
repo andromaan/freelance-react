@@ -21,12 +21,14 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({ isOpen, onClose,
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
 
   // Use skip to not fetch if modal is closed
-  const { data: chatDetails, isLoading: detailsLoading } = useGetChatDetailsQuery(contractId, { skip: !isOpen });
-  const { data: initialMessages = [], isLoading: messagesLoading } = useGetChatMessagesQuery(contractId, { skip: !isOpen });
+  const { data: chatDetails, isLoading: detailsLoading, refetch: refetchDetails } = useGetChatDetailsQuery(contractId, { skip: !isOpen });
+  const { data: initialMessages = [], isLoading: messagesLoading, refetch: refetchMessages } = useGetChatMessagesQuery(contractId, { skip: !isOpen });
 
-  const { messages, isConnected, sendMessage, editMessage, deleteMessage } = useChatHub(
+  const { messages, isConnected, isInterlocutorOnline, sendMessage, editMessage, deleteMessage, markAsRead } = useChatHub(
     isOpen ? contractId : "",
-    initialMessages
+    initialMessages,
+    chatDetails?.interlocutorId,
+    chatDetails?.isInterlocutorOnline
   );
 
   const scrollToBottom = () => {
@@ -38,6 +40,25 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({ isOpen, onClose,
       scrollToBottom();
     }
   }, [messages, isOpen]);
+
+  // Force fetch fresh data when chat opens so we get correct online status
+  useEffect(() => {
+    if (isOpen) {
+      refetchDetails();
+      refetchMessages();
+    }
+  }, [isOpen, refetchDetails, refetchMessages]);
+
+  // Mark unread messages as read when chat is open and connected
+  useEffect(() => {
+    if (isOpen && isConnected && currentUser) {
+      messages.forEach((msg) => {
+        if (!msg.isRead && msg.senderId !== currentUser.id) {
+          markAsRead(msg.id);
+        }
+      });
+    }
+  }, [isOpen, isConnected, messages, currentUser, markAsRead]);
 
   if (!isOpen) {
     return createPortal(
@@ -83,8 +104,12 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({ isOpen, onClose,
                     </div>
                   )}
                   <div>
-                    <h2 className="text-lg font-bold text-gray-900 dark:text-white leading-tight">
+                    <h2 className="text-lg font-bold text-gray-900 dark:text-white leading-tight flex items-center gap-2">
                       {chatDetails.interlocutorName}
+                      <span className="flex items-center gap-1 text-[10px] font-normal px-1.5 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                        <span className={`w-1.5 h-1.5 rounded-full ${isInterlocutorOnline ? 'bg-green-500' : 'bg-gray-400'}`}></span>
+                        {isInterlocutorOnline ? 'Online' : 'Offline'}
+                      </span>
                     </h2>
                     <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate" title={chatDetails.projectTitle}>
                       {chatDetails.projectTitle}
@@ -128,8 +153,11 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({ isOpen, onClose,
                           : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-bl-none"
                       }`}>
                         <p className="whitespace-pre-wrap break-words text-sm">{msg.text}</p>
-                        <span className={`block text-[10px] mt-1 ${isMine ? "text-primary-100 text-right opacity-80" : "text-gray-500 dark:text-gray-400"}`}>
+                        <span className={`flex items-center gap-1 text-[10px] mt-1 ${isMine ? "text-primary-100 justify-end opacity-80" : "text-gray-500 dark:text-gray-400"}`}>
                           {format(new Date(msg.sentAt), "HH:mm")}
+                          {isMine && (
+                            <span>{msg.isRead ? '✓✓' : '✓'}</span>
+                          )}
                         </span>
                         
                         {isMine && isChatActive && (

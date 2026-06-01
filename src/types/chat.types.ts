@@ -5,6 +5,7 @@ export interface ChatDetailsVM {
   interlocutorName: string;
   interlocutorAvatar: string | null;
   contractStatus: string;
+  isInterlocutorOnline?: boolean;
 }
 
 export interface MessageVM {
@@ -14,4 +15,5 @@ export interface MessageVM {
   receiverId: string;
   text: string;
   sentAt: string;
+  isRead?: boolean;
 }

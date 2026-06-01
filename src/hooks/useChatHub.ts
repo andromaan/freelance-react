@@ -5,10 +5,25 @@ import type { MessageVM } from "../types/chat.types";
 import { toast } from "react-toastify";
 import APP_ENV from "../env";
 
-export const useChatHub = (contractId: string, initialMessages: MessageVM[]) => {
+export const useChatHub = (
+  contractId: string,
+  initialMessages: MessageVM[],
+  interlocutorId?: string,
+  initialOnlineStatus: boolean = false
+) => {
   const [messages, setMessages] = useState<MessageVM[]>(initialMessages);
   const [isConnected, setIsConnected] = useState(false);
+  const [isInterlocutorOnline, setIsInterlocutorOnline] = useState(initialOnlineStatus);
   const connectionRef = useRef<HubConnection | null>(null);
+  const interlocutorIdRef = useRef(interlocutorId);
+
+  useEffect(() => {
+    interlocutorIdRef.current = interlocutorId;
+  }, [interlocutorId]);
+
+  useEffect(() => {
+    setIsInterlocutorOnline(initialOnlineStatus);
+  }, [initialOnlineStatus]);
 
   // Sync initialMessages to state when it loads, using stringify to avoid infinite loops on reference changes
   useEffect(() => {
@@ -48,6 +63,26 @@ export const useChatHub = (contractId: string, initialMessages: MessageVM[]) => 
 
     newConnection.on("ErrorMessage", (error: string) => {
       if (isMounted) toast.error(error);
+    });
+
+    newConnection.on("MessageRead", (messageId: string) => {
+      if (isMounted) {
+        setMessages((prev) =>
+          prev.map((msg) => (msg.id === messageId ? { ...msg, isRead: true } : msg))
+        );
+      }
+    });
+
+    newConnection.on("UserOnline", (userId: string) => {
+      if (isMounted && userId?.toLowerCase() === interlocutorIdRef.current?.toLowerCase()) {
+        setIsInterlocutorOnline(true);
+      }
+    });
+
+    newConnection.on("UserOffline", (userId: string) => {
+      if (isMounted && userId?.toLowerCase() === interlocutorIdRef.current?.toLowerCase()) {
+        setIsInterlocutorOnline(false);
+      }
     });
 
     newConnection
@@ -115,5 +150,21 @@ export const useChatHub = (contractId: string, initialMessages: MessageVM[]) => 
     [contractId, isConnected]
   );
 
-  return { messages, isConnected, sendMessage, editMessage, deleteMessage };
+  const markAsRead = useCallback(
+    async (messageId: string) => {
+      if (!connectionRef.current || !isConnected) return;
+      try {
+        await connectionRef.current.invoke("MarkAsRead", contractId, messageId);
+        // Optimistically mark as read locally
+        setMessages((prev) =>
+          prev.map((msg) => (msg.id === messageId ? { ...msg, isRead: true } : msg))
+        );
+      } catch (err: any) {
+        console.error("Failed to mark message as read", err);
+      }
+    },
+    [contractId, isConnected]
+  );
+
+  return { messages, isConnected, isInterlocutorOnline, sendMessage, editMessage, deleteMessage, markAsRead };
 };
