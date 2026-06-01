@@ -147,18 +147,26 @@ const ContractPage: React.FC = () => {
               )}
             </div>
           </div>
-          <div className="flex flex-col items-end gap-3">
+          <div className="flex flex-col items-end gap-3 shrink-0">
             <span className="text-xl font-bold text-gray-900 dark:text-white">
               ${contract.agreedRate}
             </span>
-            {contract.status === "Completed" && (
+            <div className="flex flex-col sm:flex-row gap-2">
               <button
-                onClick={() => setIsReviewModalOpen(true)}
-                className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-hover transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                onClick={() => navigate(`/contract/${contract.id}/chat`)}
+                className="px-4 py-2 text-sm font-medium text-primary bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
               >
-                Залишити відгук
+                Open Chat
               </button>
-            )}
+              {contract.status === "Completed" && (
+                <button
+                  onClick={() => setIsReviewModalOpen(true)}
+                  className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-hover transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                >
+                  Залишити відгук
+                </button>
+              )}
+            </div>
           </div>
         </div>
 

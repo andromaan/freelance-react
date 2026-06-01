@@ -19,6 +19,7 @@ import { languagesApi } from "../services/languages/languagesApi";
 import { employerApi } from "../services/employer/employerApi";
 import { countriesApi } from "../services/countries/countriesApi";
 import { skillsApi } from "../services/skills/skillsApi";
+import { chatApi } from "../services/chat/chatApi";
 
 export const store = configureStore({
   reducer: {
@@ -41,6 +42,7 @@ export const store = configureStore({
     [employerApi.reducerPath]: employerApi.reducer,
     [countriesApi.reducerPath]: countriesApi.reducer,
     [skillsApi.reducerPath]: skillsApi.reducer,
+    [chatApi.reducerPath]: chatApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -62,7 +64,8 @@ export const store = configureStore({
       languagesApi.middleware,
       employerApi.middleware,
       countriesApi.middleware,
-      skillsApi.middleware
+      skillsApi.middleware,
+      chatApi.middleware
     ),
 });
 
