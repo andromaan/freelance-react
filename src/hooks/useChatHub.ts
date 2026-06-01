@@ -10,10 +10,10 @@ export const useChatHub = (contractId: string, initialMessages: MessageVM[]) => 
   const [isConnected, setIsConnected] = useState(false);
   const connectionRef = useRef<HubConnection | null>(null);
 
-  // Sync initialMessages to state when it loads
+  // Sync initialMessages to state when it loads, using stringify to avoid infinite loops on reference changes
   useEffect(() => {
     setMessages(initialMessages);
-  }, [initialMessages]);
+  }, [JSON.stringify(initialMessages)]);
 
   useEffect(() => {
     const token = tokenStorage.getAccessToken();
