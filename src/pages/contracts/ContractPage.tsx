@@ -8,6 +8,7 @@ import { useGetProjectByIdQuery } from "../../services/projects/projectsApi";
 import { selectCurrentUser } from "../../store/userSlice";
 import ContractMilestonesList from "./components/ContractMilestonesList";
 import CreateReviewModal from "./components/CreateReviewModal";
+import ContractChatModal from "../../components/chat/ContractChatModal";
 import { getStatusText } from "../../utils";
 
 const ContractPage: React.FC = () => {
@@ -17,6 +18,7 @@ const ContractPage: React.FC = () => {
   const isFreelancer = user?.role?.name === ROLES.FREELANCER;
 
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
 
   const {
     data: contract,
@@ -152,12 +154,6 @@ const ContractPage: React.FC = () => {
               ${contract.agreedRate}
             </span>
             <div className="flex flex-col sm:flex-row gap-2">
-              <button
-                onClick={() => navigate(`/contract/${contract.id}/chat`)}
-                className="px-4 py-2 text-sm font-medium text-primary bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-              >
-                Open Chat
-              </button>
               {contract.status === "Completed" && (
                 <button
                   onClick={() => setIsReviewModalOpen(true)}
@@ -185,6 +181,12 @@ const ContractPage: React.FC = () => {
       <CreateReviewModal
         isOpen={isReviewModalOpen}
         onClose={() => setIsReviewModalOpen(false)}
+        contractId={contract.id}
+      />
+      <ContractChatModal
+        isOpen={isChatModalOpen}
+        onClose={() => setIsChatModalOpen(false)}
+        onOpen={() => setIsChatModalOpen(true)}
         contractId={contract.id}
       />
     </div>

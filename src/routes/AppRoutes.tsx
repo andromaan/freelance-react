@@ -32,7 +32,6 @@ import MyContractsPage from "../pages/contracts/MyContractsPage";
 import FreelancerProfilePage from "../pages/freelancer/FreelancerProfilePage";
 import EmployerProfilePage from "../pages/employer/EmployerProfilePage";
 import ContractPage from "../pages/contracts/ContractPage";
-import ContractChatPage from "../pages/chat/ContractChatPage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -98,14 +97,6 @@ const AppRoutes: React.FC = () => {
           element={
             <ProtectedRoute>
               <ContractPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/contract/:contractId/chat"
-          element={
-            <ProtectedRoute>
-              <ContractChatPage />
             </ProtectedRoute>
           }
         />
