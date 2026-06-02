@@ -6,10 +6,14 @@ import {
   useUpdateBidIsInterestMutation,
 } from "../../services/bids/bidsApi";
 import { useGetUserByIdQuery } from "../../services/user/userApi";
-import { useGetAverageRatingQuery, useGetReviewsByEmailQuery } from "../../services/reviews/reviewsApi";
+import {
+  useGetAverageRatingQuery,
+  useGetReviewsByEmailQuery,
+} from "../../services/reviews/reviewsApi";
 import ConfirmModal from "../../components/ui/ConfirmModal";
 import type { BidVM } from "../../types/bid.types";
 import { userImageUrl } from "../../utils";
+import ArrowIcon from "../../components/icons/ArrowIcon";
 
 // ─── Filter ───────────────────────────────────────────────────────────────────
 
@@ -25,7 +29,9 @@ const FILTER_TABS: { key: InterestFilter; label: string }[] = [
 function filterBids(bids: BidVM[], filter: InterestFilter): BidVM[] {
   switch (filter) {
     case "pending":
-      return bids.filter((b) => b.isInteresting === null || b.isInteresting === undefined);
+      return bids.filter(
+        (b) => b.isInteresting === null || b.isInteresting === undefined,
+      );
     case "interesting":
       return bids.filter((b) => b.isInteresting === true);
     case "not-interesting":
@@ -41,8 +47,19 @@ const InterestBadge: React.FC<{ value?: boolean | null }> = ({ value }) => {
   if (value === true)
     return (
       <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">
-        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+        <svg
+          className="w-3 h-3"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2.5}
+            d="M5 13l4 4L19 7"
+          />
         </svg>
         Interesting
       </span>
@@ -50,16 +67,38 @@ const InterestBadge: React.FC<{ value?: boolean | null }> = ({ value }) => {
   if (value === false)
     return (
       <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400">
-        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+        <svg
+          className="w-3 h-3"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2.5}
+            d="M6 18L18 6M6 6l12 12"
+          />
         </svg>
         Not Interesting
       </span>
     );
   return (
     <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400">
-      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <svg
+        className="w-3 h-3"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
       </svg>
       Pending
     </span>
@@ -72,8 +111,12 @@ const SenderInfo: React.FC<{ createdBy: string }> = ({ createdBy }) => {
   const { data: user, isLoading } = useGetUserByIdQuery(createdBy);
 
   const email = user?.email || "";
-  const { data: averageRating = 0 } = useGetAverageRatingQuery(email, { skip: !email });
-  const { data: reviews = [] } = useGetReviewsByEmailQuery(email, { skip: !email });
+  const { data: averageRating = 0 } = useGetAverageRatingQuery(email, {
+    skip: !email,
+  });
+  const { data: reviews = [] } = useGetReviewsByEmailQuery(email, {
+    skip: !email,
+  });
 
   if (isLoading) {
     return (
@@ -93,42 +136,85 @@ const SenderInfo: React.FC<{ createdBy: string }> = ({ createdBy }) => {
   const initial = label.charAt(0).toUpperCase();
 
   return (
-    <Link to={`/freelancers/${createdBy}`} className="flex items-center gap-4 mt-4 bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-xl transition-all group cursor-pointer border border-transparent hover:border-gray-200 dark:hover:border-gray-700">
+    <Link
+      to={`/freelancers/${createdBy}`}
+      className="flex items-center gap-4 mt-4 bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-xl transition-all group cursor-pointer border border-transparent hover:border-gray-200 dark:hover:border-gray-700"
+    >
       <div className="relative flex-shrink-0">
         {user.avatarImg ? (
-          <img src={userImageUrl(user.avatarImg)} alt={user.displayName || "Avatar"} className="w-12 h-12 rounded-full object-cover border-2 border-white dark:border-gray-700 shadow-sm" />
+          <img
+            src={userImageUrl(user.avatarImg)}
+            alt={user.displayName || "Avatar"}
+            className="w-12 h-12 rounded-full object-cover border-2 border-white dark:border-gray-700 shadow-sm"
+          />
         ) : (
           <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-lg shadow-sm border-2 border-white dark:border-gray-700">
             {initial}
           </div>
         )}
       </div>
-      
+
       <div className="flex flex-col flex-1">
         <div className="flex items-center justify-between">
           <span className="text-sm font-semibold text-gray-900 dark:text-gray-100 group-hover:text-primary transition-colors flex items-center gap-1">
             {user.displayName || user.email}
-            <svg className="w-3.5 h-3.5 opacity-0 -ml-2 group-hover:opacity-100 group-hover:ml-0 transition-all text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            <svg
+              className="w-3.5 h-3.5 opacity-0 -ml-2 group-hover:opacity-100 group-hover:ml-0 transition-all text-primary"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              />
             </svg>
           </span>
-          
+
           <div className="flex items-center gap-1 text-xs">
-            <svg className="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+            <svg
+              className="w-3.5 h-3.5 text-amber-400"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
             </svg>
-            <span className="font-semibold text-gray-700 dark:text-gray-300">{averageRating > 0 ? averageRating.toFixed(1) : "No rating yet"}</span>
-            <span className="text-gray-400 dark:text-gray-500">({reviews.length})</span>
+            <span className="font-semibold text-gray-700 dark:text-gray-300">
+              {averageRating > 0 ? averageRating.toFixed(1) : "No rating yet"}
+            </span>
+            <span className="text-gray-400 dark:text-gray-500">
+              ({reviews.length})
+            </span>
           </div>
         </div>
-        
+
         <div className="flex items-center justify-between mt-0.5">
           <span className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
             {user.email}
           </span>
           {user.country?.name && (
             <span className="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-0.5">
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              <svg
+                className="w-3 h-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
               {user.country.name}
             </span>
           )}
@@ -153,9 +239,9 @@ const BidCard: React.FC<BidCardProps> = ({ bid, onMark, isUpdating }) => (
       <div>
         <span className="text-2xl font-bold text-primary tabular-nums">
           ${bid.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
-        <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 uppercase tracking-wide font-medium">
-          {new Date(bid.modifiedAt).toLocaleDateString("uk-UA")}
-        </p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 uppercase tracking-wide font-medium">
+            {new Date(bid.modifiedAt).toLocaleDateString("uk-UA")}
+          </p>
         </span>
       </div>
       <InterestBadge value={bid.isInteresting} />
@@ -185,13 +271,40 @@ const BidCard: React.FC<BidCardProps> = ({ bid, onMark, isUpdating }) => (
                    transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/60"
       >
         {isUpdating ? (
-          <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          <svg
+            className="w-3.5 h-3.5 animate-spin"
+            fill="none"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+            />
           </svg>
         ) : (
-          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+          <svg
+            className="w-3.5 h-3.5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2.5}
+              d="M5 13l4 4L19 7"
+            />
           </svg>
         )}
         Interesting
@@ -208,8 +321,19 @@ const BidCard: React.FC<BidCardProps> = ({ bid, onMark, isUpdating }) => (
                    border border-red-200 dark:border-red-500/20
                    transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400/60"
       >
-        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+        <svg
+          className="w-3.5 h-3.5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2.5}
+            d="M6 18L18 6M6 6l12 12"
+          />
         </svg>
         Not Interesting
       </button>
@@ -253,18 +377,24 @@ const MyProjectBidsPage: React.FC = () => {
   const navigate = useNavigate();
 
   // ── API ──────────────────────────────────────────────────────────────────
-  const { data: project, isLoading: projectLoading } = useGetProjectByIdQuery(projectId!);
+  const { data: project, isLoading: projectLoading } = useGetProjectByIdQuery(
+    projectId!,
+  );
   const { data: bids = [], isLoading: bidsLoading } = useGetBidsByProjectQuery(
     projectId!,
     { skip: !projectId },
   );
-  const [updateInterest, { isLoading: isUpdating }] = useUpdateBidIsInterestMutation();
+  const [updateInterest, { isLoading: isUpdating }] =
+    useUpdateBidIsInterestMutation();
 
   // ── Local state ───────────────────────────────────────────────────────────
   const [filter, setFilter] = useState<InterestFilter>("all");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [pendingMark, setPendingMark] = useState<{ bidId: string; value: boolean } | null>(null);
+  const [pendingMark, setPendingMark] = useState<{
+    bidId: string;
+    value: boolean;
+  } | null>(null);
 
   // ── Handlers ─────────────────────────────────────────────────────────────
   const handleMark = (bidId: string, value: boolean) => {
@@ -277,7 +407,10 @@ const MyProjectBidsPage: React.FC = () => {
     setConfirmOpen(false);
     setUpdatingId(pendingMark.bidId);
     try {
-      await updateInterest({ bidId: pendingMark.bidId, isInteresting: pendingMark.value }).unwrap();
+      await updateInterest({
+        bidId: pendingMark.bidId,
+        isInteresting: pendingMark.value,
+      }).unwrap();
     } finally {
       setUpdatingId(null);
       setPendingMark(null);
@@ -294,12 +427,16 @@ const MyProjectBidsPage: React.FC = () => {
 
   const counts: Record<InterestFilter, number> = {
     all: bids.length,
-    pending: bids.filter((b) => b.isInteresting === null || b.isInteresting === undefined).length,
+    pending: bids.filter(
+      (b) => b.isInteresting === null || b.isInteresting === undefined,
+    ).length,
     interesting: bids.filter((b) => b.isInteresting === true).length,
     "not-interesting": bids.filter((b) => b.isInteresting === false).length,
   };
 
-  const confirmTitle = pendingMark?.value ? "Mark as Interesting" : "Mark as Not Interesting";
+  const confirmTitle = pendingMark?.value
+    ? "Mark as Interesting"
+    : "Mark as Not Interesting";
   const confirmDescription = pendingMark?.value
     ? "Mark this bid as interesting? The freelancer will be notified."
     : "Mark this bid as not interesting? The freelancer will be notified.";
@@ -308,16 +445,13 @@ const MyProjectBidsPage: React.FC = () => {
   return (
     <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 pb-12 pt-8 px-4 sm:px-6 lg:px-8 transition-colors">
       <div className="max-w-4xl mx-auto">
-
         {/* Back button */}
         <button
           type="button"
           onClick={() => navigate(`/my-projects/${projectId}`)}
           className="flex items-center gap-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors text-sm font-medium mb-6"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
+          <ArrowIcon direction="left" />
           Back to Project
         </button>
 
@@ -340,7 +474,11 @@ const MyProjectBidsPage: React.FC = () => {
 
         {/* Filter tabs */}
         {!bidsLoading && bids.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-6" role="tablist" aria-label="Filter bids by interest">
+          <div
+            className="flex flex-wrap gap-2 mb-6"
+            role="tablist"
+            aria-label="Filter bids by interest"
+          >
             {FILTER_TABS.map(({ key, label }) => (
               <button
                 key={key}
@@ -379,12 +517,25 @@ const MyProjectBidsPage: React.FC = () => {
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <div className="w-14 h-14 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
-              <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              <svg
+                className="w-6 h-6 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
               </svg>
             </div>
             <p className="text-gray-500 dark:text-gray-400 text-sm">
-              {filter === "all" ? "No bids received yet." : "No bids match the selected filter."}
+              {filter === "all"
+                ? "No bids received yet."
+                : "No bids match the selected filter."}
             </p>
             {filter !== "all" && (
               <button

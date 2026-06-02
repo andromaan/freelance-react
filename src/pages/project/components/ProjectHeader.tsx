@@ -6,6 +6,7 @@ import { selectCurrentUser } from "../../../store/userSlice";
 import AddBidModal from "./AddBidModal";
 import { ProjectStatus } from "../../../types/project.types";
 import { getStatusText } from "../../../utils";
+import ArrowIcon from "../../../components/icons/ArrowIcon";
 
 interface Props {
   projectId: string;
@@ -30,20 +31,7 @@ const ProjectHeader: React.FC<Props> = ({
           onClick={() => navigate("/projects")}
           className="flex items-center gap-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors text-sm font-medium"
         >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
+          <ArrowIcon direction="left" />
           Back to Projects
         </button>
 

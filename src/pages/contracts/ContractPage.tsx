@@ -12,6 +12,7 @@ import ContractChatModal from "../../components/chat/ContractChatModal";
 import { getStatusText } from "../../utils";
 import PageLoading from "../../components/ui/PageLoading";
 import PageError from "../../components/ui/PageError";
+import ArrowIcon from "../../components/icons/ArrowIcon";
 
 const ContractPage: React.FC = () => {
   const { contractId } = useParams<{ contractId: string }>();
@@ -63,20 +64,7 @@ const ContractPage: React.FC = () => {
             onClick={() => navigate("/my-contracts")}
             className="flex items-center gap-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors text-sm font-medium"
           >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
+            <ArrowIcon direction="left" />
             Back to My Contracts
           </button>
           <span className="text-sm font-bold tracking-wider px-3 py-1 rounded-full bg-primary/10 text-primary dark:text-white">

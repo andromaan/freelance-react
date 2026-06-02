@@ -4,6 +4,7 @@ import type { ContractVM } from "../../../types/contract.types";
 import { useGetProjectByIdQuery } from "../../../services/projects/projectsApi";
 
 import { useNavigate } from "react-router-dom";
+import ArrowIcon from "../../../components/icons/ArrowIcon";
 
 interface ContractCardProps {
   contract: ContractVM;
@@ -89,21 +90,7 @@ const ContractCard: React.FC<ContractCardProps> = ({ contract }) => {
 
         <div className="flex items-center gap-1 self-end sm:self-auto text-primary text-sm font-medium">
           View Contract{" "}
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            transform="scale(-1)"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M15 19l-7-7 7-7"
-            ></path>
-          </svg>
+          <ArrowIcon direction="right" />
         </div>
       </div>
     </div>

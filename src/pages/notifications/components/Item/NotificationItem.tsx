@@ -2,6 +2,7 @@ import React from "react";
 import type { NotificationVM } from "../../../../types/notification.types";
 import { Link } from "react-router-dom";
 import { getStatusText } from "../../../../utils";
+import ArrowIcon from "../../../../components/icons/ArrowIcon";
 
 type Props = {
   n: NotificationVM;
@@ -48,21 +49,7 @@ const NotificationItem: React.FC<Props> = ({
             />
           </svg>
           Check it
-          <svg
-            className="w-4 h-4"
-            transform="scale(-1,1)"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
+          <ArrowIcon direction="right" />
         </Link>
       )}
 

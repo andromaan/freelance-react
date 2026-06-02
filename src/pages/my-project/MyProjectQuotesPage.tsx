@@ -10,6 +10,7 @@ import {
 import type { QuoteVM } from "../../types/quote.types";
 import ConfirmModal from "../../components/ui/ConfirmModal";
 import { toast } from "react-toastify";
+import ArrowIcon from "../../components/icons/ArrowIcon";
 
 /* ─── Types ────────────────────────────────────────────────────────────── */
 interface CreateContractPayload {
@@ -234,20 +235,7 @@ const MyProjectQuotesPage: React.FC = () => {
           onClick={() => navigate(`/my-projects/${projectId}`)}
           className="flex items-center gap-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors text-sm font-medium mb-6"
         >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
+          <ArrowIcon direction="left" />
           Back to Project
         </button>
 

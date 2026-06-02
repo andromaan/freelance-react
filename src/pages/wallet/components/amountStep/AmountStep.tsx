@@ -1,5 +1,6 @@
 import React from "react";
 import { PRESET_AMOUNTS, formatCurrencyAmount } from "../../utils/currency";
+import ArrowIcon from "../../../../components/icons/ArrowIcon";
 
 interface AmountStepProps {
   amountInput: string;
@@ -68,21 +69,7 @@ const AmountStep: React.FC<AmountStepProps> = ({
         rounded-lg bg-primary hover:bg-primary-hover text-white transition-colors"
       >
         Next
-        <svg
-          className="w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          transform="scale(-1)"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M15 19l-7-7 7-7"
-          ></path>
-        </svg>
+        <ArrowIcon direction="right" />
       </button>
     </div>
   );
