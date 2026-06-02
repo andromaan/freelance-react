@@ -1,4 +1,5 @@
 import React, { useEffect, useId, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Select from "react-select";
 import { useGetAllCategoriesQuery } from "../../services/categories/categoriesApi";
 import { useGetProjectsFilteredQuery } from "../../services/projects/projectsApi";
@@ -47,13 +48,29 @@ const ProjectsPage: React.FC = () => {
   const budgetMinId = useId();
   const budgetMaxId = useId();
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   // ── Filter state ──────────────────────────────────────────────────────────
-  const [page, setPage] = useState(1);
-  const [titleInput, setTitleInput] = useState("");
-  const [titleSearch, setTitleSearch] = useState("");
-  const [budgetMin, setBudgetMin] = useState("");
-  const [budgetMax, setBudgetMax] = useState("");
-  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
+  const [page, setPage] = useState(() => Number(searchParams.get("page")) || 1);
+  const [titleInput, setTitleInput] = useState(() => searchParams.get("title") || "");
+  const [titleSearch, setTitleSearch] = useState(() => searchParams.get("title") || "");
+  const [budgetMin, setBudgetMin] = useState(() => searchParams.get("budgetMin") || "");
+  const [budgetMax, setBudgetMax] = useState(() => searchParams.get("budgetMax") || "");
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>(() => 
+    searchParams.get("categories")?.split(",").map(Number).filter(Boolean) || []
+  );
+
+  // Sync state to URL
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (page > 1) params.set("page", page.toString());
+    if (titleSearch) params.set("title", titleSearch);
+    if (budgetMin) params.set("budgetMin", budgetMin);
+    if (budgetMax) params.set("budgetMax", budgetMax);
+    if (selectedCategoryIds.length > 0) params.set("categories", selectedCategoryIds.join(","));
+    
+    setSearchParams(params, { replace: true });
+  }, [page, titleSearch, budgetMin, budgetMax, selectedCategoryIds, setSearchParams]);
 
   // Debounce title search
   useEffect(() => {

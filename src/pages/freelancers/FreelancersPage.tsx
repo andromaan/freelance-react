@@ -1,4 +1,5 @@
 import React, { useEffect, useId, useState, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import Select from "react-select";
 import { useSearchFreelancersQuery } from "../../services/freelancer/freelancerApi";
 import { useGetCountriesQuery } from "../../services/countries/countriesApi";
@@ -45,14 +46,35 @@ const SkeletonCard: React.FC = () => (
 const FreelancersPage: React.FC = () => {
   const searchId = useId();
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   // ── Filter state ──────────────────────────────────────────────────────────
-  const [page, setPage] = useState(1);
-  const [nameInput, setNameInput] = useState("");
-  const [nameSearch, setNameSearch] = useState("");
-  const [minRating, setMinRating] = useState("");
-  const [selectedSkillIds, setSelectedSkillIds] = useState<number[]>([]);
-  const [selectedCountryIds, setSelectedCountryIds] = useState<number[]>([]);
-  const [selectedLanguageIds, setSelectedLanguageIds] = useState<number[]>([]);
+  const [page, setPage] = useState(() => Number(searchParams.get("page")) || 1);
+  const [nameInput, setNameInput] = useState(() => searchParams.get("name") || "");
+  const [nameSearch, setNameSearch] = useState(() => searchParams.get("name") || "");
+  const [minRating, setMinRating] = useState(() => searchParams.get("minRating") || "");
+  const [selectedSkillIds, setSelectedSkillIds] = useState<number[]>(() =>
+    searchParams.get("skills")?.split(",").map(Number).filter(Boolean) || []
+  );
+  const [selectedCountryIds, setSelectedCountryIds] = useState<number[]>(() =>
+    searchParams.get("countries")?.split(",").map(Number).filter(Boolean) || []
+  );
+  const [selectedLanguageIds, setSelectedLanguageIds] = useState<number[]>(() =>
+    searchParams.get("languages")?.split(",").map(Number).filter(Boolean) || []
+  );
+
+  // Sync state to URL
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (page > 1) params.set("page", page.toString());
+    if (nameSearch) params.set("name", nameSearch);
+    if (minRating) params.set("minRating", minRating);
+    if (selectedSkillIds.length > 0) params.set("skills", selectedSkillIds.join(","));
+    if (selectedCountryIds.length > 0) params.set("countries", selectedCountryIds.join(","));
+    if (selectedLanguageIds.length > 0) params.set("languages", selectedLanguageIds.join(","));
+
+    setSearchParams(params, { replace: true });
+  }, [page, nameSearch, minRating, selectedSkillIds, selectedCountryIds, selectedLanguageIds, setSearchParams]);
 
   // Debounce name search
   useEffect(() => {

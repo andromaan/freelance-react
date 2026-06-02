@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useGetProjectByIdQuery } from "../../services/projects/projectsApi";
 import ProjectHeader from "./components/ProjectHeader";
 import ProjectMeta from "./components/ProjectMeta";
@@ -10,7 +10,6 @@ import PageError from "../../components/ui/PageError";
 
 const MyProjectPage: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
-  const navigate = useNavigate();
 
   const {
     data: project,
