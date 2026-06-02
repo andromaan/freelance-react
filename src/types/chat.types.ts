@@ -17,4 +17,6 @@ export interface MessageVM {
   text: string;
   sentAt: string;
   isRead?: boolean;
+  modifiedAt?: string;
+  isEdited?: boolean;
 }

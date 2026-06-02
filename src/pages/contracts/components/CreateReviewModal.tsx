@@ -22,7 +22,7 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
 
   const handleCreate = async () => {
     if (rating < 0.5) {
-      toast.error("Будь ласка, оберіть рейтинг");
+      toast.error("Please provide a rating of at least 0.5 stars");
       return;
     }
 
@@ -33,10 +33,10 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
         reviewText,
       }).unwrap();
 
-      toast.success("Відгук успішно додано");
+      toast.success("Review added successfully");
       onClose();
     } catch (error: any) {
-      toast.error(error?.data?.title || "Не вдалося додати відгук");
+      toast.error(error?.data?.title || "Failed to add review");
     }
   };
 

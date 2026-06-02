@@ -79,11 +79,11 @@ const Register: React.FC = () => {
       dispatch(
         userApi.endpoints.getMyself.initiate(undefined, { forceRefetch: true }),
       );
-      toast.success("Успішна реєстрація!");
+      toast.success("Registration successful!");
       navigate("/");
     } catch (error: any) {
       const errorMessage =
-        error?.message || error?.data?.message || "Помилка реєстрації";
+        error?.message || error?.data?.message || "Registration error";
       toast.error(errorMessage);
     }
   };

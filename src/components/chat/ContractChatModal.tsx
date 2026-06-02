@@ -8,7 +8,7 @@ import {
 } from "../../services/chat/chatApi";
 import { useChatHub } from "../../hooks/useChatHub";
 import { selectCurrentUser } from "../../store/userSlice";
-import { userImageUrl } from "../../utils";
+import { formatMessageDate, userImageUrl } from "../../utils";
 import { Link } from "react-router-dom";
 import { ROLES } from "../../constants/roles";
 
@@ -245,9 +245,17 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                         {msg.text}
                       </p>
                       <span
-                        className={`flex items-center gap-1 text-[10px] mt-1 ${isMine ? "text-primary-100 justify-end opacity-80" : "text-gray-500 dark:text-gray-400"}`}
+                        className={`flex items-center gap-1.5 text-[10px] mt-1 ${isMine ? "text-primary-100 justify-end opacity-80" : "text-gray-500 dark:text-gray-400"}`}
                       >
-                        {format(new Date(msg.sentAt), "HH:mm")}
+                        <span>{formatMessageDate(msg.sentAt)}</span>
+                        {msg.isEdited && (
+                          <span 
+                            className="italic opacity-70"
+                            title={msg.modifiedAt ? `Edited: ${formatMessageDate(msg.modifiedAt)}` : "Edited"}
+                          >
+                            (edited)
+                          </span>
+                        )}
                         {isMine && <span>{msg.isRead ? "✓✓" : "✓"}</span>}
                       </span>
 

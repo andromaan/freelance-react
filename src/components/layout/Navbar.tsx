@@ -358,7 +358,7 @@ const Navbar: React.FC = () => {
           </div>
           <div className="border-t border-gray-200 dark:border-gray-700 py-2 flex items-center justify-between">
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Тема
+              Theme
             </span>
             <button
               onClick={toggleTheme}
