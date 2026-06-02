@@ -182,9 +182,12 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
               </svg>
               Completed
             </span>
-            <span className="text-xs font-bold text-gray-500 uppercase">
-              Archive
-            </span>
+            <Link
+              to={`/my-projects/${project.id}`}
+              className="text-[10px] font-bold text-primary hover:opacity-80 uppercase tracking-wider transition-opacity inline-block"
+            >
+              Details
+            </Link>
           </div>
         ) : (
           <>
