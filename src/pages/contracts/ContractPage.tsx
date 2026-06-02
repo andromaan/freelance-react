@@ -10,6 +10,8 @@ import ContractMilestonesList from "./components/ContractMilestonesList";
 import CreateReviewModal from "./components/CreateReviewModal";
 import ContractChatModal from "../../components/chat/ContractChatModal";
 import { getStatusText } from "../../utils";
+import PageLoading from "../../components/ui/PageLoading";
+import PageError from "../../components/ui/PageError";
 
 const ContractPage: React.FC = () => {
   const { contractId } = useParams<{ contractId: string }>();
@@ -32,28 +34,16 @@ const ContractPage: React.FC = () => {
   );
 
   if (isLoading) {
-    return (
-      <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <span className="text-gray-500 dark:text-gray-400">
-          Loading contract details...
-        </span>
-      </div>
-    );
+    return <PageLoading message="Loading contract details..." />;
   }
 
   if (error || !contract) {
     return (
-      <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center gap-4">
-        <span className="text-red-500">
-          Contract not found or error loading contract.
-        </span>
-        <button
-          onClick={() => navigate("/my-contracts")}
-          className="text-primary hover:text-primary-hover underline"
-        >
-          Back to My Contracts
-        </button>
-      </div>
+      <PageError 
+        message="Contract not found or error loading contract." 
+        backToLabel="Back to My Contracts"
+        backToPath="/my-contracts"
+      />
     );
   }
 
