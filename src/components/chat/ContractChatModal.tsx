@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { format } from "date-fns";
 import { createPortal } from "react-dom";
 import {
   useGetChatDetailsQuery,
@@ -8,9 +7,9 @@ import {
 } from "../../services/chat/chatApi";
 import { useChatHub } from "../../hooks/useChatHub";
 import { selectCurrentUser } from "../../store/userSlice";
-import { formatMessageDate, userImageUrl } from "../../utils";
 import { Link } from "react-router-dom";
 import { ROLES } from "../../constants/roles";
+import { formatMessageDate, userImageUrl } from "../../utils";
 
 interface ContractChatWidgetProps {
   isOpen: boolean;
@@ -30,6 +29,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
 
   const [newMessage, setNewMessage] = useState("");
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  const [messageToDelete, setMessageToDelete] = useState<string | null>(null);
 
   // Use skip to not fetch if modal is closed
   const {
@@ -161,13 +161,13 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                   )}
                 </Link>
                 <div>
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-white leading-tight flex items-center gap-3">
-                    <Link
-                      to={linkToInterlocutor}
-                      className="hover:underline"
-                    >
-                      {chatDetails.interlocutorName}
-                    </Link>
+                  <Link
+                    to={linkToInterlocutor}
+                    className="text-lg font-bold text-gray-900 dark:text-white leading-tight flex items-center gap-3 hover:underline"
+                  >
+                    <h2>{chatDetails.interlocutorName}</h2>
+                  </Link>
+                  <div className="flex items-center gap-2">
                     <span className="flex items-center gap-1.5 text-xs font-medium">
                       <span
                         className={
@@ -179,13 +179,14 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                         {isInterlocutorOnline ? "Online" : "Offline"}
                       </span>
                     </span>
-                  </h2>
-                  <p
-                    className="text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate"
-                    title={chatDetails.projectTitle}
-                  >
-                    {chatDetails.projectTitle}
-                  </p>
+                    <span className="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-500"></span>
+                    <p
+                      className="text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate"
+                      title={chatDetails.projectTitle}
+                    >
+                      Project: {chatDetails.projectTitle}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -249,9 +250,13 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                       >
                         <span>{formatMessageDate(msg.sentAt)}</span>
                         {msg.isEdited && (
-                          <span 
+                          <span
                             className="italic opacity-70"
-                            title={msg.modifiedAt ? `Edited: ${formatMessageDate(msg.modifiedAt)}` : "Edited"}
+                            title={
+                              msg.modifiedAt
+                                ? `Edited: ${formatMessageDate(msg.modifiedAt)}`
+                                : "Edited"
+                            }
                           >
                             (edited)
                           </span>
@@ -284,7 +289,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                             </svg>
                           </button>
                           <button
-                            onClick={() => deleteMessage(msg.id)}
+                            onClick={() => setMessageToDelete(msg.id)}
                             className="p-1 text-gray-500 hover:text-red-500 transition-colors focus:outline-none"
                             aria-label="Delete message"
                           >
@@ -416,6 +421,49 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
             </form>
           </div>
         </>
+      )}
+
+      {messageToDelete && (
+        <div className="absolute inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-[2px] animate-in fade-in duration-200 px-4">
+          <div className="max-w-xs bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden animate-in zoom-in-95 duration-200 text-left align-middle border border-gray-200 dark:border-gray-800">
+            <div className="flex items-center justify-between p-3 border-b border-gray-100 dark:border-gray-800">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white leading-none">
+                Delete Message
+              </h3>
+              <button
+                type="button"
+                onClick={() => setMessageToDelete(null)}
+                className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 rounded-md p-1 -mr-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            <div className="p-3">
+              <p className="mb-3 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+                Are you sure you want to delete this message? This action cannot be undone.
+              </p>
+              <div className="flex items-center justify-center gap-3 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => setMessageToDelete(null)}
+                  className="px-4 py-2 text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    deleteMessage(messageToDelete);
+                    setMessageToDelete(null);
+                  }}
+                  className="inline-flex items-center justify-center gap-2 min-w-[6rem] px-5 py-2 text-sm font-semibold rounded-lg bg-red-500 hover:bg-red-600 text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 shadow-sm hover:shadow-md transition-all duration-150"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>,
     document.body,

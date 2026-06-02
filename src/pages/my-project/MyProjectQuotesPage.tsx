@@ -305,6 +305,7 @@ const MyProjectQuotesPage: React.FC = () => {
         }
         confirmLabel="Create"
         isLoading={createLoading}
+        variant="primary"
       />
     </div>
   );

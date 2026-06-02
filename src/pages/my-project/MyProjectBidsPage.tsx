@@ -572,6 +572,7 @@ const MyProjectBidsPage: React.FC = () => {
         confirmLabel={pendingMark?.value ? "Interesting" : "Not Interesting"}
         cancelLabel="Cancel"
         isLoading={isUpdating}
+        variant="primary"
       />
     </div>
   );

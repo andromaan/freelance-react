@@ -274,6 +274,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
         confirmLabel="Yes, change"
         cancelLabel="Cancel"
         isLoading={isUpdating}
+        variant="primary"
       />
     </div>
   );
