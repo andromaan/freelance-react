@@ -269,10 +269,10 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
         isOpen={!!confirmAction}
         onClose={() => setConfirmAction(null)}
         onConfirm={handleConfirm}
-        title="Оновити статус етапу"
-        description="Ви впевнені, що хочете змінити статус цього етапу (milestone)?"
-        confirmLabel="Так, змінити"
-        cancelLabel="Скасувати"
+        title="Confirm Status Change"
+        description="Are you sure you want to change the status of this milestone?"
+        confirmLabel="Yes, change"
+        cancelLabel="Cancel"
         isLoading={isUpdating}
       />
     </div>

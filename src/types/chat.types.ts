@@ -6,6 +6,7 @@ export interface ChatDetailsVM {
   interlocutorAvatar: string | null;
   contractStatus: string;
   isInterlocutorOnline?: boolean;
+  interlocutorRole: string
 }
 
 export interface MessageVM {
