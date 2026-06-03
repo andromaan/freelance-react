@@ -13,6 +13,7 @@
   }
 
   .dark {
+    color-scheme: dark;
     --color-bg-main: #111827;     /* gray-900 */
     --color-bg-surface: #1f2937;  /* gray-800 */
     --color-text-main: #f9fafb;   /* gray-50 */

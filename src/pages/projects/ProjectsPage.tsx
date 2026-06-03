@@ -47,6 +47,7 @@ const ProjectsPage: React.FC = () => {
   const searchId = useId();
   const budgetMinId = useId();
   const budgetMaxId = useId();
+  const deadlineMaxId = useId();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -56,6 +57,7 @@ const ProjectsPage: React.FC = () => {
   const [titleSearch, setTitleSearch] = useState(() => searchParams.get("title") || "");
   const [budgetMin, setBudgetMin] = useState(() => searchParams.get("budgetMin") || "");
   const [budgetMax, setBudgetMax] = useState(() => searchParams.get("budgetMax") || "");
+  const [deadlineMax, setDeadlineMax] = useState(() => searchParams.get("deadlineMax") || "");
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>(() => 
     searchParams.get("categories")?.split(",").map(Number).filter(Boolean) || []
   );
@@ -67,10 +69,11 @@ const ProjectsPage: React.FC = () => {
     if (titleSearch) params.set("title", titleSearch);
     if (budgetMin) params.set("budgetMin", budgetMin);
     if (budgetMax) params.set("budgetMax", budgetMax);
+    if (deadlineMax) params.set("deadlineMax", deadlineMax);
     if (selectedCategoryIds.length > 0) params.set("categories", selectedCategoryIds.join(","));
     
     setSearchParams(params, { replace: true });
-  }, [page, titleSearch, budgetMin, budgetMax, selectedCategoryIds, setSearchParams]);
+  }, [page, titleSearch, budgetMin, budgetMax, deadlineMax, selectedCategoryIds, setSearchParams]);
 
   // Debounce title search
   useEffect(() => {
@@ -92,6 +95,7 @@ const ProjectsPage: React.FC = () => {
     titleSearch !== "" ||
     budgetMin !== "" ||
     budgetMax !== "" ||
+    deadlineMax !== "" ||
     selectedCategoryIds.length > 0;
 
   const clearFilters = () => {
@@ -99,6 +103,7 @@ const ProjectsPage: React.FC = () => {
     setTitleSearch("");
     setBudgetMin("");
     setBudgetMax("");
+    setDeadlineMax("");
     setSelectedCategoryIds([]);
     setPage(1);
   };
@@ -125,6 +130,7 @@ const ProjectsPage: React.FC = () => {
       !isNaN(Number(budgetMin)) && { budgetMin: Number(budgetMin) }),
     ...(budgetMax !== "" &&
       !isNaN(Number(budgetMax)) && { budgetMax: Number(budgetMax) }),
+    ...(deadlineMax !== "" && { deadlineMax }),
     ...(status !== null && { projectStatus: status }),
     ...(selectedCategoryIds.length > 0 && { categoryIds: selectedCategoryIds }),
   };
@@ -237,6 +243,29 @@ const ProjectsPage: React.FC = () => {
               />
             </div>
 
+            {/* Deadline max */}
+            <div>
+              <label htmlFor={deadlineMaxId} className="sr-only">
+                Max deadline
+              </label>
+              <input
+                id={deadlineMaxId}
+                type={deadlineMax ? "date" : "text"}
+                onFocus={(e) => (e.target.type = "date")}
+                onBlur={(e) => {
+                  if (!e.target.value) e.target.type = "text";
+                }}
+                placeholder="Max deadline"
+                title="Maximum deadline"
+                value={deadlineMax}
+                onChange={(e) => {
+                  setDeadlineMax(e.target.value);
+                  setPage(1);
+                }}
+                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
+              />
+            </div>
+
             <Select<SelectOption<number>, true>
               inputId="create-project-categories"
               isMulti
@@ -254,7 +283,7 @@ const ProjectsPage: React.FC = () => {
 
             {/* Clear filters */}
             {hasFilters && (
-              <div className="sm:col-span-2 flex items-center">
+              <div className="col-span-1 flex items-center">
                 <button
                   type="button"
                   onClick={clearFilters}

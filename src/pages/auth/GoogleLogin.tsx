@@ -211,14 +211,16 @@ const GoogleLogin: React.FC = () => {
         </div>
       )}
       <div
-        id="loginGoogleBtn"
+        className="mx-auto rounded-full overflow-hidden w-[280px]"
         style={{
           display: showRoleSelection ? "none" : "flex",
           justifyContent: "center",
           opacity: isLoading ? 0.6 : 1,
           pointerEvents: isLoading ? "none" : "auto",
         }}
-      />
+      >
+        <div id="loginGoogleBtn" className="flex items-center justify-center" />
+      </div>
     </>
   );
 };
