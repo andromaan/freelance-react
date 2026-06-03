@@ -188,7 +188,7 @@ const FreelancersPage: React.FC = () => {
               </label>
               <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                 <svg
-                  className="w-4 h-4 text-gray-400"
+                  className="w-4 h-4 text-gray-500"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -203,7 +203,7 @@ const FreelancersPage: React.FC = () => {
                 placeholder="Search by name…"
                 value={nameInput}
                 onChange={(e) => setNameInput(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
+                className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-500 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
               />
             </div>
 
@@ -221,7 +221,7 @@ const FreelancersPage: React.FC = () => {
                   handleRatingChange();
                 }}
                 aria-label="Minimum rating"
-                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
+                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-500 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
               />
             </div>
 

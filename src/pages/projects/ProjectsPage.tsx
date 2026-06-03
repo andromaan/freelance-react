@@ -53,13 +53,25 @@ const ProjectsPage: React.FC = () => {
 
   // ── Filter state ──────────────────────────────────────────────────────────
   const [page, setPage] = useState(() => Number(searchParams.get("page")) || 1);
-  const [titleInput, setTitleInput] = useState(() => searchParams.get("title") || "");
-  const [titleSearch, setTitleSearch] = useState(() => searchParams.get("title") || "");
-  const [budgetMin, setBudgetMin] = useState(() => searchParams.get("budgetMin") || "");
-  const [budgetMax, setBudgetMax] = useState(() => searchParams.get("budgetMax") || "");
-  const [deadlineMax, setDeadlineMax] = useState(() => searchParams.get("deadlineMax") || "");
-  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>(() => 
-    searchParams.get("categories")?.split(",").map(Number).filter(Boolean) || []
+  const [titleInput, setTitleInput] = useState(
+    () => searchParams.get("title") || "",
+  );
+  const [titleSearch, setTitleSearch] = useState(
+    () => searchParams.get("title") || "",
+  );
+  const [budgetMin, setBudgetMin] = useState(
+    () => searchParams.get("budgetMin") || "",
+  );
+  const [budgetMax, setBudgetMax] = useState(
+    () => searchParams.get("budgetMax") || "",
+  );
+  const [deadlineMax, setDeadlineMax] = useState(
+    () => searchParams.get("deadlineMax") || "",
+  );
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>(
+    () =>
+      searchParams.get("categories")?.split(",").map(Number).filter(Boolean) ||
+      [],
   );
 
   // Sync state to URL
@@ -70,10 +82,19 @@ const ProjectsPage: React.FC = () => {
     if (budgetMin) params.set("budgetMin", budgetMin);
     if (budgetMax) params.set("budgetMax", budgetMax);
     if (deadlineMax) params.set("deadlineMax", deadlineMax);
-    if (selectedCategoryIds.length > 0) params.set("categories", selectedCategoryIds.join(","));
-    
+    if (selectedCategoryIds.length > 0)
+      params.set("categories", selectedCategoryIds.join(","));
+
     setSearchParams(params, { replace: true });
-  }, [page, titleSearch, budgetMin, budgetMax, deadlineMax, selectedCategoryIds, setSearchParams]);
+  }, [
+    page,
+    titleSearch,
+    budgetMin,
+    budgetMax,
+    deadlineMax,
+    selectedCategoryIds,
+    setSearchParams,
+  ]);
 
   // Debounce title search
   useEffect(() => {
@@ -199,7 +220,7 @@ const ProjectsPage: React.FC = () => {
                 placeholder="Search by title…"
                 value={titleInput}
                 onChange={(e) => setTitleInput(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
+                className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-500 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
               />
             </div>
 
@@ -219,7 +240,7 @@ const ProjectsPage: React.FC = () => {
                   setBudgetMin(e.target.value);
                   handleBudgetChange();
                 }}
-                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
+                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-500 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
               />
             </div>
 
@@ -239,7 +260,7 @@ const ProjectsPage: React.FC = () => {
                   setBudgetMax(e.target.value);
                   handleBudgetChange();
                 }}
-                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
+                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-500 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
               />
             </div>
 
@@ -262,7 +283,7 @@ const ProjectsPage: React.FC = () => {
                   setDeadlineMax(e.target.value);
                   setPage(1);
                 }}
-                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
+                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-500 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
               />
             </div>
 

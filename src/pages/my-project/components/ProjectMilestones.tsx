@@ -67,7 +67,7 @@ const MilestoneRow: React.FC<MilestoneRowProps> = ({
       <p className="text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
         {milestone.description || <em className="text-gray-400">No description</em>}
       </p>
-      <p className="mt-1 text-[11px] font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">
+      <p className="mt-1 text-[11px] font-medium text-gray-500 dark:text-gray-400 tracking-wide">
         Due: {formatDate(milestone.dueDate)}
       </p>
     </div>

@@ -46,13 +46,13 @@ const ProjectCard: React.FC<{ project: ProjectVM }> = ({ project }) => {
           )?.map((c) => (
             <span
               key={c.id}
-              className="text-[10px] px-2 py-0.5 rounded-full tracking-wider bg-gray-100 dark:bg-gray-700 text-text-muted font-medium"
+              className="text-[10px] px-2 py-0.5 rounded-full tracking-wider bg-gray-100 dark:bg-gray-700 text-gray-600 font-medium dark:text-gray-300"
             >
-              {c.name}
+              {c.name.toUpperCase()}
             </span>
           ))}
           {project.categories?.length > 4 && (
-            <span className="text-[10px] px-2 py-0.5 rounded-full tracking-wider bg-gray-100 dark:bg-gray-700 text-text-muted font-medium">
+            <span className="text-[10px] px-2 py-0.5 rounded-full tracking-wider bg-gray-100 dark:bg-gray-700 text-text-muted font-medium dark:text-gray-300">
               ...
             </span>
           )}
