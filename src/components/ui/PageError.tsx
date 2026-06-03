@@ -23,7 +23,7 @@ const PageError: React.FC<PageErrorProps> = ({
   };
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center px-4">
+    <div className="min-h-[calc(100vh-64px)] bg-main flex flex-col items-center justify-center px-4">
       <div className="text-center max-w-lg">
         <div className="relative mb-6 select-none">
           <span className="text-[120px] sm:text-[150px] font-black text-gray-400/80 dark:text-gray-800 leading-none block">
@@ -36,10 +36,10 @@ const PageError: React.FC<PageErrorProps> = ({
           </div>
         </div>
         
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3">
+        <h1 className="text-2xl sm:text-3xl font-bold text-text-main mb-3">
           Error
         </h1>
-        <p className="text-gray-500 dark:text-gray-400 text-base mb-8 leading-relaxed">
+        <p className="text-text-muted text-base mb-8 leading-relaxed">
           {message}
         </p>
         

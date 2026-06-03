@@ -134,7 +134,7 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
                 </div>
               );
             })}
-            <span className="ml-3 text-lg text-gray-600 dark:text-gray-400 font-bold bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-md">
+            <span className="ml-3 text-lg text-text-muted font-bold bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-md">
               {(hoverRating || rating).toFixed(1)} / 5.0
             </span>
           </div>
@@ -146,7 +146,7 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
           </label>
           <textarea
             id="reviewText"
-            className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:text-white transition-all resize-none shadow-sm"
+            className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:text-white transition-all resize-none shadow-sm"
             rows={4}
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
@@ -154,10 +154,10 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
           />
         </div>
 
-        <div className="flex justify-end gap-3 mt-6 border-t border-gray-100 dark:border-gray-700/60 pt-6">
+        <div className="flex justify-end gap-3 mt-6 border-t border-border-light/60 pt-6">
           <button
             onClick={onClose}
-            className="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all focus:outline-none focus:ring-2 focus:ring-gray-200"
+            className="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 border border-border rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all focus:outline-none focus:ring-2 focus:ring-gray-200"
           >
             Cancel
           </button>

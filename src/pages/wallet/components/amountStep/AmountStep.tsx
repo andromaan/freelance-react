@@ -33,7 +33,7 @@ const AmountStep: React.FC<AmountStepProps> = ({
           onKeyDown={(e) => e.key === "Enter" && onNext()}
           placeholder="For example: 500"
           autoFocus
-          className={`w-full px-3 py-3 border-2 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-base transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+          className={`w-full px-3 py-3 border-2 rounded-lg bg-white dark:bg-gray-700 text-text-main text-base transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${
             amountError
               ? "border-red-500 focus:border-red-500"
               : "border-gray-200 dark:border-gray-600 focus:border-primary"
@@ -54,7 +54,7 @@ const AmountStep: React.FC<AmountStepProps> = ({
             className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${
               amountInput === String(amt)
                 ? "border-primary bg-primary/10 text-primary font-semibold"
-                : "border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-primary hover:text-primary"
+                : "border-gray-200 dark:border-gray-600 text-text-muted hover:border-primary hover:text-primary"
             }`}
           >
             {formatCurrencyAmount(amt, currency)}

@@ -60,7 +60,7 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
   const isInProgress = project.status === ProjectStatus.InProgress;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 flex flex-col justify-between border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 shadow-sm transition-colors">
+    <div className="bg-surface rounded-xl p-6 flex flex-col justify-between border border-border hover:border-gray-300 dark:hover:border-gray-600 shadow-sm transition-colors">
       <div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
@@ -110,7 +110,7 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
               </button>
 
               {menuOpen && (
-                <div className="absolute right-0 mt-1 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg py-1 z-30 animate-in fade-in slide-in-from-top-1 duration-150">
+                <div className="absolute right-0 mt-1 w-40 bg-surface border border-border rounded-xl shadow-lg py-1 z-30 animate-in fade-in slide-in-from-top-1 duration-150">
                   <button
                     type="button"
                     onClick={() => {
@@ -128,7 +128,7 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
           )}
         </div>
 
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
+        <h3 className="text-xl font-semibold text-text-main mb-1">
           {project.title}
         </h3>
       </div>
@@ -154,7 +154,7 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
 
       <div>
         {project.status === ProjectStatus.Completed ? (
-          <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-4 mt-2">
+          <div className="flex items-center justify-between border-t border-border-light pt-4 mt-2">
             <span className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 font-medium">
               <svg
                 className="w-4 h-4"
@@ -188,7 +188,7 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
                       <p className="text-[10px] text-gray-500 uppercase font-bold mb-0.5">
                         Status
                       </p>
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      <p className="text-sm font-medium text-text-main">
                         {getStatusText(project.status)}
                       </p>
                     </div>
@@ -196,7 +196,7 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
                       <p className="text-[10px] text-gray-500 uppercase font-bold mb-0.5">
                         Deadline
                       </p>
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      <p className="text-sm font-medium text-text-main">
                         {deadlineDate}
                       </p>
                     </div>
@@ -213,7 +213,7 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
               </div>
             ) : (
               <div className="flex justify-between items-center mt-3">
-                <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                <span className="text-sm text-text-muted font-medium">
                   {getStatusText(project.status)}
                 </span>
                 <Link

@@ -59,7 +59,7 @@ const FreelancerProfilePage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-main py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto space-y-6">
           <div className="h-64 bg-gray-200 dark:bg-gray-800 animate-pulse rounded-2xl" />
           <div className="h-40 bg-gray-200 dark:bg-gray-800 animate-pulse rounded-2xl" />
@@ -90,7 +90,7 @@ const FreelancerProfilePage: React.FC = () => {
     .slice(0, 3); // Showing 3 latest
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-[calc(100vh-64px)] bg-main py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Back Button */}
         <button
@@ -102,14 +102,14 @@ const FreelancerProfilePage: React.FC = () => {
         </button>
 
         {/* Header Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm mt-12 sm:mt-16">
+        <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm mt-12 sm:mt-16">
           <div className="relative flex flex-col sm:flex-row gap-6 sm:items-end">
             <div className="relative shrink-0 -mt-16 sm:-mt-20">
               {user.avatarImg ? (
                 <img
                   src={userImageUrl(user.avatarImg)}
                   alt={user.displayName || "Avatar"}
-                  className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-md bg-white dark:bg-gray-800"
+                  className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-md bg-surface"
                 />
               ) : (
                 <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-white dark:border-gray-800 bg-primary text-white text-3xl font-bold flex items-center justify-center shadow-md">
@@ -119,10 +119,10 @@ const FreelancerProfilePage: React.FC = () => {
             </div>
 
             <div className="flex-1 pb-2 mt-2 sm:mt-0">
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-2xl sm:text-3xl font-bold text-text-main">
                 {user.displayName || user.email}
               </h1>
-              <div className="flex flex-wrap items-center gap-3 mt-2 text-sm text-gray-600 dark:text-gray-300">
+              <div className="flex flex-wrap items-center gap-3 mt-2 text-sm text-text-muted">
                 <span className="flex items-center gap-1">
                   <svg
                     className="w-4 h-4"
@@ -166,12 +166,12 @@ const FreelancerProfilePage: React.FC = () => {
                   >
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
-                  <span className="font-semibold text-gray-900 dark:text-white">
+                  <span className="font-semibold text-text-main">
                     {averageRating > 0
                       ? averageRating.toFixed(1)
                       : "No rating yet"}
                   </span>
-                  <span className="text-gray-500 dark:text-gray-400">
+                  <span className="text-text-muted">
                     ({reviews.length} review{reviews.length !== 1 ? "s" : ""})
                   </span>
                 </div>
@@ -198,10 +198,10 @@ const FreelancerProfilePage: React.FC = () => {
                       d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  <span className="font-semibold text-gray-900 dark:text-white">
+                  <span className="font-semibold text-text-main">
                     {completedContractsCount}
                   </span>
-                  <span className="text-gray-500 dark:text-gray-400">
+                  <span className="text-text-muted">
                     completed{" "}
                     {completedContractsCount === 1 ? "contract" : "contracts"}
                   </span>
@@ -214,22 +214,22 @@ const FreelancerProfilePage: React.FC = () => {
         {/* Bio & Skills */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">
+            <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
+              <h2 className="text-lg font-bold text-text-main mb-4 border-b border-border-light pb-2">
                 About
               </h2>
-              <p className="text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-line">
+              <p className="text-text-muted leading-relaxed whitespace-pre-line">
                 {freelancer.bio || "No bio provided."}
               </p>
             </div>
 
             {/* Reviews Section */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
-              <div className="flex items-center justify-between mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">
-                <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+            <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
+              <div className="flex items-center justify-between mb-4 border-b border-border-light pb-2">
+                <h2 className="text-lg font-bold text-text-main">
                   Recent Reviews
                 </h2>
-                <span className="text-sm text-gray-500 dark:text-gray-400 font-medium bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">
+                <span className="text-sm text-text-muted font-medium bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">
                   {reviews.length} total
                 </span>
               </div>
@@ -247,7 +247,7 @@ const FreelancerProfilePage: React.FC = () => {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <p className="text-gray-500 dark:text-gray-400">
+                  <p className="text-text-muted">
                     No reviews yet.
                   </p>
                 </div>
@@ -258,8 +258,8 @@ const FreelancerProfilePage: React.FC = () => {
           {/* Right Column */}
           <div className="space-y-6">
             {/* Skills */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">
+            <div className="bg-surface rounded-2xl p-6 border border-border shadow-sm">
+              <h2 className="text-lg font-bold text-text-main mb-4 border-b border-border-light pb-2">
                 Skills
               </h2>
               {freelancer.skills && freelancer.skills.length > 0 ? (
@@ -274,15 +274,15 @@ const FreelancerProfilePage: React.FC = () => {
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                <p className="text-text-muted text-sm">
                   No skills added.
                 </p>
               )}
             </div>
 
             {/* Languages */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">
+            <div className="bg-surface rounded-2xl p-6 border border-border shadow-sm">
+              <h2 className="text-lg font-bold text-text-main mb-4 border-b border-border-light pb-2">
                 Languages
               </h2>
               {user.languages && user.languages.length > 0 ? (
@@ -296,10 +296,10 @@ const FreelancerProfilePage: React.FC = () => {
                         key={lang.languageId}
                         className="flex items-center justify-between"
                       >
-                        <span className="text-sm font-medium text-gray-900 dark:text-white">
+                        <span className="text-sm font-medium text-text-main">
                           {langName}
                         </span>
-                        <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-md">
+                        <span className="text-xs text-text-muted bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-md">
                           {lang.proficiencyLevel}
                         </span>
                       </div>
@@ -307,7 +307,7 @@ const FreelancerProfilePage: React.FC = () => {
                   })}
                 </div>
               ) : (
-                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                <p className="text-text-muted text-sm">
                   No languages specified.
                 </p>
               )}
@@ -316,8 +316,8 @@ const FreelancerProfilePage: React.FC = () => {
         </div>
 
         {/* Portfolio */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 border-b border-gray-100 dark:border-gray-700 pb-2">
+        <div className="bg-surface rounded-2xl p-6 border border-border shadow-sm">
+          <h2 className="text-lg font-bold text-text-main mb-6 border-b border-border-light pb-2">
             Portfolio & Projects
           </h2>
           {freelancer.portfolio && freelancer.portfolio.length > 0 ? (
@@ -341,7 +341,7 @@ const FreelancerProfilePage: React.FC = () => {
                     href={item.portfolioUrl || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex flex-col bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+                    className="group flex flex-col bg-surface rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
                   >
                     <div
                       className={`pl-4 h-16 w-full bg-gradient-to-br ${gradient} opacity-90 group-hover:opacity-100 transition-opacity flex items-center justify-start relative overflow-hidden`}
@@ -388,18 +388,18 @@ const FreelancerProfilePage: React.FC = () => {
                       )}
                     </div>
                     <div className="p-5 flex-1 flex flex-col">
-                      <h4 className="font-bold text-gray-900 dark:text-white text-lg group-hover:text-primary transition-colors line-clamp-1 mb-2">
+                      <h4 className="font-bold text-text-main text-lg group-hover:text-primary transition-colors line-clamp-1 mb-2">
                         {item.title}
                       </h4>
                       {item.description ? (
-                        <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-4 flex-1">
+                        <p className="text-sm text-text-muted line-clamp-2 mb-4 flex-1">
                           {item.description}
                         </p>
                       ) : (
                         <div className="flex-1"></div>
                       )}
                       {item.portfolioUrl && (
-                        <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-gray-400 group-hover:text-primary transition-colors">
+                        <div className="mt-auto pt-4 border-t border-border-light flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-gray-400 group-hover:text-primary transition-colors">
                           <span>View Link</span>
                           <ArrowIcon direction="right" />
                         </div>
@@ -410,8 +410,8 @@ const FreelancerProfilePage: React.FC = () => {
               })}
             </div>
           ) : (
-            <div className="text-center py-12 px-4 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-white dark:bg-gray-800 text-gray-400 shadow-sm border border-gray-100 dark:border-gray-700 mb-4">
+            <div className="text-center py-12 px-4 rounded-xl border-2 border-dashed border-border bg-gray-50 dark:bg-gray-800/50">
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-surface text-gray-400 shadow-sm border border-border-light mb-4">
                 <svg
                   className="w-7 h-7"
                   fill="none"
@@ -426,10 +426,10 @@ const FreelancerProfilePage: React.FC = () => {
                   />
                 </svg>
               </div>
-              <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1">
+              <h3 className="text-base font-semibold text-text-main mb-1">
                 Portfolio is empty
               </h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400 max-w-sm mx-auto">
+              <p className="text-sm text-text-muted max-w-sm mx-auto">
                 This freelancer hasn't added any projects to their portfolio
                 yet.
               </p>

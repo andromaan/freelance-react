@@ -33,7 +33,7 @@ const ProjectTableRow: React.FC<{ project: ProjectVM; onDelete?: (id: string) =>
   return (
     <tr className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
       <td className="py-4 px-4 align-top">
-        <Link to={`/my-projects/${project.id}`} className="font-semibold text-gray-900 dark:text-white hover:text-primary transition-colors block mb-1">
+        <Link to={`/my-projects/${project.id}`} className="font-semibold text-text-main hover:text-primary transition-colors block mb-1">
           {project.title}
         </Link>
         <div className="flex gap-2 mt-2">
@@ -55,7 +55,7 @@ const ProjectTableRow: React.FC<{ project: ProjectVM; onDelete?: (id: string) =>
           )}
         </div>
       </td>
-      <td className="py-4 px-4 align-top whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+      <td className="py-4 px-4 align-top whitespace-nowrap text-sm text-text-muted">
         {deadlineDate}
       </td>
       <td className="py-4 px-4 align-top whitespace-nowrap">
@@ -85,7 +85,7 @@ const ProjectTableRow: React.FC<{ project: ProjectVM; onDelete?: (id: string) =>
               </button>
 
               {menuOpen && (
-                <div className="absolute right-0 mt-1 w-36 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg py-1 z-30">
+                <div className="absolute right-0 mt-1 w-36 bg-surface border border-border rounded-xl shadow-lg py-1 z-30">
                   <button
                     type="button"
                     onClick={() => {
@@ -113,26 +113,26 @@ const ProjectTableRow: React.FC<{ project: ProjectVM; onDelete?: (id: string) =>
 
 const ProjectTable: React.FC<Props> = ({ projects, onDelete }) => {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+    <div className="bg-surface rounded-2xl border border-border shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead className="bg-gray-50/50 dark:bg-gray-800/50">
             <tr>
-              <th scope="col" className="py-3 px-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+              <th scope="col" className="py-3 px-4 text-left text-xs font-semibold text-text-muted uppercase tracking-wider">
                 Project
               </th>
-              <th scope="col" className="py-3 px-4 text-center text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+              <th scope="col" className="py-3 px-4 text-center text-xs font-semibold text-text-muted uppercase tracking-wider">
                 Deadline
               </th>
-              <th scope="col" className="py-3 px-4 text-center text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+              <th scope="col" className="py-3 px-4 text-center text-xs font-semibold text-text-muted uppercase tracking-wider">
                 Status
               </th>
-              <th scope="col" className="py-3 px-4 text-center text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider w-32">
+              <th scope="col" className="py-3 px-4 text-center text-xs font-semibold text-text-muted uppercase tracking-wider w-32">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100 dark:divide-gray-700 bg-white dark:bg-gray-800">
+          <tbody className="divide-y divide-gray-100 dark:divide-gray-700 bg-surface">
             {projects.map((project) => (
               <ProjectTableRow key={project.id} project={project} onDelete={onDelete} />
             ))}

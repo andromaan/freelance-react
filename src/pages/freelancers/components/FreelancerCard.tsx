@@ -20,7 +20,7 @@ const FreelancerCard: React.FC<Props> = ({ freelancer }) => {
   return (
     <Link
       to={`/freelancers/${freelancer.userId}`}
-      className="group bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary/40 dark:hover:border-primary/40 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col h-full"
+      className="group bg-surface rounded-xl border border-border hover:border-primary/40 dark:hover:border-primary/40 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col h-full"
     >
       <div className="p-5 flex-1 flex flex-col">
         {/* Header: Avatar, Name, Rating */}
@@ -41,12 +41,12 @@ const FreelancerCard: React.FC<Props> = ({ freelancer }) => {
             </div>
             <div className="min-w-0 flex-1">
               <h3
-                className="font-semibold text-lg text-gray-900 dark:text-white truncate group-hover:text-primary transition-colors"
+                className="font-semibold text-lg text-text-main truncate group-hover:text-primary transition-colors"
                 title={freelancer.displayName || "Anonymous Freelancer"}
               >
                 {freelancer.displayName || "Anonymous Freelancer"}
               </h3>
-              <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+              <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-sm text-text-muted mt-0.5">
                 {freelancer.country && (
                   <span
                     className="font-medium truncate max-w-[140px] sm:max-w-[200px]"
@@ -86,7 +86,7 @@ const FreelancerCard: React.FC<Props> = ({ freelancer }) => {
         </div>
 
         {/* Bio */}
-        <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3 mb-4 flex-1">
+        <p className="text-sm text-text-muted line-clamp-3 mb-4 flex-1">
           {freelancer.bio || "This freelancer hasn't provided a bio yet."}
         </p>
 

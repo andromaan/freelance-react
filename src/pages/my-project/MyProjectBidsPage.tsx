@@ -120,7 +120,7 @@ const SenderInfo: React.FC<{ createdBy: string }> = ({ createdBy }) => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700 animate-pulse">
+      <div className="flex items-center gap-3 pt-4 border-t border-border-light animate-pulse">
         <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex-shrink-0" />
         <div className="flex flex-col gap-2 flex-1">
           <div className="h-3 w-32 bg-gray-200 dark:bg-gray-700 rounded" />
@@ -156,7 +156,7 @@ const SenderInfo: React.FC<{ createdBy: string }> = ({ createdBy }) => {
 
       <div className="flex flex-col flex-1">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-gray-900 dark:text-gray-100 group-hover:text-primary transition-colors flex items-center gap-1">
+          <span className="text-sm font-semibold text-text-main group-hover:text-primary transition-colors flex items-center gap-1">
             {user.displayName || user.email}
             <svg
               className="w-3.5 h-3.5 opacity-0 -ml-2 group-hover:opacity-100 group-hover:ml-0 transition-all text-primary"
@@ -191,7 +191,7 @@ const SenderInfo: React.FC<{ createdBy: string }> = ({ createdBy }) => {
         </div>
 
         <div className="flex items-center justify-between mt-0.5">
-          <span className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
+          <span className="text-xs text-text-muted line-clamp-1">
             {user.email}
           </span>
           {user.country?.name && (
@@ -233,7 +233,7 @@ interface BidCardProps {
 }
 
 const BidCard: React.FC<BidCardProps> = ({ bid, onMark, isUpdating }) => (
-  <article className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-5">
+  <article className="bg-surface rounded-xl border border-border shadow-sm p-5">
     {/* Top row: amount + date + badge */}
     <div className="flex items-start justify-between gap-4 mb-3">
       <div>
@@ -249,7 +249,7 @@ const BidCard: React.FC<BidCardProps> = ({ bid, onMark, isUpdating }) => (
 
     {/* Message */}
     {bid.message && (
-      <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap mb-4">
+      <p className="text-sm text-text-muted leading-relaxed whitespace-pre-wrap mb-4">
         {bid.message}
       </p>
     )}
@@ -258,7 +258,7 @@ const BidCard: React.FC<BidCardProps> = ({ bid, onMark, isUpdating }) => (
     <SenderInfo createdBy={bid.createdBy} />
 
     {/* Action buttons */}
-    <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+    <div className="flex items-center gap-2 mt-4 pt-4 border-t border-border-light">
       <button
         type="button"
         disabled={isUpdating || bid.isInteresting === true}
@@ -344,7 +344,7 @@ const BidCard: React.FC<BidCardProps> = ({ bid, onMark, isUpdating }) => (
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
 
 const SkeletonCard: React.FC = () => (
-  <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-5 animate-pulse">
+  <div className="bg-surface rounded-xl border border-border shadow-sm p-5 animate-pulse">
     <div className="flex items-start justify-between gap-4 mb-3">
       <div className="space-y-1.5">
         <div className="h-7 w-28 bg-gray-200 dark:bg-gray-700 rounded" />
@@ -356,14 +356,14 @@ const SkeletonCard: React.FC = () => (
       <div className="h-3 w-full bg-gray-200 dark:bg-gray-700 rounded" />
       <div className="h-3 w-5/6 bg-gray-200 dark:bg-gray-700 rounded" />
     </div>
-    <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
+    <div className="flex items-center gap-3 pt-4 border-t border-border-light">
       <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700" />
       <div className="space-y-1.5 flex-1">
         <div className="h-3 w-32 bg-gray-200 dark:bg-gray-700 rounded" />
         <div className="h-3 w-48 bg-gray-200 dark:bg-gray-700 rounded" />
       </div>
     </div>
-    <div className="flex gap-2 mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+    <div className="flex gap-2 mt-4 pt-4 border-t border-border-light">
       <div className="h-7 w-24 bg-gray-200 dark:bg-gray-700 rounded-lg" />
       <div className="h-7 w-28 bg-gray-200 dark:bg-gray-700 rounded-lg" />
     </div>
@@ -443,7 +443,7 @@ const MyProjectBidsPage: React.FC = () => {
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 pb-12 pt-8 px-4 sm:px-6 lg:px-8 transition-colors">
+    <div className="min-h-[calc(100vh-64px)] bg-main pb-12 pt-8 px-4 sm:px-6 lg:px-8 transition-colors">
       <div className="max-w-4xl mx-auto">
         {/* Back button */}
         <button
@@ -460,11 +460,11 @@ const MyProjectBidsPage: React.FC = () => {
           {projectLoading ? (
             <div className="h-8 w-64 animate-pulse bg-gray-200 dark:bg-gray-700 rounded mb-2" />
           ) : (
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white leading-snug">
+            <h1 className="text-2xl font-bold text-text-main leading-snug">
               {project?.title ?? "Project"}
             </h1>
           )}
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-sm text-text-muted mt-1">
             Bids —{" "}
             <span className="font-semibold text-gray-700 dark:text-gray-300">
               {bidsLoading ? "…" : bids.length} total
@@ -489,7 +489,7 @@ const MyProjectBidsPage: React.FC = () => {
                 className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${
                   filter === key
                     ? "bg-primary text-white border-primary"
-                    : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
+                    : "bg-surface text-text-muted border-border hover:border-gray-300 dark:hover:border-gray-600"
                 }`}
               >
                 {label}
@@ -497,7 +497,7 @@ const MyProjectBidsPage: React.FC = () => {
                   className={`text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[1.25rem] text-center ${
                     filter === key
                       ? "bg-white/20 text-white"
-                      : "bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
+                      : "bg-gray-100 dark:bg-gray-700 text-text-muted"
                   }`}
                 >
                   {counts[key]}
@@ -532,7 +532,7 @@ const MyProjectBidsPage: React.FC = () => {
                 />
               </svg>
             </div>
-            <p className="text-gray-500 dark:text-gray-400 text-sm">
+            <p className="text-text-muted text-sm">
               {filter === "all"
                 ? "No bids received yet."
                 : "No bids match the selected filter."}

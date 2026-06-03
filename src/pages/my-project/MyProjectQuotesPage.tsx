@@ -28,7 +28,7 @@ const SenderInfo: React.FC<SenderInfoProps> = ({ createdBy }) => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700 animate-pulse">
+      <div className="flex items-center gap-3 pt-4 border-t border-border-light animate-pulse">
         <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex-shrink-0" />
         <div className="flex flex-col gap-2 flex-1">
           <div className="h-3 w-32 bg-gray-200 dark:bg-gray-700 rounded" />
@@ -44,17 +44,17 @@ const SenderInfo: React.FC<SenderInfoProps> = ({ createdBy }) => {
   const initial = label.charAt(0).toUpperCase();
 
   return (
-    <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
+    <div className="flex items-center gap-3 pt-4 border-t border-border-light">
       <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm flex-shrink-0 uppercase">
         {initial}
       </div>
       <div className="flex flex-col min-w-0">
         {user.displayName && (
-          <span className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+          <span className="text-sm font-medium text-text-main truncate">
             {user.displayName}
           </span>
         )}
-        <span className="text-sm text-gray-500 dark:text-gray-400 truncate">
+        <span className="text-sm text-text-muted truncate">
           {user.email}
         </span>
         {user.country?.name && (
@@ -84,7 +84,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onCreateContract }) => {
   });
 
   return (
-    <article className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-5">
+    <article className="bg-surface rounded-xl border border-border shadow-sm p-5">
       <div className="flex items-start justify-between gap-4 mb-3">
         <div>
           <span className="text-2xl font-bold text-green-500 tabular-nums">
@@ -98,7 +98,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onCreateContract }) => {
 
         {/* CTA */}
         {isChecking ? (
-          <span className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
+          <span className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-lg bg-gray-200 dark:bg-gray-700 text-text-muted">
             <svg
               className="w-4 h-4 animate-spin"
               fill="none"
@@ -158,7 +158,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onCreateContract }) => {
         )}
       </div>
 
-      <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap mb-4">
+      <p className="text-sm text-text-muted leading-relaxed whitespace-pre-wrap mb-4">
         {quote.message}
       </p>
 
@@ -169,7 +169,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onCreateContract }) => {
 
 /* ─── Skeleton card ──────────────────────────────────────────────────────── */
 const SkeletonCard: React.FC = () => (
-  <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-5 animate-pulse">
+  <div className="bg-surface rounded-xl border border-border shadow-sm p-5 animate-pulse">
     <div className="flex items-start justify-between gap-4 mb-3">
       <div className="space-y-1.5">
         <div className="h-7 w-28 bg-gray-200 dark:bg-gray-700 rounded" />
@@ -180,7 +180,7 @@ const SkeletonCard: React.FC = () => (
       <div className="h-3 w-full bg-gray-200 dark:bg-gray-700 rounded" />
       <div className="h-3 w-5/6 bg-gray-200 dark:bg-gray-700 rounded" />
     </div>
-    <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
+    <div className="flex items-center gap-3 pt-4 border-t border-border-light">
       <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700" />
       <div className="space-y-1.5 flex-1">
         <div className="h-3 w-32 bg-gray-200 dark:bg-gray-700 rounded" />
@@ -228,7 +228,7 @@ const MyProjectQuotesPage: React.FC = () => {
   const isLoading = quotesLoading;
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 pb-12 pt-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-[calc(100vh-64px)] bg-main pb-12 pt-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Back button */}
         <button
@@ -244,11 +244,11 @@ const MyProjectQuotesPage: React.FC = () => {
           {projectLoading ? (
             <div className="h-8 w-64 animate-pulse bg-gray-200 dark:bg-gray-700 rounded mb-2" />
           ) : (
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-2xl font-bold text-text-main">
               Project: {project?.title}
             </h1>
           )}
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-sm text-text-muted mt-1">
             Quotes — {isLoading ? 0 : quotes.length} total
           </p>
         </div>

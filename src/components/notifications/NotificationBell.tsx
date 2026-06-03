@@ -84,7 +84,7 @@ const NotificationBell: React.FC = () => {
       {/* Bell button */}
       <button
         onClick={handleOpen}
-        className="relative p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+        className="relative p-2 rounded-lg text-text-muted hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
         aria-label="Notifications"
       >
         <svg
@@ -109,10 +109,10 @@ const NotificationBell: React.FC = () => {
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-50 overflow-hidden">
+        <div className="absolute right-0 mt-2 w-80 bg-surface border border-border rounded-xl shadow-xl z-50 overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-700">
-            <span className="text-sm font-semibold text-gray-900 dark:text-white">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-border-light">
+            <span className="text-sm font-semibold text-text-main">
               Notifications
             </span>
             {unreadCount > 0 && (
@@ -201,7 +201,7 @@ const NotificationBell: React.FC = () => {
           </div>
 
           {/* Footer */}
-          <div className="px-4 py-2.5 border-t border-gray-100 dark:border-gray-700">
+          <div className="px-4 py-2.5 border-t border-border-light">
             <Link
               to="/notifications"
               onClick={() => setOpen(false)}

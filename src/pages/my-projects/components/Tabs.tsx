@@ -17,7 +17,7 @@ const Tabs: React.FC<Props> = ({ activeTab, onTabChange, counts }) => {
   ];
 
   return (
-    <div className="flex items-center gap-6 border-b border-gray-200 dark:border-gray-800 mb-8 overflow-x-auto">
+    <div className="flex items-center gap-6 border-b border-border mb-8 overflow-x-auto">
       {tabs.map((tab) => {
         const isActive = activeTab === tab.value;
         const countKey = tab.value === null ? "all" : tab.value;

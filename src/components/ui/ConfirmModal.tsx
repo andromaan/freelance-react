@@ -67,7 +67,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       preventBackdropClose
     >
       {description && (
-        <p className="mb-6 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+        <p className="mb-6 text-sm leading-relaxed text-text-muted">
           {description}
         </p>
       )}
@@ -80,7 +80,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           disabled={isLoading}
           className="px-4 py-2 text-sm font-medium rounded-lg
                      text-gray-700 dark:text-gray-300
-                     border border-gray-300 dark:border-gray-600
+                     border border-border
                      hover:bg-gray-50 dark:hover:bg-gray-800
                      focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60
                      disabled:opacity-50 disabled:cursor-not-allowed

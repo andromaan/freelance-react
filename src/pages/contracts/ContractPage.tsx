@@ -56,7 +56,7 @@ const ContractPage: React.FC = () => {
     : null;
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 font-sans pb-12 pt-8 px-4 sm:px-6 lg:px-8 transition-colors">
+    <div className="min-h-[calc(100vh-64px)] bg-main font-sans pb-12 pt-8 px-4 sm:px-6 lg:px-8 transition-colors">
       <div className="max-w-5xl mx-auto space-y-6">
         <div className="flex items-center justify-between mb-2">
           <button
@@ -73,9 +73,9 @@ const ContractPage: React.FC = () => {
         </div>
 
         {/* Header */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="bg-surface rounded-2xl p-6 border border-border shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 min-w-0">
+            <h3 className="text-lg font-bold text-text-main flex items-center gap-2 min-w-0">
               <span className="shrink-0">Contract for:</span>
 
               {isProjectLoading ? (
@@ -90,7 +90,7 @@ const ContractPage: React.FC = () => {
                 </span>
               )}
             </h3>
-            <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
+            <div className="flex flex-wrap items-center gap-3 text-sm text-text-muted">
               <span className="flex items-center gap-1">
                 <svg
                   className="w-4 h-4"
@@ -128,7 +128,7 @@ const ContractPage: React.FC = () => {
             </div>
           </div>
           <div className="flex flex-col items-end gap-3 shrink-0">
-            <span className="text-xl font-bold text-gray-900 dark:text-white">
+            <span className="text-xl font-bold text-text-main">
               ${contract.agreedRate}
             </span>
             <div className="flex flex-col sm:flex-row gap-2">
@@ -145,8 +145,8 @@ const ContractPage: React.FC = () => {
         </div>
 
         {/* Milestones Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+        <div className="bg-surface rounded-2xl p-6 border border-border shadow-sm">
+          <h2 className="text-xl font-bold text-text-main mb-6">
             Milestones
           </h2>
           <ContractMilestonesList

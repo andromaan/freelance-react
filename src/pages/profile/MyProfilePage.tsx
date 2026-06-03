@@ -112,11 +112,11 @@ const MyProfilePage: React.FC = () => {
   const activeTabLabel = TABS.find((t) => t.key === activeTab)?.label ?? "";
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 transition-colors flex">
+    <div className="min-h-[calc(100vh-64px)] bg-main transition-colors flex">
       {/* ── Sidebar — fixed left, full height ─────────────────────────── */}
-      <aside className="hidden lg:flex flex-col w-64 flex-shrink-0 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-[calc(100vh-64px)]">
+      <aside className="hidden lg:flex flex-col w-64 flex-shrink-0 bg-surface border-r border-border min-h-[calc(100vh-64px)]">
         {/* Avatar card */}
-        <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex flex-col items-center gap-3">
+        <div className="p-6 border-b border-border-light flex flex-col items-center gap-3">
           {user?.avatarImg ? (
             <img
               src={userImageUrl(user.avatarImg)}
@@ -129,10 +129,10 @@ const MyProfilePage: React.FC = () => {
             </div>
           )}
           <div className="text-center min-w-0 w-full">
-            <p className="font-semibold text-gray-900 dark:text-white truncate">
+            <p className="font-semibold text-text-main truncate">
               {user?.displayName ?? "—"}
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">
+            <p className="text-xs text-text-muted truncate mt-0.5">
               {user?.email}
             </p>
             {user?.role?.name && (
@@ -154,7 +154,7 @@ const MyProfilePage: React.FC = () => {
               className={`w-full flex items-center gap-3 px-5 py-3.5 text-sm font-medium text-left transition-colors border-r-2 ${
                 activeTab === key
                   ? "bg-primary/5 dark:bg-primary/10 text-primary border-primary"
-                  : "text-gray-600 dark:text-gray-300 border-transparent hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-white"
+                  : "text-text-muted border-transparent hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-white"
               }`}
             >
               <span
@@ -175,7 +175,7 @@ const MyProfilePage: React.FC = () => {
       {/* ── Main content ──────────────────────────────────────────────── */}
       <div className="flex-1 min-w-0 flex flex-col">
         {/* Mobile tab bar */}
-        <div className="lg:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 flex gap-1 overflow-x-auto">
+        <div className="lg:hidden bg-surface border-b border-border px-4 flex gap-1 overflow-x-auto">
           {visibleTabs.map(({ key, label, icon }) => (
             <button
               key={key}
@@ -185,7 +185,7 @@ const MyProfilePage: React.FC = () => {
               className={`flex items-center gap-2 px-3 py-3.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
                 activeTab === key
                   ? "border-primary text-primary"
-                  : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                  : "border-transparent text-text-muted hover:text-gray-700 dark:hover:text-gray-200"
               }`}
             >
               {icon}
@@ -197,8 +197,8 @@ const MyProfilePage: React.FC = () => {
         {/* Content area */}
         <main className="flex-1 p-6 lg:p-8 max-w-4xl w-full mx-auto">
           {/* Tab heading */}
-          <div className="mb-6 pb-5 border-b border-gray-200 dark:border-gray-700">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <div className="mb-6 pb-5 border-b border-border">
+            <h1 className="text-2xl font-bold text-text-main">
               {activeTabLabel}
             </h1>
           </div>

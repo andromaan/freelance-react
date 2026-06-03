@@ -14,9 +14,9 @@ export interface FieldProps {
 
 export const inputClass =
   "w-full px-3 py-2 rounded-lg border text-sm " +
-  "bg-white dark:bg-gray-800 " +
-  "text-gray-900 dark:text-white " +
-  "border-gray-300 dark:border-gray-600 " +
+  "bg-surface " +
+  "text-text-main " +
+  "border-border " +
   "placeholder:text-gray-400 dark:placeholder:text-gray-500 " +
   "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary " +
   "aria-[invalid=true]:border-red-400 dark:aria-[invalid=true]:border-red-500 " +

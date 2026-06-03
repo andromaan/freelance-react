@@ -114,7 +114,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
 
   if (milestones.length === 0) {
     return (
-      <div className="text-sm text-gray-500 dark:text-gray-400">
+      <div className="text-sm text-text-muted">
         No milestones found.
       </div>
     );
@@ -125,7 +125,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
       {milestones.map((milestone, _index) => (
         <div
           key={milestone.id}
-          className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4"
+          className="bg-surface border border-border rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4"
         >
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-1">
@@ -135,10 +135,10 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                 {getStatusText(milestone.status)}
               </span>
             </div>
-            <p className="text-gray-900 dark:text-white font-medium mb-2">
+            <p className="text-text-main font-medium mb-2">
               {milestone.description || "No description provided."}
             </p>
-            <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+            <div className="flex items-center gap-4 text-sm text-text-muted">
               <div className="flex items-center gap-1">
                 <svg
                   className="w-4 h-4"

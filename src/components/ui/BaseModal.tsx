@@ -176,27 +176,27 @@ const BaseModal: React.FC<BaseModalProps> = ({
         className={[
           "modal-content relative w-full",
           sizeClasses[size],
-          "bg-white dark:bg-gray-900",
+          "bg-surface",
           "rounded-2xl shadow-2xl",
-          "border border-gray-200 dark:border-gray-700/60",
+          "border border-border",
           "outline-none",
           "flex flex-col max-h-[90vh]",
           className,
         ].join(" ")}
       >
         {/* ── Header ── */}
-        <div className="flex items-start justify-between gap-3 px-6 py-5 border-b border-gray-100 dark:border-gray-700/60 flex-shrink-0">
+        <div className="flex items-start justify-between gap-3 px-6 py-5 border-b border-border-light/60 flex-shrink-0">
           <div className="min-w-0">
             <h2
               id={titleId}
-              className="text-lg font-semibold leading-snug text-gray-900 dark:text-white truncate"
+              className="text-lg font-semibold leading-snug text-text-main truncate"
             >
               {title}
             </h2>
             {description && (
               <p
                 id={descId}
-                className="mt-0.5 text-sm text-gray-500 dark:text-gray-400"
+                className="mt-0.5 text-sm text-text-muted"
               >
                 {description}
               </p>

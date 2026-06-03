@@ -98,14 +98,14 @@ const MyProjectsPage = () => {
   }, [myProjects, activeTabConfig]);
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 transition-colors flex">
+    <div className="min-h-[calc(100vh-64px)] bg-main transition-colors flex">
       {/* ── Sidebar ──────────────────────────────────────────────────────── */}
-      <aside className="hidden lg:flex flex-col w-64 flex-shrink-0 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-[calc(100vh-64px)]">
-        <div className="text-2xl font-bold text-center text-gray-900 dark:text-white p-6 border-b border-gray-200 dark:border-gray-700">
+      <aside className="hidden lg:flex flex-col w-64 flex-shrink-0 bg-surface border-r border-border min-h-[calc(100vh-64px)]">
+        <div className="text-2xl font-bold text-center text-text-main p-6 border-b border-border">
           My Projects
         </div>
 
-        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="p-4 border-b border-border">
            <button
              onClick={() => setIsCreateModalOpen(true)}
              className="w-full bg-primary hover:bg-primary-hover text-white font-semibold py-2.5 px-4 rounded-xl transition-colors text-sm shadow-sm flex items-center justify-center gap-2"
@@ -127,7 +127,7 @@ const MyProjectsPage = () => {
               className={`w-full flex items-center gap-3 px-5 py-3.5 text-sm font-medium text-left transition-colors border-r-2 ${
                 activeTabKey === key
                   ? "bg-primary/5 dark:bg-primary/10 text-primary border-primary"
-                  : "text-gray-600 dark:text-gray-300 border-transparent hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-white"
+                  : "text-text-muted border-transparent hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-white"
               }`}
             >
               <span className={activeTabKey === key ? "text-primary" : "text-gray-400 dark:text-gray-500"}>
@@ -142,8 +142,8 @@ const MyProjectsPage = () => {
       {/* ── Main content ──────────────────────────────────────────────── */}
       <div className="flex-1 min-w-0 flex flex-col">
         {/* Mobile header area */}
-        <div className="lg:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex justify-between items-center">
-            <h1 className="text-xl font-bold text-gray-900 dark:text-white">My Projects</h1>
+        <div className="lg:hidden bg-surface border-b border-border p-4 flex justify-between items-center">
+            <h1 className="text-xl font-bold text-text-main">My Projects</h1>
             <button
              onClick={() => setIsCreateModalOpen(true)}
              className="bg-primary hover:bg-primary-hover text-white font-semibold py-2 px-3 rounded-xl transition-colors text-xs shadow-sm flex items-center gap-1"
@@ -155,7 +155,7 @@ const MyProjectsPage = () => {
            </button>
         </div>
         {/* Mobile tab bar */}
-        <div className="lg:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 flex gap-1 overflow-x-auto">
+        <div className="lg:hidden bg-surface border-b border-border px-4 flex gap-1 overflow-x-auto">
           {TABS.map(({ key, label, icon }) => (
             <button
               key={key}
@@ -165,7 +165,7 @@ const MyProjectsPage = () => {
               className={`flex items-center gap-2 px-3 py-3.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
                 activeTabKey === key
                   ? "border-primary text-primary"
-                  : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                  : "border-transparent text-text-muted hover:text-gray-700 dark:hover:text-gray-200"
               }`}
             >
               {icon}
@@ -176,8 +176,8 @@ const MyProjectsPage = () => {
 
         {/* Content area */}
         <main className="flex-1 p-6 lg:p-8 max-w-4xl w-full mx-auto">
-          <div className="mb-6 pb-5 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <div className="mb-6 pb-5 border-b border-border flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-text-main">
               {activeTabConfig.label}
             </h1>
             <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
@@ -222,11 +222,11 @@ const MyProjectsPage = () => {
               </div>
             )}
             {!isLoading && !error && filteredProjects.length === 0 && (
-              <div className="text-center p-12 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700">
+              <div className="text-center p-12 bg-surface rounded-2xl border border-border">
                 <svg className="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <p className="text-gray-500 dark:text-gray-400 text-lg">No projects found in this category.</p>
+                <p className="text-text-muted text-lg">No projects found in this category.</p>
               </div>
             )}
             {!isLoading && !error && filteredProjects.length > 0 && (

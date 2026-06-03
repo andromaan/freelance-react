@@ -46,7 +46,7 @@ const NotificationsFilters: React.FC<Props> = ({
 
   return (
     <div className="flex flex-wrap gap-3 mb-6">
-      <div className="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="flex rounded-lg border border-border overflow-hidden">
         {isReadOptions.map((opt) => (
           <button
             key={String(opt.value)}
@@ -54,7 +54,7 @@ const NotificationsFilters: React.FC<Props> = ({
             className={`px-4 py-2 text-sm transition-colors ${
               isReadFilter === opt.value
                 ? "bg-primary text-white"
-                : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                : "bg-surface text-text-muted hover:bg-gray-50 dark:hover:bg-gray-700"
             }`}
           >
             {opt.label}

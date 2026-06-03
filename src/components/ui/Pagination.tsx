@@ -36,7 +36,7 @@ const Pagination: React.FC<PaginationProps> = ({
         onClick={() => handlePageChange(Math.max(1, page - 1))}
         disabled={page === 1}
         aria-label="Previous page"
-        className="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-border text-text-muted hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
       >
         <ArrowIcon direction="left" />
       </button>
@@ -63,7 +63,7 @@ const Pagination: React.FC<PaginationProps> = ({
             className={`inline-flex items-center justify-center w-9 h-9 rounded-lg text-sm font-medium border transition-colors ${
               p === page
                 ? "bg-primary text-white border-primary"
-                : "border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                : "border-border text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
             }`}
           >
             {p}
@@ -78,7 +78,7 @@ const Pagination: React.FC<PaginationProps> = ({
         onClick={() => handlePageChange(Math.min(totalPages, page + 1))}
         disabled={page === totalPages}
         aria-label="Next page"
-        className="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-border text-text-muted hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
       >
         <ArrowIcon direction="right" />
       </button>

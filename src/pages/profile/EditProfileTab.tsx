@@ -307,8 +307,8 @@ export const EditProfileTab: React.FC = () => {
         className="space-y-6"
       >
         <div className="flex gap-6 flex-col lg:flex-row">
-          <div className="w-1/2 bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-3 border-b border-gray-100 dark:border-gray-700">
+          <div className="w-1/2 bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
+            <h2 className="text-lg font-bold text-text-main mb-6 pb-3 border-b border-border-light">
               Profile Picture
             </h2>
             <div className="flex flex-col items-center gap-5">
@@ -387,8 +387,8 @@ export const EditProfileTab: React.FC = () => {
             </div>
           </div>
 
-          <div className="w-1/2 bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-3 border-b border-gray-100 dark:border-gray-700">
+          <div className="w-1/2 bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
+            <h2 className="text-lg font-bold text-text-main mb-6 pb-3 border-b border-border-light">
               Basic Information
             </h2>
             <div className="space-y-5 max-w-xl">
@@ -416,8 +416,8 @@ export const EditProfileTab: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-3 border-b border-gray-100 dark:border-gray-700">
+        <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
+          <h2 className="text-lg font-bold text-text-main mb-6 pb-3 border-b border-border-light">
             {isFreelancer ? "Freelancer Details" : "Company Details"}
           </h2>
           <div className="space-y-5">
@@ -479,8 +479,8 @@ export const EditProfileTab: React.FC = () => {
       {isFreelancer && (
         <>
           {/* Skills Card */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-3 border-b border-gray-100 dark:border-gray-700">
+          <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
+            <h2 className="text-lg font-bold text-text-main mb-6 pb-3 border-b border-border-light">
               Skills
             </h2>
             <div className="max-w-xl">
@@ -500,12 +500,12 @@ export const EditProfileTab: React.FC = () => {
           </div>
 
           {/* Portfolio Card */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-3 border-b border-gray-100 dark:border-gray-700">
+          <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
+            <h2 className="text-lg font-bold text-text-main mb-6 pb-3 border-b border-border-light">
               Portfolio
             </h2>
 
-            <div className="mb-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl p-5 border border-gray-100 dark:border-gray-700">
+            <div className="mb-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl p-5 border border-border-light">
               <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-4 uppercase tracking-wider">
                 Add New Item
               </h3>
@@ -572,7 +572,7 @@ export const EditProfileTab: React.FC = () => {
                     return (
                       <div
                         key={item.id}
-                        className="group flex flex-col bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm hover:shadow-md transition-shadow relative"
+                        className="group flex flex-col bg-surface rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow relative"
                       >
                         <div
                           className={`pl-4 h-12 w-full bg-gradient-to-br ${gradient} opacity-90 flex items-center justify-start relative`}
@@ -619,11 +619,11 @@ export const EditProfileTab: React.FC = () => {
                           )}
                         </div>
                         <div className="p-4 flex flex-col flex-1">
-                          <h3 className="font-bold text-gray-900 dark:text-white line-clamp-1 pr-6 mb-1 text-base">
+                          <h3 className="font-bold text-text-main line-clamp-1 pr-6 mb-1 text-base">
                             {item.title}
                           </h3>
                           {item.description && (
-                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">
+                            <p className="text-xs text-text-muted mt-1 line-clamp-2">
                               {item.description}
                             </p>
                           )}
@@ -652,8 +652,8 @@ export const EditProfileTab: React.FC = () => {
                   })}
                 </div>
               ) : (
-                <div className="text-center py-10 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                <div className="text-center py-10 rounded-xl border-2 border-dashed border-border bg-gray-50 dark:bg-gray-800/50">
+                  <p className="text-sm text-text-muted">
                     No portfolio items yet. Add one above!
                   </p>
                 </div>
@@ -663,8 +663,8 @@ export const EditProfileTab: React.FC = () => {
         </>
       )}
 
-      <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
-        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 pb-3 border-b border-gray-100 dark:border-gray-700">
+      <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
+        <h2 className="text-lg font-bold text-text-main mb-6 pb-3 border-b border-border-light">
           Languages
         </h2>
         <div className="flex items-end gap-3 flex-wrap mb-6">
@@ -712,7 +712,7 @@ export const EditProfileTab: React.FC = () => {
               return (
                 <div
                   key={lang.languageId}
-                  className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-700"
+                  className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 border border-border-light"
                 >
                   <div className="flex items-center gap-3">
                     <span className="font-semibold text-gray-800 dark:text-gray-200">
@@ -734,7 +734,7 @@ export const EditProfileTab: React.FC = () => {
               );
             })
           ) : (
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-text-muted">
               No languages added yet.
             </p>
           )}

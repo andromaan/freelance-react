@@ -121,10 +121,10 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
       : `/employers/${chatDetails?.interlocutorId}`;
 
   return createPortal(
-    <div className="fixed bottom-6 right-6 sm:bottom-6 sm:right-6 z-50 flex flex-col w-[90vw] sm:w-[500px] h-[600px] max-h-[85vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700/60 animate-in slide-in-from-bottom-8">
+    <div className="fixed bottom-6 right-6 sm:bottom-6 sm:right-6 z-50 flex flex-col w-[90vw] sm:w-[500px] h-[600px] max-h-[85vh] bg-surface rounded-2xl shadow-2xl overflow-hidden border border-border animate-in slide-in-from-bottom-8">
       {detailsLoading || messagesLoading ? (
         <div className="flex-1 flex flex-col items-center justify-center">
-          <span className="text-gray-500 dark:text-gray-400">
+          <span className="text-text-muted">
             Loading chat...
           </span>
         </div>
@@ -141,7 +141,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
       ) : (
         <>
           {/* Header */}
-          <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-2 px-3 shadow-sm flex items-center justify-between z-10 shrink-0">
+          <div className="bg-surface border-b border-border p-2 px-3 shadow-sm flex items-center justify-between z-10 shrink-0">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
                 <Link
@@ -163,7 +163,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                 <div>
                   <Link
                     to={linkToInterlocutor}
-                    className="text-lg font-bold text-gray-900 dark:text-white leading-tight flex items-center gap-3 hover:underline"
+                    className="text-lg font-bold text-text-main leading-tight flex items-center gap-3 hover:underline"
                   >
                     <h2>{chatDetails.interlocutorName}</h2>
                   </Link>
@@ -173,7 +173,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                         className={
                           isInterlocutorOnline
                             ? "text-blue-600 dark:text-blue-400"
-                            : "text-gray-500 dark:text-gray-400"
+                            : "text-text-muted"
                         }
                       >
                         {isInterlocutorOnline ? "Online" : "Offline"}
@@ -181,7 +181,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                     </span>
                     <span className="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-500"></span>
                     <p
-                      className="text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate"
+                      className="text-sm text-text-muted max-w-xs truncate"
                       title={chatDetails.projectTitle}
                     >
                       Project: {chatDetails.projectTitle}
@@ -219,9 +219,9 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
           </div>
 
           {/* Messages List */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 custom-scrollbar bg-gray-50 dark:bg-gray-900/50">
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 custom-scrollbar bg-main">
             {messages.length === 0 ? (
-              <div className="h-full flex items-center justify-center text-gray-500 dark:text-gray-400 text-sm">
+              <div className="h-full flex items-center justify-center text-text-muted text-sm">
                 No messages yet. Start the conversation!
               </div>
             ) : (
@@ -239,14 +239,14 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                       className={`group relative max-w-[85%] sm:max-w-[75%] rounded-2xl px-4 py-2 shadow-sm ${
                         isMine
                           ? "bg-primary text-white rounded-br-none"
-                          : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-bl-none"
+                          : "bg-surface border border-border text-text-main rounded-bl-none"
                       }`}
                     >
                       <p className="whitespace-pre-wrap break-words text-sm">
                         {msg.text}
                       </p>
                       <span
-                        className={`flex items-center gap-1.5 text-[10px] mt-1 ${isMine ? "text-primary-100 justify-end opacity-80" : "text-gray-500 dark:text-gray-400"}`}
+                        className={`flex items-center gap-1.5 text-[10px] mt-1 ${isMine ? "text-primary-100 justify-end opacity-80" : "text-text-muted"}`}
                       >
                         <span>{formatMessageDate(msg.sentAt)}</span>
                         {msg.isEdited && (
@@ -318,12 +318,12 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
           </div>
 
           {/* Input Area */}
-          <div className="bg-white dark:bg-gray-800 p-2 border-t border-gray-200 dark:border-gray-700 shrink-0">
+          <div className="bg-surface p-2 border-t border-border shrink-0">
             {!(
               chatDetails.contractStatus === "Active" ||
               chatDetails.contractStatus === "Pending"
             ) && (
-              <div className="text-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+              <div className="text-center text-sm text-text-muted mb-2">
                 You cannot send messages because the contract is{" "}
                 {chatDetails.contractStatus}.
               </div>
@@ -390,7 +390,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                     maxHeight: "10lh",
                   } as React.CSSProperties
                 }
-                className="flex-1 px-3 py-2 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:opacity-60 disabled:cursor-not-allowed transition-all text-sm sm:text-base resize-none custom-scrollbar"
+                className="flex-1 px-3 py-2 rounded-xl border border-border bg-gray-50 dark:bg-gray-700 text-text-main placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:opacity-60 disabled:cursor-not-allowed transition-all text-sm sm:text-base resize-none custom-scrollbar"
               />
               <button
                 type="submit"
@@ -425,9 +425,9 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
 
       {messageToDelete && (
         <div className="absolute inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-[2px] animate-in fade-in duration-200 px-4">
-          <div className="max-w-xs bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden animate-in zoom-in-95 duration-200 text-left align-middle border border-gray-200 dark:border-gray-800">
-            <div className="flex items-center justify-between p-3 border-b border-gray-100 dark:border-gray-800">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white leading-none">
+          <div className="max-w-xs bg-surface rounded-2xl shadow-xl overflow-hidden animate-in zoom-in-95 duration-200 text-left align-middle border border-border">
+            <div className="flex items-center justify-between p-3 border-b border-border-light">
+              <h3 className="text-xl font-semibold text-text-main leading-none">
                 Delete Message
               </h3>
               <button
@@ -439,14 +439,14 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
               </button>
             </div>
             <div className="p-3">
-              <p className="mb-3 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+              <p className="mb-3 text-sm leading-relaxed text-text-muted">
                 Are you sure you want to delete this message? This action cannot be undone.
               </p>
               <div className="flex items-center justify-center gap-3 flex-wrap">
                 <button
                   type="button"
                   onClick={() => setMessageToDelete(null)}
-                  className="px-4 py-2 text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 transition-colors"
+                  className="px-4 py-2 text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 border border-border hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 transition-colors"
                 >
                   Cancel
                 </button>
