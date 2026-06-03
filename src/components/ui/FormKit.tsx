@@ -17,7 +17,7 @@ export const inputClass =
   "bg-surface " +
   "text-text-main " +
   "border-border " +
-  "placeholder:text-gray-400 dark:placeholder:text-gray-500 " +
+  "placeholder:text-gray-500 dark:placeholder:text-gray-400/50 " +
   "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary " +
   "aria-[invalid=true]:border-red-400 dark:aria-[invalid=true]:border-red-500 " +
   "transition-colors";

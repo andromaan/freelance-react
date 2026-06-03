@@ -126,7 +126,7 @@ const FreelancersPage: React.FC = () => {
   const styles = mergeSelectStyles(useSelectStyles<number>(), {
     control: (base) => ({
       ...base,
-      backgroundColor: isDark ? "#111827" : "#f9fafb",
+      backgroundColor: isDark ? "#111827" : "#f3f4f6",
       borderColor: isDark ? "#4b5563" : "#e5e7eb",
       color: isDark ? "#f9fafb" : "#111827",
     }),

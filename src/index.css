@@ -4,12 +4,12 @@
 
 @layer base {
   :root {
-    --color-bg-main: #f9fafb;     /* gray-50 */
+    --color-bg-main: #f3f4f6;     /* gray-100 */
     --color-bg-surface: #ffffff;  /* white */
     --color-text-main: #111827;   /* gray-900 */
     --color-text-muted: #6b7280;  /* gray-500 */
-    --color-border: #e5e7eb;      /* gray-200 */
-    --color-border-light: #f3f4f6; /* gray-100 */
+    --color-border: #d1d5db;      /* gray-300 */
+    --color-border-light: #e5e7eb; /* gray-200 */
   }
 
   .dark {

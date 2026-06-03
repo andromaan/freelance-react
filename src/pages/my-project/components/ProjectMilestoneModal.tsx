@@ -344,7 +344,7 @@ const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
         </p>
 
         {/* ── Actions ── */}
-        <div className="flex items-center justify-end gap-3 pt-2 border-t border-border-light/60">
+        <div className="flex items-center justify-end gap-3 pt-2 border-t border-border-light">
           <button
             type="button"
             onClick={onClose}

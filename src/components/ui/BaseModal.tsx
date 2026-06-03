@@ -185,7 +185,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
         ].join(" ")}
       >
         {/* ── Header ── */}
-        <div className="flex items-start justify-between gap-3 px-6 py-5 border-b border-border-light/60 flex-shrink-0">
+        <div className="flex items-start justify-between gap-3 px-6 py-5 border-b border-border-light flex-shrink-0">
           <div className="min-w-0">
             <h2
               id={titleId}

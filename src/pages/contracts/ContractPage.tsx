@@ -62,7 +62,7 @@ const ContractPage: React.FC = () => {
           <button
             type="button"
             onClick={() => navigate("/my-contracts")}
-            className="flex items-center gap-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors text-sm font-medium"
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors text-sm font-medium"
           >
             <ArrowIcon direction="left" />
             Back to My Contracts

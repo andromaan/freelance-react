@@ -341,7 +341,7 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Required + submit */}
-        <div className="flex items-center justify-end gap-3 pt-2 border-t border-border-light/60">
+        <div className="flex items-center justify-end gap-3 pt-2 border-t border-border-light">
           <p className="text-xs text-gray-400 dark:text-gray-500 mr-auto">
             <span aria-hidden="true">* </span>Required fields
           </p>

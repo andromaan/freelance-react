@@ -154,7 +154,7 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
           />
         </div>
 
-        <div className="flex justify-end gap-3 mt-6 border-t border-border-light/60 pt-6">
+        <div className="flex justify-end gap-3 mt-6 border-t border-border-light pt-6">
           <button
             onClick={onClose}
             className="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 border border-border rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all focus:outline-none focus:ring-2 focus:ring-gray-200"
