@@ -104,7 +104,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
       {/* Сума */}
       <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl px-4 py-3 text-center">
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-0.5">
+        <p className="text-sm text-text-muted mb-0.5">
           Enter Amount ({currency})
         </p>
         <p className="text-2xl font-bold text-primary">
@@ -117,7 +117,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Card Details
         </label>
-        <div className="border-2 border-gray-200 dark:border-gray-600 rounded-lg px-3 py-3 bg-white dark:bg-gray-800 focus-within:border-primary transition-colors">
+        <div className="border-2 border-gray-200 dark:border-gray-600 rounded-lg px-3 py-3 bg-surface focus-within:border-primary transition-colors">
           <CardElement
             options={cardElementOptions}
             onChange={(e) => setCardError(e.error?.message ?? null)}

@@ -9,6 +9,16 @@ export default {
           DEFAULT: "#1976d2",
           hover: "#1565c0",
         },
+        main: "var(--color-bg-main)",
+        surface: "var(--color-bg-surface)",
+        text: {
+          main: "var(--color-text-main)",
+          muted: "var(--color-text-muted)",
+        },
+        border: {
+          DEFAULT: "var(--color-border)",
+          light: "var(--color-border-light)",
+        },
       },
     },
   },

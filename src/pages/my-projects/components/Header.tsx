@@ -8,10 +8,10 @@ const Header: React.FC<HeaderProps> = ({ onCreateClick }) => {
   return (
     <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-8 transition-colors">
       <div>
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2 transition-colors">
+        <h1 className="text-3xl md:text-4xl font-bold text-text-main mb-2 transition-colors">
           My Projects
         </h1>
-        <p className="text-gray-500 dark:text-gray-400 max-w-xl text-sm leading-relaxed transition-colors">
+        <p className="text-text-muted max-w-xl text-sm leading-relaxed transition-colors">
           Manage your active atelier engagements, track milestones, and maintain
           surgical precision over your delivery pipeline.
         </p>

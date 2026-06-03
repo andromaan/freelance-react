@@ -4,6 +4,7 @@ import type { ContractVM } from "../../../types/contract.types";
 import { useGetProjectByIdQuery } from "../../../services/projects/projectsApi";
 
 import { useNavigate } from "react-router-dom";
+import ArrowIcon from "../../../components/icons/ArrowIcon";
 
 interface ContractCardProps {
   contract: ContractVM;
@@ -22,13 +23,13 @@ const ContractCard: React.FC<ContractCardProps> = ({ contract }) => {
 
   return (
     <div
-      className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden transition-shadow hover:shadow-md cursor-pointer hover:border-primary/30"
+      className="bg-surface rounded-2xl border border-border shadow-sm overflow-hidden transition-shadow hover:shadow-md cursor-pointer hover:border-primary/30"
       onClick={() => navigate(`/contract/${contract.id}`)}
     >
       <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 min-w-0">
+            <h3 className="text-lg font-bold text-text-main flex items-center gap-2 min-w-0">
               <span className="shrink-0">Contract for:</span>
 
               {isProjectLoading ? (
@@ -47,7 +48,7 @@ const ContractCard: React.FC<ContractCardProps> = ({ contract }) => {
               ${contract.agreedRate}
             </span>
           </div>
-          <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+          <div className="flex items-center gap-4 text-sm text-text-muted">
             <div className="flex items-center gap-1.5">
               <svg
                 className="w-4 h-4"
@@ -89,21 +90,7 @@ const ContractCard: React.FC<ContractCardProps> = ({ contract }) => {
 
         <div className="flex items-center gap-1 self-end sm:self-auto text-primary text-sm font-medium">
           View Contract{" "}
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            transform="scale(-1)"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 19l-7-7 7-7"
-            ></path>
-          </svg>
+          <ArrowIcon direction="right" />
         </div>
       </div>
     </div>

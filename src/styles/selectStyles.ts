@@ -35,11 +35,11 @@ export function buildSelectStyles<T = number | string>(
   isDark: boolean,
 ): StylesConfig<SelectOption<T>> {
   // ── Палітра ──────────────────────────────────────────────────────────────────
-  const bg = isDark ? "#1f2937" : "#F9FAFB";
+  const bg = isDark ? "#1f2937" : "#FFFFFF";
   const bgHover = isDark ? "#374151" : "#dddddd";
   const border = isDark ? "#4b5563" : "#d1d5db";
   const text = isDark ? "#f9fafb" : "#111827";
-  const placeholder = isDark ? "#6b7280" : "#9ca3af";
+  const placeholder = isDark ? "#6b7280" : "#6a7282";
   const indicator = isDark ? "#6b7280" : "#9ca3af";
 
   // ── Акцентний колір (indigo-600) ─────────────────────────────────────────────

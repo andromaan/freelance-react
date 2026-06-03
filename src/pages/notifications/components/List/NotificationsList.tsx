@@ -23,7 +23,7 @@ const NotificationsList: React.FC<Props> = ({
     <div className="relative space-y-2">
       {isFetching && !isLoading && (
         <div className="absolute inset-0 z-10 flex items-start justify-center pt-6 pointer-events-none">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/90 dark:bg-gray-800/90 shadow-sm border border-gray-100 dark:border-gray-700">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/90 dark:bg-gray-800/90 shadow-sm border border-border-light">
             <svg
               className="w-3.5 h-3.5 animate-spin text-primary"
               fill="none"
@@ -43,7 +43,7 @@ const NotificationsList: React.FC<Props> = ({
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
               />
             </svg>
-            <span className="text-xs text-gray-500 dark:text-gray-400">
+            <span className="text-xs text-text-muted">
               Оновлення…
             </span>
           </div>

@@ -8,6 +8,7 @@ import { userApi } from "../../services/user/userApi";
 import type { AppDispatch } from "../../store";
 import type { SignInVM, FormErrors } from "../../types/auth.types";
 import GoogleLogin from "./GoogleLogin";
+import ArrowIcon from "../../components/icons/ArrowIcon";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -75,10 +76,18 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-5">
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-8 w-full max-w-md shadow-lg">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-5 relative">
+      <Link 
+        to="/" 
+        className="absolute top-6 left-6 flex items-center gap-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
+      >
+        <ArrowIcon direction="left" />
+        <span className="font-medium text-sm hidden sm:inline">Back to Home</span>
+      </Link>
+      
+      <div className="bg-surface border border-border rounded-xl p-8 w-full max-w-md shadow-lg">
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          <h1 className="text-gray-900 dark:text-white text-2xl font-semibold mb-6 text-center">
+          <h1 className="text-text-main text-2xl font-semibold mb-6 text-center">
             Login to Your Account
           </h1>
 
@@ -95,7 +104,7 @@ const Login: React.FC = () => {
               name="email"
               onChange={handleChange}
               value={formValues.email}
-              className={`w-full px-3 py-3 border-2 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:cursor-not-allowed ${
+              className={`w-full px-3 py-3 border-2 rounded-lg bg-white dark:bg-gray-700 text-text-main text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:cursor-not-allowed ${
                 errors.email
                   ? "border-red-500 focus:border-red-500"
                   : "border-gray-200 dark:border-gray-600 focus:border-primary"
@@ -121,7 +130,7 @@ const Login: React.FC = () => {
               name="password"
               onChange={handleChange}
               value={formValues.password}
-              className={`w-full px-3 py-3 border-2 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:cursor-not-allowed ${
+              className={`w-full px-3 py-3 border-2 rounded-lg bg-white dark:bg-gray-700 text-text-main text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:cursor-not-allowed ${
                 errors.password
                   ? "border-red-500 focus:border-red-500"
                   : "border-gray-200 dark:border-gray-600 focus:border-primary"
@@ -153,7 +162,7 @@ const Login: React.FC = () => {
         </form>
 
         <div className="mt-6 text-center">
-          <div className="flex items-center my-5 text-gray-600 dark:text-gray-400">
+          <div className="flex items-center my-5 text-text-muted">
             <div className="flex-1 border-b border-gray-200 dark:border-gray-600"></div>
             <span className="px-3 text-sm">or</span>
             <div className="flex-1 border-b border-gray-200 dark:border-gray-600"></div>

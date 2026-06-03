@@ -8,7 +8,11 @@ import { useGetProjectByIdQuery } from "../../services/projects/projectsApi";
 import { selectCurrentUser } from "../../store/userSlice";
 import ContractMilestonesList from "./components/ContractMilestonesList";
 import CreateReviewModal from "./components/CreateReviewModal";
+import ContractChatModal from "../../components/chat/ContractChatModal";
 import { getStatusText } from "../../utils";
+import PageLoading from "../../components/ui/PageLoading";
+import PageError from "../../components/ui/PageError";
+import ArrowIcon from "../../components/icons/ArrowIcon";
 
 const ContractPage: React.FC = () => {
   const { contractId } = useParams<{ contractId: string }>();
@@ -17,6 +21,7 @@ const ContractPage: React.FC = () => {
   const isFreelancer = user?.role?.name === ROLES.FREELANCER;
 
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
 
   const {
     data: contract,
@@ -30,28 +35,16 @@ const ContractPage: React.FC = () => {
   );
 
   if (isLoading) {
-    return (
-      <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <span className="text-gray-500 dark:text-gray-400">
-          Loading contract details...
-        </span>
-      </div>
-    );
+    return <PageLoading message="Loading contract details..." />;
   }
 
   if (error || !contract) {
     return (
-      <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center gap-4">
-        <span className="text-red-500">
-          Contract not found or error loading contract.
-        </span>
-        <button
-          onClick={() => navigate("/my-contracts")}
-          className="text-primary hover:text-primary-hover underline"
-        >
-          Back to My Contracts
-        </button>
-      </div>
+      <PageError 
+        message="Contract not found or error loading contract." 
+        backToLabel="Back to My Contracts"
+        backToPath="/my-contracts"
+      />
     );
   }
 
@@ -63,28 +56,15 @@ const ContractPage: React.FC = () => {
     : null;
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 font-sans pb-12 pt-8 px-4 sm:px-6 lg:px-8 transition-colors">
+    <div className="min-h-[calc(100vh-64px)] bg-main font-sans pb-12 pt-8 px-4 sm:px-6 lg:px-8 transition-colors">
       <div className="max-w-5xl mx-auto space-y-6">
         <div className="flex items-center justify-between mb-2">
           <button
             type="button"
             onClick={() => navigate("/my-contracts")}
-            className="flex items-center gap-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors text-sm font-medium"
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors text-sm font-medium"
           >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
+            <ArrowIcon direction="left" />
             Back to My Contracts
           </button>
           <span className="text-sm font-bold tracking-wider px-3 py-1 rounded-full bg-primary/10 text-primary dark:text-white">
@@ -93,9 +73,9 @@ const ContractPage: React.FC = () => {
         </div>
 
         {/* Header */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="bg-surface rounded-2xl p-6 border border-border shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 min-w-0">
+            <h3 className="text-lg font-bold text-text-main flex items-center gap-2 min-w-0">
               <span className="shrink-0">Contract for:</span>
 
               {isProjectLoading ? (
@@ -110,7 +90,7 @@ const ContractPage: React.FC = () => {
                 </span>
               )}
             </h3>
-            <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
+            <div className="flex flex-wrap items-center gap-3 text-sm text-text-muted">
               <span className="flex items-center gap-1">
                 <svg
                   className="w-4 h-4"
@@ -147,24 +127,26 @@ const ContractPage: React.FC = () => {
               )}
             </div>
           </div>
-          <div className="flex flex-col items-end gap-3">
-            <span className="text-xl font-bold text-gray-900 dark:text-white">
+          <div className="flex flex-col items-end gap-3 shrink-0">
+            <span className="text-xl font-bold text-text-main">
               ${contract.agreedRate}
             </span>
-            {contract.status === "Completed" && (
-              <button
-                onClick={() => setIsReviewModalOpen(true)}
-                className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-hover transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-              >
-                Залишити відгук
-              </button>
-            )}
+            <div className="flex flex-col sm:flex-row gap-2">
+              {contract.status === "Completed" && (
+                <button
+                  onClick={() => setIsReviewModalOpen(true)}
+                  className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-hover transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                >
+                  Leave a review
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Milestones Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+        <div className="bg-surface rounded-2xl p-6 border border-border shadow-sm">
+          <h2 className="text-xl font-bold text-text-main mb-6">
             Milestones
           </h2>
           <ContractMilestonesList
@@ -177,6 +159,12 @@ const ContractPage: React.FC = () => {
       <CreateReviewModal
         isOpen={isReviewModalOpen}
         onClose={() => setIsReviewModalOpen(false)}
+        contractId={contract.id}
+      />
+      <ContractChatModal
+        isOpen={isChatModalOpen}
+        onClose={() => setIsChatModalOpen(false)}
+        onOpen={() => setIsChatModalOpen(true)}
         contractId={contract.id}
       />
     </div>

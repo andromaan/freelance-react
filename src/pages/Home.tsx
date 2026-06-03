@@ -59,22 +59,22 @@ const Home: React.FC = () => {
   const topFreelancers = topFreelancersData?.items ?? [];
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div className="bg-main transition-colors">
       {/* ── HERO SECTION ── */}
-      <section className="relative overflow-hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 pt-20 pb-24 sm:pt-28 sm:pb-32">
+      <section className="relative overflow-hidden bg-surface border-b border-border pt-20 pb-24 sm:pt-28 sm:pb-32">
         <div className="absolute inset-0 z-0">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 dark:bg-primary/5 rounded-full blur-3xl mix-blend-multiply dark:mix-blend-lighten" />
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-400/10 dark:bg-blue-600/5 rounded-full blur-3xl mix-blend-multiply dark:mix-blend-lighten" />
         </div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-gray-900 dark:text-white leading-tight mb-6 tracking-tight">
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-text-main leading-tight mb-6 tracking-tight">
             Find the perfect <br className="hidden sm:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600 dark:from-primary dark:to-blue-400">
               freelancer
             </span> for your project
           </h1>
-          <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-text-muted mb-10 max-w-2xl mx-auto">
             Thousands of verified professionals are ready to help your business grow. Fast, secure, quality.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -114,42 +114,42 @@ const Home: React.FC = () => {
       </section>
 
       {/* ── STATS SECTION ── */}
-      <section className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 relative z-10 -mt-8 sm:-mt-12 mx-4 sm:mx-8 max-w-5xl xl:mx-auto rounded-2xl shadow-sm">
+      <section className="bg-surface border-y border-border relative z-10 -mt-8 sm:-mt-12 mx-4 sm:mx-8 max-w-5xl xl:mx-auto rounded-2xl shadow-sm">
         <div className="px-6 py-8 sm:p-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-gray-100 dark:divide-gray-800">
             <div>
-              <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
+              <div className="text-3xl font-bold text-text-main mb-1">
                 {totalFreelancers > 0 ? `${totalFreelancers}+` : "10k+"}
               </div>
-              <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Freelancers</div>
+              <div className="text-sm font-medium text-text-muted">Freelancers</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
+              <div className="text-3xl font-bold text-text-main mb-1">
                 {totalProjects > 0 ? `${totalProjects}+` : "5k+"}
               </div>
-              <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Projects Posted</div>
+              <div className="text-sm font-medium text-text-muted">Projects Posted</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">98%</div>
-              <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Satisfaction Rate</div>
+              <div className="text-3xl font-bold text-text-main mb-1">98%</div>
+              <div className="text-sm font-medium text-text-muted">Satisfaction Rate</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">24/7</div>
-              <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Support</div>
+              <div className="text-3xl font-bold text-text-main mb-1">24/7</div>
+              <div className="text-sm font-medium text-text-muted">Support</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ── LATEST PROJECTS ── */}
-      <section className="py-16 sm:py-24 bg-gray-50 dark:bg-gray-900">
+      <section className="py-16 sm:py-24 bg-main">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-4">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              <h2 className="text-2xl sm:text-3xl font-bold text-text-main mb-2">
                 Latest Projects
               </h2>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-text-muted">
                 Find the perfect opportunity to showcase your skills.
               </p>
             </div>
@@ -167,7 +167,7 @@ const Home: React.FC = () => {
           {isLoadingProjects ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-64 bg-white dark:bg-gray-800 rounded-xl animate-pulse" />
+                <div key={i} className="h-64 bg-surface rounded-xl animate-pulse" />
               ))}
             </div>
           ) : latestProjects.length > 0 ? (
@@ -177,21 +177,21 @@ const Home: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-10 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-              <p className="text-gray-500 dark:text-gray-400">No projects available at the moment.</p>
+            <div className="text-center py-10 bg-surface rounded-xl border border-border">
+              <p className="text-text-muted">No projects available at the moment.</p>
             </div>
           )}
         </div>
       </section>
 
       {/* ── CATEGORIES ── */}
-      <section className="py-16 sm:py-24 bg-white dark:bg-gray-950 border-y border-gray-200 dark:border-gray-800">
+      <section className="py-16 sm:py-24 bg-surface border-y border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3">
+            <h2 className="text-2xl sm:text-3xl font-bold text-text-main mb-3">
               Popular Categories
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
+            <p className="text-text-muted max-w-xl mx-auto">
               Browse top categories and find professionals in any field
             </p>
           </div>
@@ -202,18 +202,18 @@ const Home: React.FC = () => {
                 <Link
                   to="/freelancers"
                   key={cat.id}
-                  className="group bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 flex items-start gap-5 hover:border-primary/50 hover:bg-white dark:hover:bg-gray-800 hover:shadow-lg transition-all"
+                  className="group bg-main border border-border rounded-2xl p-6 flex items-start gap-5 hover:border-primary/50 hover:bg-white dark:hover:bg-gray-800 hover:shadow-lg transition-all"
                 >
-                  <div className="text-primary bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 p-3.5 rounded-xl flex-shrink-0 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all">
+                  <div className="text-primary bg-surface shadow-sm border border-border-light p-3.5 rounded-xl flex-shrink-0 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       {categoryIcons[cat.name] || DefaultCategoryIcon}
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1 group-hover:text-primary transition-colors">
+                    <h3 className="text-lg font-semibold text-text-main mb-1 group-hover:text-primary transition-colors">
                       {cat.name}
                     </h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p className="text-sm text-text-muted">
                       Explore {cat.name.toLowerCase()} experts
                     </p>
                   </div>
@@ -231,7 +231,7 @@ const Home: React.FC = () => {
           <div className="mt-10 text-center">
              <Link
                 to="/freelancers"
-                className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary font-medium transition-colors"
+                className="inline-flex items-center gap-2 text-text-muted hover:text-primary dark:hover:text-primary font-medium transition-colors"
              >
                 Browse all categories
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -243,14 +243,14 @@ const Home: React.FC = () => {
       </section>
 
       {/* ── TOP FREELANCERS ── */}
-      <section className="py-16 sm:py-24 bg-gray-50 dark:bg-gray-900">
+      <section className="py-16 sm:py-24 bg-main">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-4">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              <h2 className="text-2xl sm:text-3xl font-bold text-text-main mb-2">
                 Top Rated Freelancers
               </h2>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-text-muted">
                 Work with the best professionals on the platform.
               </p>
             </div>
@@ -268,7 +268,7 @@ const Home: React.FC = () => {
           {isLoadingFreelancers ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-64 bg-white dark:bg-gray-800 rounded-xl animate-pulse" />
+                <div key={i} className="h-64 bg-surface rounded-xl animate-pulse" />
               ))}
             </div>
           ) : topFreelancers.length > 0 ? (
@@ -278,21 +278,21 @@ const Home: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-10 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-              <p className="text-gray-500 dark:text-gray-400">No freelancers available at the moment.</p>
+            <div className="text-center py-10 bg-surface rounded-xl border border-border">
+              <p className="text-text-muted">No freelancers available at the moment.</p>
             </div>
           )}
         </div>
       </section>
 
       {/* ── HOW IT WORKS ── */}
-      <section className="py-16 sm:py-24 bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800">
+      <section className="py-16 sm:py-24 bg-surface border-t border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3">
+            <h2 className="text-2xl sm:text-3xl font-bold text-text-main mb-3">
               How It Works
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
+            <p className="text-text-muted max-w-xl mx-auto">
               Get started by working or finding freelancers in 4 simple steps
             </p>
           </div>
@@ -301,14 +301,14 @@ const Home: React.FC = () => {
             <div className="hidden lg:block absolute top-6 left-16 right-16 h-0.5 bg-gray-100 dark:bg-gray-800 -z-10" />
             
             {howItWorks.map((item) => (
-              <div key={item.step} className="relative bg-white dark:bg-gray-950 group">
-                <div className="w-14 h-14 rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white flex items-center justify-center text-lg font-bold mb-6 mx-auto sm:mx-0 transition-colors shadow-sm ring-4 ring-white dark:ring-gray-950">
+              <div key={item.step} className="relative bg-surface group">
+                <div className="w-14 h-14 rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white flex items-center justify-center text-lg font-bold mb-6 mx-auto sm:mx-0 transition-colors shadow-sm ring-1 ring-primary/50 dark:ring-aqua-950">
                   {item.step}
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 text-center sm:text-left">
+                <h3 className="text-lg font-bold text-text-main mb-2 text-center sm:text-left">
                   {item.title}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed text-center sm:text-left">
+                <p className="text-sm text-text-muted leading-relaxed text-center sm:text-left">
                   {item.description}
                 </p>
               </div>

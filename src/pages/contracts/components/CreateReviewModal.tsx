@@ -22,7 +22,7 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
 
   const handleCreate = async () => {
     if (rating < 0.5) {
-      toast.error("Будь ласка, оберіть рейтинг");
+      toast.error("Please provide a rating of at least 0.5 stars");
       return;
     }
 
@@ -33,10 +33,10 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
         reviewText,
       }).unwrap();
 
-      toast.success("Відгук успішно додано");
+      toast.success("Review added successfully");
       onClose();
     } catch (error: any) {
-      toast.error(error?.data?.title || "Не вдалося додати відгук");
+      toast.error(error?.data?.title || "Failed to add review");
     }
   };
 
@@ -111,11 +111,11 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
   };
 
   return (
-    <BaseModal isOpen={isOpen} onClose={onClose} title="Залишити відгук">
+    <BaseModal isOpen={isOpen} onClose={onClose} title="Leave a review">
       <div className="space-y-6 pt-2">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Оцініть співпрацю
+            Rate your collaboration
           </label>
           <div
             className="flex gap-1 items-center"
@@ -134,7 +134,7 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
                 </div>
               );
             })}
-            <span className="ml-3 text-lg text-gray-600 dark:text-gray-400 font-bold bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-md">
+            <span className="ml-3 text-lg text-text-muted font-bold bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-md">
               {(hoverRating || rating).toFixed(1)} / 5.0
             </span>
           </div>
@@ -142,31 +142,31 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
 
         <div>
           <label htmlFor="reviewText" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Ваш коментар (необов'язково)
+            Your review (optional)
           </label>
           <textarea
             id="reviewText"
-            className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:text-white transition-all resize-none shadow-sm"
+            className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:text-white transition-all resize-none shadow-sm"
             rows={4}
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
-            placeholder="Опишіть ваші враження від роботи..."
+            placeholder="Describe your experience..."
           />
         </div>
 
-        <div className="flex justify-end gap-3 mt-6 border-t border-gray-100 dark:border-gray-700/60 pt-6">
+        <div className="flex justify-end gap-3 mt-6 border-t border-border-light pt-6">
           <button
             onClick={onClose}
-            className="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all focus:outline-none focus:ring-2 focus:ring-gray-200"
+            className="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 border border-border rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all focus:outline-none focus:ring-2 focus:ring-gray-200"
           >
-            Скасувати
+            Cancel
           </button>
           <button
             onClick={handleCreate}
             disabled={isLoading || rating < 0.5}
             className="px-5 py-2.5 text-sm font-medium text-white bg-primary rounded-xl hover:bg-primary-hover shadow-sm shadow-primary/30 hover:shadow-primary/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
-            {isLoading ? "Збереження..." : "Надіслати відгук"}
+            {isLoading ? "Saving..." : "Submit Review"}
           </button>
         </div>
       </div>

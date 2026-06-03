@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { authApi } from "../services/auth/authApi";
 import { userApi } from "../services/user/userApi";
@@ -19,29 +19,40 @@ import { languagesApi } from "../services/languages/languagesApi";
 import { employerApi } from "../services/employer/employerApi";
 import { countriesApi } from "../services/countries/countriesApi";
 import { skillsApi } from "../services/skills/skillsApi";
+import { chatApi } from "../services/chat/chatApi";
+
+const appReducer = combineReducers({
+  user: userReducer,
+  notifications: notificationReducer,
+  [authApi.reducerPath]: authApi.reducer,
+  [userApi.reducerPath]: userApi.reducer,
+  [notificationApi.reducerPath]: notificationApi.reducer,
+  [walletApi.reducerPath]: walletApi.reducer,
+  [projectsApi.reducerPath]: projectsApi.reducer,
+  [bidsApi.reducerPath]: bidsApi.reducer,
+  [quotesApi.reducerPath]: quotesApi.reducer,
+  [projectMilestonesApi.reducerPath]: projectMilestonesApi.reducer,
+  [categoriesApi.reducerPath]: categoriesApi.reducer,
+  [contractsApi.reducerPath]: contractsApi.reducer,
+  [contractMilestonesApi.reducerPath]: contractMilestonesApi.reducer,
+  [reviewsApi.reducerPath]: reviewsApi.reducer,
+  [freelancerApi.reducerPath]: freelancerApi.reducer,
+  [languagesApi.reducerPath]: languagesApi.reducer,
+  [employerApi.reducerPath]: employerApi.reducer,
+  [countriesApi.reducerPath]: countriesApi.reducer,
+  [skillsApi.reducerPath]: skillsApi.reducer,
+  [chatApi.reducerPath]: chatApi.reducer,
+});
+
+const rootReducer = (state: any, action: any) => {
+  if (action.type === 'user/clearUser') {
+    state = undefined;
+  }
+  return appReducer(state, action);
+};
 
 export const store = configureStore({
-  reducer: {
-    user: userReducer,
-    notifications: notificationReducer,
-    [authApi.reducerPath]: authApi.reducer,
-    [userApi.reducerPath]: userApi.reducer,
-    [notificationApi.reducerPath]: notificationApi.reducer,
-    [walletApi.reducerPath]: walletApi.reducer,
-    [projectsApi.reducerPath]: projectsApi.reducer,
-    [bidsApi.reducerPath]: bidsApi.reducer,
-    [quotesApi.reducerPath]: quotesApi.reducer,
-    [projectMilestonesApi.reducerPath]: projectMilestonesApi.reducer,
-    [categoriesApi.reducerPath]: categoriesApi.reducer,
-    [contractsApi.reducerPath]: contractsApi.reducer,
-    [contractMilestonesApi.reducerPath]: contractMilestonesApi.reducer,
-    [reviewsApi.reducerPath]: reviewsApi.reducer,
-    [freelancerApi.reducerPath]: freelancerApi.reducer,
-    [languagesApi.reducerPath]: languagesApi.reducer,
-    [employerApi.reducerPath]: employerApi.reducer,
-    [countriesApi.reducerPath]: countriesApi.reducer,
-    [skillsApi.reducerPath]: skillsApi.reducer,
-  },
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
@@ -62,7 +73,8 @@ export const store = configureStore({
       languagesApi.middleware,
       employerApi.middleware,
       countriesApi.middleware,
-      skillsApi.middleware
+      skillsApi.middleware,
+      chatApi.middleware
     ),
 });
 

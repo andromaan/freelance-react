@@ -40,7 +40,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
 
   if (isLoading) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-100 dark:border-gray-700 shadow-sm animate-pulse">
+      <div className="bg-surface rounded-xl p-5 border border-border-light shadow-sm animate-pulse">
         <div className="flex items-center gap-2 mb-3">
           <div className="flex gap-1">
             {[1, 2, 3, 4, 5].map((i) => (
@@ -54,7 +54,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
         </div>
         <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2" />
         <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-4/5 mb-4" />
-        <div className="flex items-center gap-2 border-t border-gray-100 dark:border-gray-700 pt-3">
+        <div className="flex items-center gap-2 border-t border-border-light pt-3">
           <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700" />
           <div className="w-20 h-3 bg-gray-200 dark:bg-gray-700 rounded" />
         </div>
@@ -67,7 +67,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
     : employer?.email?.charAt(0).toUpperCase() || "?";
 
   return (
-    <article className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-100 dark:border-gray-700 shadow-sm flex flex-col h-full">
+    <article className="bg-surface rounded-xl p-5 border border-border-light shadow-sm flex flex-col h-full">
       <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
         <StarRating rating={review.rating} />
 
@@ -92,30 +92,30 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
       </div>
 
       {project?.title && (
-        <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-2 line-clamp-1">
+        <h4 className="font-semibold text-text-main text-sm mb-2 line-clamp-1">
           {project.title}
         </h4>
       )}
 
-      <p className="text-sm text-gray-600 dark:text-gray-300 italic mb-4 flex-1">
+      <p className="text-sm text-text-muted italic mb-4 flex-1">
         "{review.reviewText || "No written review provided."}"
       </p>
 
       {/* Employer Info */}
-      <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-700">
+      <div className="flex items-center justify-between border-t border-border-light">
         <div className=" pt-3 mt-auto flex items-center gap-2">
           {employer?.avatarImg ? (
             <img
               src={userImageUrl(employer.avatarImg)}
               alt={employer.displayName || "Employer Avatar"}
-              className="w-6 h-6 rounded-full object-cover border border-gray-200 dark:border-gray-700"
+              className="w-6 h-6 rounded-full object-cover border border-border"
             />
           ) : (
             <div className="w-6 h-6 rounded-full bg-primary/10 text-primary text-[10px] font-bold flex items-center justify-center border border-primary/20">
               {employerInitial}
             </div>
           )}
-          <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+          <span className="text-xs text-text-muted font-medium">
             {employer?.displayName || employer?.email || "Unknown Employer"}
           </span>
         </div>

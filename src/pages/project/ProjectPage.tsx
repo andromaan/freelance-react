@@ -1,15 +1,16 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useGetProjectByIdQuery } from "../../services/projects/projectsApi";
 import ProjectHeader from "./components/ProjectHeader";
 import ProjectMeta from "./components/ProjectMeta";
 import ProjectMilestones from "./components/ProjectMilestones";
 import ProjectResponses from "./components/ProjectResponses";
 import ProjectEmployer from "./components/ProjectEmployer";
+import PageLoading from "../../components/ui/PageLoading";
+import PageError from "../../components/ui/PageError";
 
 const ProjectPage: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
-  const navigate = useNavigate();
 
   const {
     data: project,
@@ -20,33 +21,21 @@ const ProjectPage: React.FC = () => {
   });
 
   if (isLoading) {
-    return (
-      <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <span className="text-gray-500 dark:text-gray-400">
-          Loading project...
-        </span>
-      </div>
-    );
+    return <PageLoading message="Loading project..." />;
   }
 
   if (error || !project) {
     return (
-      <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center gap-4">
-        <span className="text-red-500">
-          Project not found or error loading project.
-        </span>
-        <button
-          onClick={() => navigate("/projects")}
-          className="text-primary hover:text-primary-hover underline"
-        >
-          Back to Projects
-        </button>
-      </div>
+      <PageError 
+        message="Project not found or error loading project." 
+        backToLabel="Back to Projects"
+        backToPath="/projects"
+      />
     );
   }
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 font-sans pb-12 pt-8 px-4 sm:px-6 lg:px-8 transition-colors">
+    <div className="min-h-[calc(100vh-64px)] bg-main font-sans pb-12 pt-8 px-4 sm:px-6 lg:px-8 transition-colors">
       <div className="max-w-5xl mx-auto space-y-6">
         <ProjectHeader
           projectId={project.id}

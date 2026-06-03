@@ -49,7 +49,7 @@ const StatCell: React.FC<StatCellProps> = ({
         {count}
       </span>
     )}
-    <span className="text-xs text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-widest">
+    <span className="text-xs text-text-muted font-semibold uppercase tracking-widest">
       {label}
     </span>
   </Link>
@@ -65,9 +65,9 @@ const ProjectResponses: React.FC<Props> = ({ projectId }) => {
     useGetQuotesByProjectQuery(projectId, { skip: !projectId });
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
-      <div className="p-4 border-b border-gray-100 dark:border-gray-700">
-        <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider text-center">
+    <div className="bg-surface rounded-xl border border-border shadow-sm overflow-hidden">
+      <div className="p-4 border-b border-border-light">
+        <h3 className="text-sm font-bold text-text-main uppercase tracking-wider text-center">
           Responses
         </h3>
       </div>

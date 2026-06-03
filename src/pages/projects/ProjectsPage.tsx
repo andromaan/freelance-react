@@ -1,4 +1,5 @@
 import React, { useEffect, useId, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Select from "react-select";
 import { useGetAllCategoriesQuery } from "../../services/categories/categoriesApi";
 import { useGetProjectsFilteredQuery } from "../../services/projects/projectsApi";
@@ -19,7 +20,7 @@ const PAGE_SIZE = 9;
 // ─── Skeleton card ────────────────────────────────────────────────────────────
 
 const SkeletonCard: React.FC = () => (
-  <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-5 animate-pulse">
+  <div className="bg-surface rounded-xl border border-border shadow-sm p-5 animate-pulse">
     <div className="flex items-center justify-between mb-3">
       <div className="h-5 w-20 bg-gray-200 dark:bg-gray-700 rounded-full" />
       <div className="h-5 w-16 bg-gray-200 dark:bg-gray-700 rounded-full" />
@@ -30,7 +31,7 @@ const SkeletonCard: React.FC = () => (
       <div className="h-3 w-5/6 bg-gray-200 dark:bg-gray-700 rounded" />
       <div className="h-3 w-4/6 bg-gray-200 dark:bg-gray-700 rounded" />
     </div>
-    <div className="border-t border-gray-100 dark:border-gray-700 pt-4 flex items-center justify-between">
+    <div className="border-t border-border-light pt-4 flex items-center justify-between">
       <div className="space-y-1">
         <div className="h-5 w-16 bg-gray-200 dark:bg-gray-700 rounded" />
         <div className="h-3 w-24 bg-gray-200 dark:bg-gray-700 rounded" />
@@ -46,14 +47,54 @@ const ProjectsPage: React.FC = () => {
   const searchId = useId();
   const budgetMinId = useId();
   const budgetMaxId = useId();
+  const deadlineMaxId = useId();
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // ── Filter state ──────────────────────────────────────────────────────────
-  const [page, setPage] = useState(1);
-  const [titleInput, setTitleInput] = useState("");
-  const [titleSearch, setTitleSearch] = useState("");
-  const [budgetMin, setBudgetMin] = useState("");
-  const [budgetMax, setBudgetMax] = useState("");
-  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
+  const [page, setPage] = useState(() => Number(searchParams.get("page")) || 1);
+  const [titleInput, setTitleInput] = useState(
+    () => searchParams.get("title") || "",
+  );
+  const [titleSearch, setTitleSearch] = useState(
+    () => searchParams.get("title") || "",
+  );
+  const [budgetMin, setBudgetMin] = useState(
+    () => searchParams.get("budgetMin") || "",
+  );
+  const [budgetMax, setBudgetMax] = useState(
+    () => searchParams.get("budgetMax") || "",
+  );
+  const [deadlineMax, setDeadlineMax] = useState(
+    () => searchParams.get("deadlineMax") || "",
+  );
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>(
+    () =>
+      searchParams.get("categories")?.split(",").map(Number).filter(Boolean) ||
+      [],
+  );
+
+  // Sync state to URL
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (page > 1) params.set("page", page.toString());
+    if (titleSearch) params.set("title", titleSearch);
+    if (budgetMin) params.set("budgetMin", budgetMin);
+    if (budgetMax) params.set("budgetMax", budgetMax);
+    if (deadlineMax) params.set("deadlineMax", deadlineMax);
+    if (selectedCategoryIds.length > 0)
+      params.set("categories", selectedCategoryIds.join(","));
+
+    setSearchParams(params, { replace: true });
+  }, [
+    page,
+    titleSearch,
+    budgetMin,
+    budgetMax,
+    deadlineMax,
+    selectedCategoryIds,
+    setSearchParams,
+  ]);
 
   // Debounce title search
   useEffect(() => {
@@ -75,6 +116,7 @@ const ProjectsPage: React.FC = () => {
     titleSearch !== "" ||
     budgetMin !== "" ||
     budgetMax !== "" ||
+    deadlineMax !== "" ||
     selectedCategoryIds.length > 0;
 
   const clearFilters = () => {
@@ -82,6 +124,7 @@ const ProjectsPage: React.FC = () => {
     setTitleSearch("");
     setBudgetMin("");
     setBudgetMax("");
+    setDeadlineMax("");
     setSelectedCategoryIds([]);
     setPage(1);
   };
@@ -93,7 +136,7 @@ const ProjectsPage: React.FC = () => {
   const styles = mergeSelectStyles(useSelectStyles<number>(), {
     control: (base) => ({
       ...base,
-      backgroundColor: isDark ? "#111827" : "#f9fafb",
+      backgroundColor: isDark ? "#111827" : "#f3f4f6",
       borderColor: isDark ? "#4b5563" : "#e5e7eb",
       color: isDark ? "#f9fafb" : "#111827",
     }),
@@ -108,6 +151,7 @@ const ProjectsPage: React.FC = () => {
       !isNaN(Number(budgetMin)) && { budgetMin: Number(budgetMin) }),
     ...(budgetMax !== "" &&
       !isNaN(Number(budgetMax)) && { budgetMax: Number(budgetMax) }),
+    ...(deadlineMax !== "" && { deadlineMax }),
     ...(status !== null && { projectStatus: status }),
     ...(selectedCategoryIds.length > 0 && { categoryIds: selectedCategoryIds }),
   };
@@ -134,20 +178,20 @@ const ProjectsPage: React.FC = () => {
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div className="min-h-[calc(100vh-64px)] bg-main transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16">
         {/* ── Page header ── */}
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-text-main mb-2">
             Browse Projects
           </h1>
-          <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed max-w-xl">
+          <p className="text-text-muted text-sm leading-relaxed max-w-xl">
             Discover open projects and find work that matches your skills.
           </p>
         </div>
 
         {/* ── Filters ── */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4 mb-6">
+        <div className="bg-surface rounded-xl border border-border shadow-sm p-4 mb-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {/* Search */}
             <div className="lg:col-span-2 relative">
@@ -176,7 +220,7 @@ const ProjectsPage: React.FC = () => {
                 placeholder="Search by title…"
                 value={titleInput}
                 onChange={(e) => setTitleInput(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
+                className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-500 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
               />
             </div>
 
@@ -196,7 +240,7 @@ const ProjectsPage: React.FC = () => {
                   setBudgetMin(e.target.value);
                   handleBudgetChange();
                 }}
-                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
+                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-500 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
               />
             </div>
 
@@ -216,7 +260,30 @@ const ProjectsPage: React.FC = () => {
                   setBudgetMax(e.target.value);
                   handleBudgetChange();
                 }}
-                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
+                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-500 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
+              />
+            </div>
+
+            {/* Deadline max */}
+            <div>
+              <label htmlFor={deadlineMaxId} className="sr-only">
+                Max deadline
+              </label>
+              <input
+                id={deadlineMaxId}
+                type={deadlineMax ? "date" : "text"}
+                onFocus={(e) => (e.target.type = "date")}
+                onBlur={(e) => {
+                  if (!e.target.value) e.target.type = "text";
+                }}
+                placeholder="Max deadline"
+                title="Maximum deadline"
+                value={deadlineMax}
+                onChange={(e) => {
+                  setDeadlineMax(e.target.value);
+                  setPage(1);
+                }}
+                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-500 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
               />
             </div>
 
@@ -237,11 +304,11 @@ const ProjectsPage: React.FC = () => {
 
             {/* Clear filters */}
             {hasFilters && (
-              <div className="sm:col-span-2 flex items-center">
+              <div className="col-span-1 flex items-center">
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="flex items-center gap-1.5 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+                  className="flex items-center gap-1.5 text-sm font-medium text-text-muted hover:text-red-500 dark:hover:text-red-400 transition-colors"
                 >
                   <svg
                     className="w-4 h-4"
@@ -266,7 +333,7 @@ const ProjectsPage: React.FC = () => {
 
         {/* ── Result count ── */}
         {!isLoadingContent && (
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+          <p className="text-sm text-text-muted mb-4">
             {totalCount === 0
               ? "No projects found"
               : `${totalCount} project${totalCount === 1 ? "" : "s"} found`}
@@ -303,7 +370,7 @@ const ProjectsPage: React.FC = () => {
                 />
               </svg>
             </div>
-            <p className="text-gray-600 dark:text-gray-300 font-medium mb-1">
+            <p className="text-text-muted font-medium mb-1">
               No projects found
             </p>
             <p className="text-sm text-gray-400 dark:text-gray-500">

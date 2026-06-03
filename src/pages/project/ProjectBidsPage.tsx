@@ -9,6 +9,7 @@ import {
 import { useGetUserByIdQuery } from "../../services/user/userApi";
 import type { BidVM } from "../../types/bid.types";
 import { userImageUrl } from "../../utils";
+import ArrowIcon from "../../components/icons/ArrowIcon";
 
 /* ─── SenderInfo ─────────────────────────────────────────────────────────── */
 interface SenderInfoProps {
@@ -64,7 +65,7 @@ const SenderInfo: React.FC<SenderInfoProps> = ({ createdBy }) => {
 
       <div className="flex flex-col flex-1">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-gray-900 dark:text-gray-100 group-hover:text-primary transition-colors flex items-center gap-1">
+          <span className="text-sm font-semibold text-text-main group-hover:text-primary transition-colors flex items-center gap-1">
             {user.displayName || user.email}
             <svg
               className="w-3.5 h-3.5 opacity-0 -ml-2 group-hover:opacity-100 group-hover:ml-0 transition-all text-primary"
@@ -99,7 +100,7 @@ const SenderInfo: React.FC<SenderInfoProps> = ({ createdBy }) => {
         </div>
 
         <div className="flex items-center justify-between mt-0.5">
-          <span className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
+          <span className="text-xs text-text-muted line-clamp-1">
             {user.email}
           </span>
           {user.country?.name && (
@@ -139,7 +140,7 @@ interface BidCardProps {
 
 const BidCard: React.FC<BidCardProps> = ({ bid }) => {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-5">
+    <div className="bg-surface rounded-xl border border-border shadow-sm p-5">
       <div className="flex items-start justify-between gap-4">
         <span className="text-2xl font-bold text-primary">
           ${bid.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
@@ -149,7 +150,7 @@ const BidCard: React.FC<BidCardProps> = ({ bid }) => {
         </span>
       </div>
 
-      <p className="mt-3 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+      <p className="mt-3 text-sm text-text-muted leading-relaxed">
         {bid.message}
       </p>
 
@@ -160,7 +161,7 @@ const BidCard: React.FC<BidCardProps> = ({ bid }) => {
 
 /* ─── Skeleton card ──────────────────────────────────────────────────────── */
 const SkeletonCard: React.FC = () => (
-  <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-5">
+  <div className="bg-surface rounded-xl border border-border shadow-sm p-5">
     <div className="flex items-start justify-between gap-4">
       <div className="h-7 w-28 animate-pulse bg-gray-200 dark:bg-gray-700 rounded" />
       <div className="h-4 w-20 animate-pulse bg-gray-200 dark:bg-gray-700 rounded" />
@@ -198,27 +199,14 @@ const ProjectBidsPage: React.FC = () => {
   const isLoading = bidsLoading;
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-900 pb-12 pt-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-[calc(100vh-64px)] bg-main pb-12 pt-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Back button */}
         <button
           onClick={() => navigate(`/projects/${projectId}`)}
-          className="flex items-center gap-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors text-sm font-medium mb-6"
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors text-sm font-medium mb-6"
         >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
+          <ArrowIcon direction="left" />
           Back to Project
         </button>
 
@@ -227,11 +215,11 @@ const ProjectBidsPage: React.FC = () => {
           {projectLoading ? (
             <div className="h-8 w-64 animate-pulse bg-gray-200 dark:bg-gray-700 rounded mb-2" />
           ) : (
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-2xl font-bold text-text-main">
               Project: {project?.title}
             </h1>
           )}
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-sm text-text-muted mt-1">
             Bids — {isLoading ? 0 : bids.length} total
           </p>
         </div>

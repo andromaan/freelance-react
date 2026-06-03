@@ -13,7 +13,7 @@ const ProjectMeta: React.FC<Props> = ({ project }) => {
 
   return (
     <>
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
+      <div className="bg-surface rounded-xl p-6 border border-border shadow-sm">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-6">
           <div>
             <div className="flex flex-wrap gap-2 mb-4">
@@ -26,10 +26,10 @@ const ProjectMeta: React.FC<Props> = ({ project }) => {
                 </span>
               ))}
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            <h1 className="text-2xl md:text-3xl font-bold text-text-main mb-2">
               {project.title}
             </h1>
-            <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed max-w-3xl whitespace-pre-wrap">
+            <p className="text-text-muted text-sm leading-relaxed max-w-3xl whitespace-pre-wrap">
               {project.description}
             </p>
           </div>
@@ -39,7 +39,7 @@ const ProjectMeta: React.FC<Props> = ({ project }) => {
               <p className="text-[10px] text-gray-500 uppercase font-bold mb-1">
                 Budget
               </p>
-              <p className="text-xl font-bold text-gray-900 dark:text-white">
+              <p className="text-xl font-bold text-text-main">
                 ${project.budget}
               </p>
             </div>
@@ -47,7 +47,7 @@ const ProjectMeta: React.FC<Props> = ({ project }) => {
               <p className="text-[10px] text-gray-500 uppercase font-bold mb-1">
                 Deadline
               </p>
-              <p className="font-medium text-gray-900 dark:text-white">
+              <p className="font-medium text-text-main">
                 {new Date(project.deadline).toLocaleDateString("uk-UA")}
               </p>
             </div>

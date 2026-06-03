@@ -161,11 +161,11 @@ const GoogleLogin: React.FC = () => {
     <>
       {showRoleSelection && (
         <div className="modal-overlay fixed inset-0 w-full h-full bg-black/50 flex items-center justify-center z-[1000] p-5">
-          <div className="modal-content bg-white dark:bg-gray-800 rounded-xl p-8 w-full max-w-md shadow-2xl">
-            <h3 className="m-0 mb-3 text-gray-900 dark:text-white text-xl font-semibold text-center">
+          <div className="modal-content bg-surface rounded-xl p-8 w-full max-w-md shadow-2xl">
+            <h3 className="m-0 mb-3 text-text-main text-xl font-semibold text-center">
               Select Role
             </h3>
-            <p className="m-0 mb-6 text-gray-600 dark:text-gray-400 text-sm text-center">
+            <p className="m-0 mb-6 text-text-muted text-sm text-center">
               To complete registration, please select your role:
             </p>
             <div className="flex flex-col gap-3 mb-6">
@@ -211,14 +211,16 @@ const GoogleLogin: React.FC = () => {
         </div>
       )}
       <div
-        id="loginGoogleBtn"
+        className="mx-auto rounded-full overflow-hidden w-[280px]"
         style={{
           display: showRoleSelection ? "none" : "flex",
           justifyContent: "center",
           opacity: isLoading ? 0.6 : 1,
           pointerEvents: isLoading ? "none" : "auto",
         }}
-      />
+      >
+        <div id="loginGoogleBtn" className="flex items-center justify-center" />
+      </div>
     </>
   );
 };

@@ -20,6 +20,8 @@ export interface ConfirmModalProps {
   cancelLabel?: string;
   /** Disable confirm button (e.g. while async action is pending) */
   isLoading?: boolean;
+  /** Visual variant for the confirm button */
+  variant?: "danger" | "primary" | "success";
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -48,7 +50,14 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   confirmLabel = "Confirm",
   cancelLabel = "Cancel",
   isLoading = false,
+  variant = "danger",
 }) => {
+  let confirmButtonClass = "bg-red-500 hover:bg-red-600 text-white focus-visible:ring-red-400/60";
+  if (variant === "primary") {
+    confirmButtonClass = "bg-primary hover:bg-primary-hover text-white focus-visible:ring-primary/60";
+  } else if (variant === "success") {
+    confirmButtonClass = "bg-green-500 hover:bg-green-600 text-white focus-visible:ring-green-400/60";
+  }
   return (
     <BaseModal
       isOpen={isOpen}
@@ -58,12 +67,12 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       preventBackdropClose
     >
       {description && (
-        <p className="mb-6 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+        <p className="mb-6 text-sm leading-relaxed text-text-muted">
           {description}
         </p>
       )}
 
-      <div className="flex items-center justify-end gap-3 flex-wrap">
+      <div className="flex items-center justify-center gap-3 flex-wrap">
         {/* Cancel */}
         <button
           type="button"
@@ -71,7 +80,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           disabled={isLoading}
           className="px-4 py-2 text-sm font-medium rounded-lg
                      text-gray-700 dark:text-gray-300
-                     border border-gray-300 dark:border-gray-600
+                     border border-border
                      hover:bg-gray-50 dark:hover:bg-gray-800
                      focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60
                      disabled:opacity-50 disabled:cursor-not-allowed
@@ -86,13 +95,13 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           onClick={onConfirm}
           disabled={isLoading}
           aria-busy={isLoading}
-          className="inline-flex items-center justify-center gap-2 min-w-[6rem]
+          className={`inline-flex items-center justify-center gap-2 min-w-[6rem]
                      px-5 py-2 text-sm font-semibold rounded-lg
-                     bg-red-500 hover:bg-red-600 text-white
-                     focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400/60 focus-visible:ring-offset-2
+                     ${confirmButtonClass}
+                     focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                      disabled:opacity-60 disabled:cursor-not-allowed
                      shadow-sm hover:shadow-md
-                     transition-all duration-150"
+                     transition-all duration-150`}
         >
           {isLoading ? (
             <svg

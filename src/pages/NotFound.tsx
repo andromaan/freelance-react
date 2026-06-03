@@ -5,7 +5,7 @@ const NotFound: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-main flex items-center justify-center px-4">
       <div className="text-center max-w-lg">
         {/* 404 number */}
         <div className="relative mb-6 select-none">
@@ -30,10 +30,10 @@ const NotFound: React.FC = () => {
         </div>
 
         {/* Text */}
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3">
+        <h1 className="text-2xl sm:text-3xl font-bold text-text-main mb-3">
           Oops! Page not found.
         </h1>
-        <p className="text-gray-500 dark:text-gray-400 text-base mb-8 leading-relaxed">
+        <p className="text-text-muted text-base mb-8 leading-relaxed">
           It looks like the page you're looking for doesn't exist or has been moved.
           <br />
           Please check the URL or return to the homepage.
@@ -49,7 +49,7 @@ const NotFound: React.FC = () => {
           </Link>
           <button
             onClick={() => navigate(-1)}
-            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 font-semibold px-6 py-3 rounded-xl transition-colors text-sm"
+            className="bg-surface border border-border text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 font-semibold px-6 py-3 rounded-xl transition-colors text-sm"
           >
             Back
           </button>

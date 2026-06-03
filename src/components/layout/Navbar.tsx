@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { tokenStorage } from "../../services/auth/tokenStorage";
 import { userApi } from "../../services/user/userApi";
@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
     : (user?.email?.slice(0, 2).toUpperCase() ?? "??");
 
   return (
-    <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50 shadow-sm">
+    <header className="bg-surface border-b border-border sticky top-0 z-50 shadow-sm">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link
@@ -63,32 +63,50 @@ const Navbar: React.FC = () => {
         </Link>
 
         {/* Desktop Nav Links */}
-        <div className="hidden md:flex items-center gap-6">
-          <Link
+        <div className="hidden md:flex items-center gap-1">
+          <NavLink
             to="/"
-            className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors"
+            className={({ isActive }) =>
+              `text-sm font-medium transition-all duration-300 ease-in-out px-3 py-2 rounded-xl ${
+                isActive
+                  ? "text-primary bg-primary/10 dark:bg-primary/20 dark:text-sky-400"
+                  : "text-text-muted hover:text-text-main hover:bg-gray-100 dark:hover:bg-gray-800"
+              }`
+            }
           >
             Home
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/projects"
-            className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors"
+            className={({ isActive }) =>
+              `text-sm font-medium transition-all duration-300 ease-in-out px-3 py-2 rounded-xl ${
+                isActive
+                  ? "text-primary bg-primary/10 dark:bg-primary/20 dark:text-sky-400"
+                  : "text-text-muted hover:text-text-main hover:bg-gray-100 dark:hover:bg-gray-800"
+              }`
+            }
           >
             Projects
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/freelancers"
-            className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors"
+            className={({ isActive }) =>
+              `text-sm font-medium transition-all duration-300 ease-in-out px-3 py-2 rounded-xl ${
+                isActive
+                  ? "text-primary bg-primary/10 dark:bg-primary/20 dark:text-sky-400"
+                  : "text-text-muted hover:text-text-main hover:bg-gray-100 dark:hover:bg-gray-800"
+              }`
+            }
           >
             Freelancers
-          </Link>
+          </NavLink>
         </div>
 
         {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center gap-3">
           <button
             onClick={toggleTheme}
-            className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+            className="p-2 text-text-muted hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
             aria-label="Toggle theme"
           >
             {theme === "dark" ? (
@@ -128,7 +146,7 @@ const Navbar: React.FC = () => {
               <Link
                 to="/wallet"
                 aria-label="Wallet"
-                className="text-gray-600 dark:text-gray-300 transition-colors p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="text-text-muted transition-colors p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <svg
                   className="w-6 h-6"
@@ -157,7 +175,7 @@ const Navbar: React.FC = () => {
                     <img
                       src={userImageUrl(user.avatarImg)}
                       alt=""
-                      className="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-gray-700"
+                      className="w-8 h-8 rounded-full object-cover border border-border"
                     />
                   ) : (
                     <div className="w-8 h-8 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center">
@@ -183,9 +201,9 @@ const Navbar: React.FC = () => {
                 </button>
 
                 {userMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg py-1 z-50">
+                  <div className="absolute right-0 mt-2 w-48 bg-surface border border-border rounded-xl shadow-lg py-1 z-50">
                     <Link
-                      to="/profile"
+                      to="/profile/edit-profile"
                       className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
                       onClick={() => setUserMenuOpen(false)}
                     >
@@ -207,7 +225,7 @@ const Navbar: React.FC = () => {
                       >
                         My Contracts
                       </Link>
-                    <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
+                    <div className="border-t border-border my-1" />
                     <button
                       onClick={() => {
                         handleLogout();
@@ -241,7 +259,7 @@ const Navbar: React.FC = () => {
 
         {/* Mobile burger */}
         <button
-          className="md:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          className="md:hidden p-2 rounded-lg text-text-muted hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           onClick={() => setMenuOpen((v) => !v)}
           aria-label="Меню"
         >
@@ -279,29 +297,47 @@ const Navbar: React.FC = () => {
 
       {/* Mobile dropdown */}
       {menuOpen && (
-        <div className="md:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 flex flex-col gap-2">
-          <Link
+        <div className="md:hidden border-t border-border bg-surface px-4 py-3 flex flex-col gap-2">
+          <NavLink
             to="/"
-            className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
+            className={({ isActive }) =>
+              `text-sm font-medium py-2 px-3 rounded-lg transition-all duration-300 ease-in-out ${
+                isActive
+                  ? "text-primary bg-primary/10"
+                  : "text-text-main hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800"
+              }`
+            }
             onClick={() => setMenuOpen(false)}
           >
             Home
-          </Link>
-          <Link
-            to="/jobs"
-            className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
+          </NavLink>
+          <NavLink
+            to="/projects"
+            className={({ isActive }) =>
+              `text-sm font-medium py-2 px-3 rounded-lg transition-all duration-300 ease-in-out ${
+                isActive
+                  ? "text-primary bg-primary/10"
+                  : "text-text-main hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800"
+              }`
+            }
             onClick={() => setMenuOpen(false)}
           >
             Projects
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/freelancers"
-            className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
+            className={({ isActive }) =>
+              `text-sm font-medium py-2 px-3 rounded-lg transition-colors ${
+                isActive
+                  ? "text-primary bg-primary/10"
+                  : "text-text-main hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800"
+              }`
+            }
             onClick={() => setMenuOpen(false)}
           >
             Freelancers
-          </Link>
-          <div className="border-t border-gray-200 dark:border-gray-700 pt-2 mt-1 flex flex-col gap-2">
+          </NavLink>
+          <div className="border-t border-border pt-2 mt-1 flex flex-col gap-2">
             {isAuthenticated ? (
               <>
                 <div className="flex items-center gap-3 py-2">
@@ -309,7 +345,7 @@ const Navbar: React.FC = () => {
                     <img
                       src={userImageUrl(user.avatarImg)}
                       alt=""
-                      className="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-gray-700"
+                      className="w-8 h-8 rounded-full object-cover border border-border"
                     />
                   ) : (
                     <div className="w-8 h-8 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
@@ -356,13 +392,13 @@ const Navbar: React.FC = () => {
               </>
             )}
           </div>
-          <div className="border-t border-gray-200 dark:border-gray-700 py-2 flex items-center justify-between">
+          <div className="border-t border-border py-2 flex items-center justify-between">
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Тема
+              Theme
             </span>
             <button
               onClick={toggleTheme}
-              className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              className="p-2 text-text-muted hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
             >
               {theme === "dark" ? (
                 <svg

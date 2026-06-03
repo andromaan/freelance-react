@@ -1,5 +1,6 @@
 import React from "react";
 import { PRESET_AMOUNTS, formatCurrencyAmount } from "../../utils/currency";
+import ArrowIcon from "../../../../components/icons/ArrowIcon";
 
 interface AmountStepProps {
   amountInput: string;
@@ -32,7 +33,7 @@ const AmountStep: React.FC<AmountStepProps> = ({
           onKeyDown={(e) => e.key === "Enter" && onNext()}
           placeholder="For example: 500"
           autoFocus
-          className={`w-full px-3 py-3 border-2 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-base transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+          className={`w-full px-3 py-3 border-2 rounded-lg bg-white dark:bg-gray-700 text-text-main text-base transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${
             amountError
               ? "border-red-500 focus:border-red-500"
               : "border-gray-200 dark:border-gray-600 focus:border-primary"
@@ -53,7 +54,7 @@ const AmountStep: React.FC<AmountStepProps> = ({
             className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${
               amountInput === String(amt)
                 ? "border-primary bg-primary/10 text-primary font-semibold"
-                : "border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-primary hover:text-primary"
+                : "border-gray-200 dark:border-gray-600 text-text-muted hover:border-primary hover:text-primary"
             }`}
           >
             {formatCurrencyAmount(amt, currency)}
@@ -68,21 +69,7 @@ const AmountStep: React.FC<AmountStepProps> = ({
         rounded-lg bg-primary hover:bg-primary-hover text-white transition-colors"
       >
         Next
-        <svg
-          className="w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          transform="scale(-1)"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M15 19l-7-7 7-7"
-          ></path>
-        </svg>
+        <ArrowIcon direction="right" />
       </button>
     </div>
   );

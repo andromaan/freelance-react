@@ -30,7 +30,7 @@ function formatDate(iso: string): string {
 // ─── Skeleton row ────────────────────────────────────────────────────────────
 
 const SkeletonRow: React.FC = () => (
-  <div className="animate-pulse flex justify-between items-center p-4 rounded-xl border border-gray-100 dark:border-gray-700">
+  <div className="animate-pulse flex justify-between items-center p-4 rounded-xl border border-border-light">
     <div className="space-y-2 flex-1">
       <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
       <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
@@ -56,8 +56,8 @@ const MilestoneRow: React.FC<MilestoneRowProps> = ({
 }) => (
   <div
     className="group flex items-start justify-between gap-4 p-4 rounded-xl
-               border border-gray-100 dark:border-gray-700
-               bg-gray-50 dark:bg-gray-900/50
+               border border-border-light
+               bg-main
                hover:border-primary/30 dark:hover:border-primary/30
                hover:bg-primary/5 dark:hover:bg-primary/5
                transition-all duration-150"
@@ -67,14 +67,14 @@ const MilestoneRow: React.FC<MilestoneRowProps> = ({
       <p className="text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
         {milestone.description || <em className="text-gray-400">No description</em>}
       </p>
-      <p className="mt-1 text-[11px] font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">
+      <p className="mt-1 text-[11px] font-medium text-gray-500 dark:text-gray-400 tracking-wide">
         Due: {formatDate(milestone.dueDate)}
       </p>
     </div>
 
     {/* Right — amount + actions */}
     <div className="flex-shrink-0 flex flex-col items-end gap-2">
-      <span className="text-sm font-bold text-gray-900 dark:text-white">
+      <span className="text-sm font-bold text-text-main">
         ${milestone.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
       </span>
 
@@ -214,14 +214,14 @@ const ProjectMilestones: React.FC<Props> = ({ projectId }) => {
       {/* ── Card ── */}
       <section
         aria-labelledby="milestones-heading"
-        className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
+        className="bg-surface rounded-xl p-6 border border-border shadow-sm"
       >
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 mb-4 border-b border-gray-100 dark:border-gray-700">
+        <div className="flex items-center justify-between pb-4 mb-4 border-b border-border-light">
           <div>
             <h2
               id="milestones-heading"
-              className="text-lg font-bold text-gray-900 dark:text-white"
+              className="text-lg font-bold text-text-main"
             >
               Project Milestones
             </h2>
@@ -279,7 +279,7 @@ const ProjectMilestones: React.FC<Props> = ({ projectId }) => {
           </p>
         ) : !milestones || milestones.length === 0 ? (
           <div className="text-center py-10">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-text-muted">
               No milestones added yet.
             </p>
             <button

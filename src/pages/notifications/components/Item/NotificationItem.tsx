@@ -2,6 +2,7 @@ import React from "react";
 import type { NotificationVM } from "../../../../types/notification.types";
 import { Link } from "react-router-dom";
 import { getStatusText } from "../../../../utils";
+import ArrowIcon from "../../../../components/icons/ArrowIcon";
 
 type Props = {
   n: NotificationVM;
@@ -21,7 +22,7 @@ const NotificationItem: React.FC<Props> = ({
       className={`group relative flex items-start items-center gap-4 p-4 rounded-xl border transition-all duration-300 notification-item-enter ${
         !n.isRead
           ? "bg-blue-50/60 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/50"
-          : "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
+          : "bg-surface border-gray-300 dark:border-gray-700"
       } ${isToggling ? "opacity-60 scale-[0.99]" : "opacity-100 scale-100"}`}
     >
       {n.linkAddress && (
@@ -48,21 +49,7 @@ const NotificationItem: React.FC<Props> = ({
             />
           </svg>
           Check it
-          <svg
-            className="w-4 h-4"
-            transform="scale(-1,1)"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
+          <ArrowIcon direction="right" />
         </Link>
       )}
 

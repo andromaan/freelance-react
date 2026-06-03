@@ -35,7 +35,7 @@ const ContractStatus: React.FC<{ quoteId: string }> = ({ quoteId }) => {
 };
 
 const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onEditQuote, onDeleteQuote }) => (
-  <article className="shadow-lg bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 flex flex-col gap-3">
+  <article className="shadow-lg bg-surface rounded-xl border border-border p-5 flex flex-col gap-3">
     {/* Top row */}
     <div className="flex items-start justify-between gap-3 flex-wrap">
       <div>
@@ -51,13 +51,13 @@ const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onEditQuote, onDeleteQuote
 
     {/* Message */}
     {quote.message && (
-      <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-3">
+      <p className="text-sm text-text-muted leading-relaxed line-clamp-3">
         {quote.message}
       </p>
     )}
 
     {/* Actions row */}
-    <div className="flex items-center gap-2 pt-3 border-t border-gray-200 dark:border-gray-700 flex-wrap">
+    <div className="flex items-center gap-2 pt-3 border-t border-border flex-wrap">
       {/* View project */}
       <Link
         to={`/projects/${quote.projectId}`}
@@ -114,7 +114,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onEditQuote, onDeleteQuote
 // ─── Skeleton quote card ───────────────────────────────────────────────────────
 
 const SkeletonQuoteCard: React.FC = () => (
-  <div className="shadow-lg bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 animate-pulse flex flex-col gap-3">
+  <div className="shadow-lg bg-gray-50 dark:bg-gray-800 rounded-xl border border-border p-5 animate-pulse flex flex-col gap-3">
     <div className="flex items-start justify-between gap-3">
       <div className="space-y-1.5">
         <div className="h-6 w-24 bg-gray-200 dark:bg-gray-700 rounded" />
@@ -125,7 +125,7 @@ const SkeletonQuoteCard: React.FC = () => (
       <div className="h-3 w-full bg-gray-200 dark:bg-gray-700 rounded" />
       <div className="h-3 w-4/5 bg-gray-200 dark:bg-gray-700 rounded" />
     </div>
-    <div className="flex gap-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+    <div className="flex gap-3 pt-3 border-t border-border">
       <div className="h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded" />
       <div className="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded" />
     </div>
@@ -173,7 +173,7 @@ const MyQuotesTab: React.FC<MyQuotesTabProps> = ({ onEditQuote }) => {
             />
           </svg>
         </div>
-        <p className="text-gray-600 dark:text-gray-300 font-medium">
+        <p className="text-text-muted font-medium">
           No quotes yet
         </p>
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">

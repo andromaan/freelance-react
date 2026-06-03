@@ -111,7 +111,7 @@ const BidCard: React.FC<BidCardProps> = ({
   onDeleteBid,
   isQuoteSubmitted,
 }) => (
-  <article className="shadow-lg bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 flex flex-col gap-3">
+  <article className="shadow-lg bg-surface rounded-xl border border-border p-5 flex flex-col gap-3">
     {/* Top row */}
     <div className="flex items-start justify-between gap-3 flex-wrap">
       <div>
@@ -127,13 +127,13 @@ const BidCard: React.FC<BidCardProps> = ({
 
     {/* Message */}
     {bid.message && (
-      <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-3">
+      <p className="text-sm text-text-muted leading-relaxed line-clamp-3">
         {bid.message}
       </p>
     )}
 
     {/* Actions row */}
-    <div className="flex items-center gap-2 pt-3 border-t border-gray-200 dark:border-gray-700 flex-wrap">
+    <div className="flex items-center gap-2 pt-3 border-t border-border flex-wrap">
       {/* View project */}
       <Link
         to={`/projects/${bid.projectId}`}
@@ -246,7 +246,7 @@ const BidCard: React.FC<BidCardProps> = ({
 // ─── Skeleton bid card ────────────────────────────────────────────────────────
 
 const SkeletonBidCard: React.FC = () => (
-  <div className="shadow-lg bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 animate-pulse flex flex-col gap-3">
+  <div className="shadow-lg bg-gray-50 dark:bg-gray-800 rounded-xl border border-border p-5 animate-pulse flex flex-col gap-3">
     <div className="flex items-start justify-between gap-3">
       <div className="space-y-1.5">
         <div className="h-6 w-24 bg-gray-200 dark:bg-gray-700 rounded" />
@@ -258,7 +258,7 @@ const SkeletonBidCard: React.FC = () => (
       <div className="h-3 w-full bg-gray-200 dark:bg-gray-700 rounded" />
       <div className="h-3 w-4/5 bg-gray-200 dark:bg-gray-700 rounded" />
     </div>
-    <div className="flex gap-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+    <div className="flex gap-3 pt-3 border-t border-border">
       <div className="h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded" />
       <div className="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded" />
     </div>
@@ -306,7 +306,7 @@ const MyBidsTab: React.FC<MyBidsTabProps> = ({ onSubmitQuote, onEditBid }) => {
             />
           </svg>
         </div>
-        <p className="text-gray-600 dark:text-gray-300 font-medium">
+        <p className="text-text-muted font-medium">
           No bids yet
         </p>
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
@@ -351,7 +351,7 @@ const MyBidsTab: React.FC<MyBidsTabProps> = ({ onSubmitQuote, onEditBid }) => {
             className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${
               filter === key
                 ? "bg-primary text-white border-primary"
-                : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
+                : "bg-surface text-text-muted border-border hover:border-gray-300 dark:hover:border-gray-600"
             }`}
           >
             {label}
@@ -359,7 +359,7 @@ const MyBidsTab: React.FC<MyBidsTabProps> = ({ onSubmitQuote, onEditBid }) => {
               className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[1.25rem] text-center ${
                 filter === key
                   ? "bg-white/20 text-white"
-                  : "bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
+                  : "bg-gray-100 dark:bg-gray-700 text-text-muted"
               }`}
             >
               {counts[key]}
@@ -371,7 +371,7 @@ const MyBidsTab: React.FC<MyBidsTabProps> = ({ onSubmitQuote, onEditBid }) => {
       {/* List */}
       {filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-center">
-          <p className="text-gray-500 dark:text-gray-400 text-sm">
+          <p className="text-text-muted text-sm">
             No bids match this filter.
           </p>
           <button

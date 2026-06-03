@@ -25,17 +25,17 @@ const ProjectCard: React.FC<{ project: ProjectVM }> = ({ project }) => {
   return (
     <Link
       to={`/projects/${project.id}`}
-      className="group bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary/40 dark:hover:border-primary/40 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col overflow-hidden h-full"
+      className="group bg-surface rounded-xl border border-border hover:border-primary/40 dark:hover:border-primary/40 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col overflow-hidden h-full"
     >
       {/* Card header */}
       <div className="p-5 flex-1 flex flex-col">
         {/* Title */}
-        <h2 className="text-base font-semibold text-gray-900 dark:text-white leading-snug mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+        <h2 className="text-base font-semibold text-text-main leading-snug mb-2 line-clamp-2 group-hover:text-primary transition-colors">
           {project.title}
         </h2>
 
         {/* Description */}
-        <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-3 mb-4 flex-1">
+        <p className="text-sm text-text-muted leading-relaxed line-clamp-3 mb-4 flex-1">
           {project.description}
         </p>
 
@@ -46,13 +46,13 @@ const ProjectCard: React.FC<{ project: ProjectVM }> = ({ project }) => {
           )?.map((c) => (
             <span
               key={c.id}
-              className="text-[10px] px-2 py-0.5 rounded-full tracking-wider bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-medium"
+              className="text-[10px] px-2 py-0.5 rounded-full tracking-wider bg-gray-100 dark:bg-gray-700 text-gray-600 font-medium dark:text-gray-300"
             >
-              {c.name}
+              {c.name.toUpperCase()}
             </span>
           ))}
           {project.categories?.length > 4 && (
-            <span className="text-[10px] px-2 py-0.5 rounded-full tracking-wider bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-medium">
+            <span className="text-[10px] px-2 py-0.5 rounded-full tracking-wider bg-gray-100 dark:bg-gray-700 text-text-muted font-medium dark:text-gray-300">
               ...
             </span>
           )}
@@ -60,9 +60,9 @@ const ProjectCard: React.FC<{ project: ProjectVM }> = ({ project }) => {
       </div>
 
       {/* Footer */}
-      <div className="px-5 pb-5 border-t border-gray-100 dark:border-gray-700 pt-4 flex items-center justify-between gap-3 bg-gray-50 dark:bg-gray-800/50">
+      <div className="px-5 pb-5 border-t border-border-light pt-4 flex items-center justify-between gap-3 bg-gray-50 dark:bg-gray-800/50">
         <div className="flex flex-col gap-0.5">
-          <span className="text-lg font-bold text-gray-900 dark:text-white tabular-nums">
+          <span className="text-lg font-bold text-text-main tabular-nums">
             ${project.budget.toLocaleString("en-US")}
           </span>
           <span
