@@ -74,7 +74,6 @@ const GoogleLogin: React.FC = () => {
       dispatch(
         userApi.endpoints.getMyself.initiate(undefined, { forceRefetch: true }),
       );
-      toast.success("Successfully logged in with Google!");
       navigate("/");
     } catch (error: any) {
       // Перевіряємо чи потрібен вибір ролі
@@ -103,7 +102,6 @@ const GoogleLogin: React.FC = () => {
       dispatch(
         userApi.endpoints.getMyself.initiate(undefined, { forceRefetch: true }),
       );
-      toast.success("Successfully logged in with Google!");
       navigate("/");
       setShowRoleSelection(false);
       setPendingGoogleToken(null);

@@ -66,7 +66,6 @@ const Login: React.FC = () => {
       dispatch(
         userApi.endpoints.getMyself.initiate(undefined, { forceRefetch: true }),
       );
-      toast.success("Successfully logged in!");
       navigate("/");
     } catch (error: any) {
       const errorMessage =
