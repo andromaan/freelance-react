@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { tokenStorage } from "../../services/auth/tokenStorage";
 import { userApi } from "../../services/user/userApi";
@@ -63,25 +63,43 @@ const Navbar: React.FC = () => {
         </Link>
 
         {/* Desktop Nav Links */}
-        <div className="hidden md:flex items-center gap-6">
-          <Link
+        <div className="hidden md:flex items-center gap-1">
+          <NavLink
             to="/"
-            className="text-text-muted hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors"
+            className={({ isActive }) =>
+              `text-sm font-medium transition-all duration-300 ease-in-out px-3 py-2 rounded-xl ${
+                isActive
+                  ? "text-primary bg-primary/10 dark:bg-primary/20 dark:text-sky-400"
+                  : "text-text-muted hover:text-text-main hover:bg-gray-100 dark:hover:bg-gray-800"
+              }`
+            }
           >
             Home
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/projects"
-            className="text-text-muted hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors"
+            className={({ isActive }) =>
+              `text-sm font-medium transition-all duration-300 ease-in-out px-3 py-2 rounded-xl ${
+                isActive
+                  ? "text-primary bg-primary/10 dark:bg-primary/20 dark:text-sky-400"
+                  : "text-text-muted hover:text-text-main hover:bg-gray-100 dark:hover:bg-gray-800"
+              }`
+            }
           >
             Projects
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/freelancers"
-            className="text-text-muted hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors"
+            className={({ isActive }) =>
+              `text-sm font-medium transition-all duration-300 ease-in-out px-3 py-2 rounded-xl ${
+                isActive
+                  ? "text-primary bg-primary/10 dark:bg-primary/20 dark:text-sky-400"
+                  : "text-text-muted hover:text-text-main hover:bg-gray-100 dark:hover:bg-gray-800"
+              }`
+            }
           >
             Freelancers
-          </Link>
+          </NavLink>
         </div>
 
         {/* Desktop Auth Buttons */}
@@ -280,27 +298,45 @@ const Navbar: React.FC = () => {
       {/* Mobile dropdown */}
       {menuOpen && (
         <div className="md:hidden border-t border-border bg-surface px-4 py-3 flex flex-col gap-2">
-          <Link
+          <NavLink
             to="/"
-            className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
+            className={({ isActive }) =>
+              `text-sm font-medium py-2 px-3 rounded-lg transition-all duration-300 ease-in-out ${
+                isActive
+                  ? "text-primary bg-primary/10"
+                  : "text-text-main hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800"
+              }`
+            }
             onClick={() => setMenuOpen(false)}
           >
             Home
-          </Link>
-          <Link
-            to="/jobs"
-            className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
+          </NavLink>
+          <NavLink
+            to="/projects"
+            className={({ isActive }) =>
+              `text-sm font-medium py-2 px-3 rounded-lg transition-all duration-300 ease-in-out ${
+                isActive
+                  ? "text-primary bg-primary/10"
+                  : "text-text-main hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800"
+              }`
+            }
             onClick={() => setMenuOpen(false)}
           >
             Projects
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/freelancers"
-            className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
+            className={({ isActive }) =>
+              `text-sm font-medium py-2 px-3 rounded-lg transition-colors ${
+                isActive
+                  ? "text-primary bg-primary/10"
+                  : "text-text-main hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800"
+              }`
+            }
             onClick={() => setMenuOpen(false)}
           >
             Freelancers
-          </Link>
+          </NavLink>
           <div className="border-t border-border pt-2 mt-1 flex flex-col gap-2">
             {isAuthenticated ? (
               <>
