@@ -12,10 +12,8 @@
 }
 
 // Dark mode description
-@media (prefers-color-scheme: dark) {
-  .confirm-modal-description {
-    color: #9ca3af; // gray-400
-  }
+.dark .confirm-modal-description {
+  color: #9ca3af; // gray-400
 }
 
 // ── Action row ────────────────────────────────────────────────────────────────

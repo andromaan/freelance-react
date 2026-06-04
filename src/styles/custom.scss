@@ -38,7 +38,7 @@
   }
 
   &::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: var(--color-bg-surface);
     border-radius: 4px;
   }
 
@@ -53,18 +53,16 @@
 }
 
 // Dark theme для кастомних елементів
-@media (prefers-color-scheme: dark) {
-  .custom-scrollbar {
-    &::-webkit-scrollbar-track {
-      background: #2a2a2a;
-    }
+.dark .custom-scrollbar {
+  &::-webkit-scrollbar-track {
+    background: var(--color-bg-surface);
+  }
 
-    &::-webkit-scrollbar-thumb {
-      background: #555;
+  &::-webkit-scrollbar-thumb {
+    background: #555;
 
-      &:hover {
-        background: #777;
-      }
+    &:hover {
+      background: #777;
     }
   }
 }
