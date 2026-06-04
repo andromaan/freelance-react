@@ -42,7 +42,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
-                  to="/jobs"
+                  to="/projects"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
                   Find Work

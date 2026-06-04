@@ -248,7 +248,7 @@ const Home: React.FC = () => {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-4">
             <div>
               <h2 className="text-2xl sm:text-3xl font-bold text-text-main mb-2">
-                Top Rated Freelancers
+                Find Your Freelancer
               </h2>
               <p className="text-text-muted">
                 Work with the best professionals on the platform.

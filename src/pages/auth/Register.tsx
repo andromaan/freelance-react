@@ -10,6 +10,7 @@ import type { SignUpVM, FormErrors, UserRole } from "../../types/auth.types";
 import { UserRoles } from "../../types/auth.types";
 import GoogleLogin from "./GoogleLogin";
 import ArrowIcon from "../../components/icons/ArrowIcon";
+import PasswordEyeIcon from "../../components/icons/PasswordEyeIcon";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -19,9 +20,13 @@ const Register: React.FC = () => {
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
+    confirmPassword: "",
     displayName: "",
     userRole: UserRoles.FREELANCER as UserRole,
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [errors, setErrors] = useState<FormErrors>({});
 
@@ -55,6 +60,10 @@ const Register: React.FC = () => {
 
     if (!formValues.password || formValues.password.length < 8) {
       newErrors.password = "Повинно бути 8 і більше символів";
+    }
+
+    if (formValues.password !== formValues.confirmPassword) {
+      newErrors.confirmPassword = "Паролі не співпадають";
     }
 
     setErrors(newErrors);
@@ -91,22 +100,22 @@ const Register: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-5 relative">
-      <Link 
-        to="/" 
+      <Link
+        to="/"
         className="absolute top-6 left-6 flex items-center gap-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
       >
         <ArrowIcon direction="left" />
-        <span className="font-medium text-sm hidden sm:inline">Back to Home</span>
+        <span className="font-medium text-sm hidden sm:inline">
+          Back to Home
+        </span>
       </Link>
-      
+
       <div className="bg-surface border border-border rounded-xl p-8 w-full max-w-md shadow-lg">
         <div className="text-center mb-6">
           <h1 className="text-text-main text-2xl font-semibold mb-2">
             Register
           </h1>
-          <p className="text-text-muted text-sm">
-            Create your account
-          </p>
+          <p className="text-text-muted text-sm">Create your account</p>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -171,22 +180,73 @@ const Register: React.FC = () => {
             >
               Password
             </label>
-            <input
-              id="password"
-              type="password"
-              name="password"
-              onChange={handleChange}
-              value={formValues.password}
-              className={`w-full px-3 py-3 border-2 rounded-lg bg-white dark:bg-gray-700 text-text-main text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:cursor-not-allowed ${
-                errors.password
-                  ? "border-red-500 focus:border-red-500"
-                  : "border-gray-200 dark:border-gray-600 focus:border-primary"
-              }`}
-              placeholder="Enter password (minimum 8 characters)"
-              disabled={isLoading}
-            />
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                name="password"
+                onChange={handleChange}
+                value={formValues.password}
+                className={`w-full px-3 py-3 pr-10 border-2 rounded-lg bg-white dark:bg-gray-700 text-text-main text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:cursor-not-allowed ${
+                  errors.password
+                    ? "border-red-500 focus:border-red-500"
+                    : "border-gray-200 dark:border-gray-600 focus:border-primary"
+                }`}
+                placeholder="Enter password (minimum 8 characters)"
+                disabled={isLoading}
+              />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                onClick={() => setShowPassword(!showPassword)}
+                tabIndex={-1}
+              >
+                <PasswordEyeIcon isClosed={!showPassword} className="w-5 h-5" />
+              </button>
+            </div>
             {errors.password && (
               <div className="text-red-500 text-xs mt-1">{errors.password}</div>
+            )}
+          </div>
+
+          <div className="w-full">
+            <label
+              htmlFor="confirmPassword"
+              className="text-gray-700 dark:text-gray-300 text-sm font-medium mb-2 block"
+            >
+              Confirm Password
+            </label>
+            <div className="relative">
+              <input
+                id="confirmPassword"
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                onChange={handleChange}
+                value={formValues.confirmPassword}
+                className={`w-full px-3 py-3 pr-10 border-2 rounded-lg bg-white dark:bg-gray-700 text-text-main text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:cursor-not-allowed ${
+                  errors.confirmPassword
+                    ? "border-red-500 focus:border-red-500"
+                    : "border-gray-200 dark:border-gray-600 focus:border-primary"
+                }`}
+                placeholder="Confirm password"
+                disabled={isLoading}
+              />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                tabIndex={-1}
+              >
+                <PasswordEyeIcon
+                  isClosed={!showConfirmPassword}
+                  className="w-5 h-5"
+                />
+              </button>
+            </div>
+            {errors.confirmPassword && (
+              <div className="text-red-500 text-xs mt-1">
+                {errors.confirmPassword}
+              </div>
             )}
           </div>
 
