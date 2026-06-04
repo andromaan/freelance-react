@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { notificationHubService } from "../services/signalr/notificationHubService";
 import { tokenStorage } from "../services/auth/tokenStorage";
@@ -10,6 +11,7 @@ import { getStatusText } from "../utils";
 
 export const useNotificationHub = (enabled: boolean) => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // When disabled, stop the connection and bail out.
@@ -28,6 +30,7 @@ export const useNotificationHub = (enabled: boolean) => {
       toast.info(`${label}: ${notification.message}`, {
         position: "bottom-right",
         autoClose: 5000,
+        onClick: () => navigate("/notifications"),
       });
     };
 
