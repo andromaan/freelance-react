@@ -7,9 +7,9 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-900 dark:bg-gray-950 text-gray-300 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8 lg:gap-12 mb-10">
           {/* Brand */}
-          <div className="col-span-1 sm:col-span-2 lg:col-span-1">
+          <div className="col-span-2 sm:col-span-3 lg:col-span-1 mb-4 lg:mb-0">
             <Link
               to="/"
               className="flex items-center gap-2 text-lg font-bold text-white mb-3"
@@ -35,11 +35,11 @@ const Footer: React.FC = () => {
           </div>
 
           {/* For freelancers */}
-          <div>
+          <div className="col-span-1">
             <h4 className="text-white text-sm font-semibold mb-4 uppercase tracking-wide">
               Freelancers
             </h4>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-3 text-sm">
               <li>
                 <Link
                   to="/projects"
@@ -68,11 +68,11 @@ const Footer: React.FC = () => {
           </div>
 
           {/* For employers */}
-          <div>
+          <div className="col-span-1">
             <h4 className="text-white text-sm font-semibold mb-4 uppercase tracking-wide">
               Employers
             </h4>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-3 text-sm">
               <li>
                 <Link
                   to="/freelancers"
@@ -101,11 +101,11 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Info */}
-          <div>
+          <div className="col-span-1 sm:col-span-1 lg:col-span-1">
             <h4 className="text-white text-sm font-semibold mb-4 uppercase tracking-wide">
               Information
             </h4>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-3 text-sm">
               <li>
                 <Link
                   to="/about"

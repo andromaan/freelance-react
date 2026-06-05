@@ -1,17 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { tokenStorage } from "../../services/auth/tokenStorage";
-import { userApi } from "../../services/user/userApi";
-import { authApi } from "../../services/auth/authApi";
-import { selectCurrentUser, clearUser } from "../../store/userSlice";
-import { clearNotifications } from "../../store/notificationSlice";
-import NotificationBell from "../notifications/NotificationBell";
-import type { AppDispatch } from "../../store";
-import { ROLES } from "../../constants/roles";
-import { useTheme } from "../../context/ThemeContext";
-import freelanceIconUrl from "../icons/FreelanceIcon.svg";
-import { userImageUrl } from "../../utils";
+import { tokenStorage } from "../../../services/auth/tokenStorage";
+import { userApi } from "../../../services/user/userApi";
+import { authApi } from "../../../services/auth/authApi";
+import { selectCurrentUser, clearUser } from "../../../store/userSlice";
+import { clearNotifications } from "../../../store/notificationSlice";
+import NotificationBell from "../../notifications/NotificationBell";
+import type { AppDispatch } from "../../../store";
+import { ROLES } from "../../../constants/roles";
+import { useTheme } from "../../../context/ThemeContext";
+import freelanceIconUrl from "../../icons/FreelanceIcon.svg";
+import { avatarLetters, userImageUrl } from "../../../utils";
+import NavbarMobile from "./NavbarMobile";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -46,10 +47,6 @@ const Navbar: React.FC = () => {
     navigate("/login");
   };
 
-  const avatarLetters = user?.displayName
-    ? user.displayName.slice(0, 2).toUpperCase()
-    : (user?.email?.slice(0, 2).toUpperCase() ?? "??");
-
   return (
     <header className="bg-surface border-b border-border sticky top-0 z-50 shadow-sm">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -58,7 +55,11 @@ const Navbar: React.FC = () => {
           to="/"
           className="flex items-center gap-2 text-xl font-bold text-primary hover:opacity-90 transition-opacity"
         >
-          <img src={freelanceIconUrl} alt="Freelance platform logo" className="w-8 h-8" />
+          <img
+            src={freelanceIconUrl}
+            alt="Freelance platform logo"
+            className="w-8 h-8"
+          />
           <span>FreeLance</span>
         </Link>
 
@@ -179,7 +180,7 @@ const Navbar: React.FC = () => {
                     />
                   ) : (
                     <div className="w-8 h-8 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center">
-                      {avatarLetters}
+                      {avatarLetters(user)}
                     </div>
                   )}
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-200 max-w-[120px] truncate">
@@ -219,12 +220,12 @@ const Navbar: React.FC = () => {
                       </Link>
                     )}
                     <Link
-                        to="/my-contracts"
-                        className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
-                        onClick={() => setUserMenuOpen(false)}
-                      >
-                        My Contracts
-                      </Link>
+                      to="/my-contracts"
+                      className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      My Contracts
+                    </Link>
                     <div className="border-t border-border my-1" />
                     <button
                       onClick={() => {
@@ -295,144 +296,9 @@ const Navbar: React.FC = () => {
         </button>
       </nav>
 
-      {/* Mobile dropdown */}
-      {menuOpen && (
-        <div className="md:hidden border-t border-border bg-surface px-4 py-3 flex flex-col gap-2">
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              `text-sm font-medium py-2 px-3 rounded-lg transition-all duration-300 ease-in-out ${
-                isActive
-                  ? "text-primary bg-primary/10"
-                  : "text-text-main hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800"
-              }`
-            }
-            onClick={() => setMenuOpen(false)}
-          >
-            Home
-          </NavLink>
-          <NavLink
-            to="/projects"
-            className={({ isActive }) =>
-              `text-sm font-medium py-2 px-3 rounded-lg transition-all duration-300 ease-in-out ${
-                isActive
-                  ? "text-primary bg-primary/10"
-                  : "text-text-main hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800"
-              }`
-            }
-            onClick={() => setMenuOpen(false)}
-          >
-            Projects
-          </NavLink>
-          <NavLink
-            to="/freelancers"
-            className={({ isActive }) =>
-              `text-sm font-medium py-2 px-3 rounded-lg transition-colors ${
-                isActive
-                  ? "text-primary bg-primary/10"
-                  : "text-text-main hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800"
-              }`
-            }
-            onClick={() => setMenuOpen(false)}
-          >
-            Freelancers
-          </NavLink>
-          <div className="border-t border-border pt-2 mt-1 flex flex-col gap-2">
-            {isAuthenticated ? (
-              <>
-                <div className="flex items-center gap-3 py-2">
-                  {user?.avatarImg ? (
-                    <img
-                      src={userImageUrl(user.avatarImg)}
-                      alt=""
-                      className="w-8 h-8 rounded-full object-cover border border-border"
-                    />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
-                      {avatarLetters}
-                    </div>
-                  )}
-                  <span className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
-                    {user?.displayName ?? user?.email ?? "..."}
-                  </span>
-                </div>
-                <Link
-                  to="/profile"
-                  className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  My Profile
-                </Link>
-                <button
-                  onClick={() => {
-                    handleLogout();
-                    setMenuOpen(false);
-                  }}
-                  className="text-left text-sm font-medium text-red-600 py-2"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/register"
-                  className="bg-primary text-white text-sm font-medium py-2 px-4 rounded-lg text-center"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Register
-                </Link>
-              </>
-            )}
-          </div>
-          <div className="border-t border-border py-2 flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Theme
-            </span>
-            <button
-              onClick={toggleTheme}
-              className="p-2 text-text-muted hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-            >
-              {theme === "dark" ? (
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 3v1m0 16v1m8.66-8.66h-1M4.34 12H3m15.36 4.95l-.7-.7M6.34 6.34l-.7-.7m12.02 0l-.7.7M6.34 17.66l-.7.7M12 8a4 4 0 100 8 4 4 0 000-8z"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                  />
-                </svg>
-              )}
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Mobile Menu */}
+      <NavbarMobile menuOpen={menuOpen} setMenuOpen={setMenuOpen} handleLogout={handleLogout} />
+      
     </header>
   );
 };

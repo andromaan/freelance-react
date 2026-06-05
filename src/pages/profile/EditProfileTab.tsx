@@ -32,7 +32,7 @@ import {
 } from "../../components/ui/FormKit";
 import { useSelectStyles, type SelectOption } from "../../styles/selectStyles";
 import { toast } from "react-toastify";
-import { userImageUrl } from "../../utils";
+import { avatarLetters, userImageUrl } from "../../utils";
 import DeleteIcon from "../../components/icons/DeleteIcon";
 import ArrowIcon from "../../components/icons/ArrowIcon";
 
@@ -83,8 +83,10 @@ export const EditProfileTab: React.FC = () => {
     isUpdatingEmployer ||
     isUpdatingSkills;
 
+  const [errorMsg, setErrorMsg] = useState<string[]>([]);
+  const [isDirty, setIsDirty] = useState(false);
+
   // ─── Local State ───
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Avatar
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
@@ -176,7 +178,7 @@ export const EditProfileTab: React.FC = () => {
 
   const handleUpdateAvatar = async () => {
     if (!selectedAvatar) return;
-    setErrorMsg(null);
+    setErrorMsg([]);
     try {
       const formData = new FormData();
       formData.append("file", selectedAvatar);
@@ -185,18 +187,24 @@ export const EditProfileTab: React.FC = () => {
       setSelectedAvatar(null);
     } catch (err: any) {
       console.error(err);
-      setErrorMsg(
+      setErrorMsg([
         err?.data?.title || err?.data?.message || "Could not update avatar.",
-      );
+      ]);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  function splitCamelCase(str: string): string {
+  return str
+    .replace(/([a-z])([A-Z])/g, "$1 $2")  // "CompanyName" → "Company Name"
+    .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2"); // "HTTPSConnection" → "HTTPS Connection"
+}
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setErrorMsg(null);
+    setErrorMsg([]);
 
     if (!selectedCountry) {
-      setErrorMsg("Country is required.");
+      setErrorMsg(["Country is required."]);
       return;
     }
 
@@ -222,13 +230,29 @@ export const EditProfileTab: React.FC = () => {
       }
 
       toast.success("Profile updated successfully.");
+      setIsDirty(false);
     } catch (err: any) {
       console.error(err);
-      toast.error(
-        err?.data?.title ||
-          err?.data?.message ||
-          "An error occurred while updating profile.",
-      );
+
+      if (err?.data?.errors) {
+        const errList: string[] = [];
+        for (const key in err.data.errors) {
+          const readableKey = splitCamelCase(key); // "CompanyName" → "Company Name"
+          const messages = err.data.errors[key].map(
+            (msg: string) => msg.replace(key, readableKey), // замінюємо в оригінальному повідомленні
+          );
+          errList.push(...messages);
+        }
+        setErrorMsg(errList);
+      } else {
+        setErrorMsg([
+          err?.data?.title ||
+            err?.data?.message ||
+            "An error occurred while updating profile.",
+        ]);
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -243,9 +267,9 @@ export const EditProfileTab: React.FC = () => {
       setProfToAdd(null);
     } catch (err: any) {
       console.error(err);
-      setErrorMsg(
+      setErrorMsg([
         err?.data?.title || err?.data?.message || "Could not add language.",
-      );
+      ]);
     }
   };
 
@@ -293,21 +317,37 @@ export const EditProfileTab: React.FC = () => {
     }
   };
 
-  const firstLetter = (user?.displayName ||
-    user?.email ||
-    "?")[0].toUpperCase();
-
   return (
-    <div className="space-y-6 max-w-3xl pb-10">
-      {errorMsg && <FormErrorAlert message={errorMsg} />}
+    <div className="space-y-6 max-w-3xl pb-5">
+      {errorMsg.length > 0 && <FormErrorAlert message={errorMsg} />}
 
       <form
         id="edit-profile-form"
         onSubmit={handleSubmit}
         className="space-y-6"
       >
+        {/* Floating Save Button */}
+        <div
+          className={`fixed bottom-6 lg:bottom-10 right-6 lg:right-10 z-50 transition-all duration-300 ${
+            isDirty
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-8 pointer-events-none"
+          }`}
+        >
+          <div className="bg-surface border border-border rounded-xl p-3 shadow-2xl flex items-center gap-4">
+            <span className="text-sm font-medium text-text-main pl-2 hidden sm:inline-block">
+              Unsaved changes
+            </span>
+            <SubmitButton
+              form="edit-profile-form"
+              isLoading={isUpdating}
+              label="Save Profile"
+            />
+          </div>
+        </div>
+
         <div className="flex gap-6 flex-col lg:flex-row">
-          <div className="w-1/2 bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
+          <div className="w-full lg:w-1/2 bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
             <h2 className="text-lg font-bold text-text-main mb-6 pb-3 border-b border-border-light">
               Profile Picture
             </h2>
@@ -322,7 +362,7 @@ export const EditProfileTab: React.FC = () => {
                     />
                   ) : (
                     <span className="text-gray-400 font-bold text-4xl">
-                      {firstLetter}
+                      {avatarLetters(user)}
                     </span>
                   )}
                 </div>
@@ -387,7 +427,7 @@ export const EditProfileTab: React.FC = () => {
             </div>
           </div>
 
-          <div className="w-1/2 bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
+          <div className="w-full lg:w-1/2 bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
             <h2 className="text-lg font-bold text-text-main mb-6 pb-3 border-b border-border-light">
               Basic Information
             </h2>
@@ -397,7 +437,10 @@ export const EditProfileTab: React.FC = () => {
                   id="displayName"
                   type="text"
                   value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
+                  onChange={(e) => {
+                    setDisplayName(e.target.value);
+                    setIsDirty(true);
+                  }}
                   placeholder="e.g. John Doe"
                   className={inputClass}
                 />
@@ -407,7 +450,10 @@ export const EditProfileTab: React.FC = () => {
                   inputId="countryId"
                   options={countryOptions}
                   value={selectedCountry}
-                  onChange={setSelectedCountry}
+                  onChange={(val) => {
+                    setSelectedCountry(val);
+                    setIsDirty(true);
+                  }}
                   styles={selectStyles}
                   placeholder="Select a country..."
                 />
@@ -427,7 +473,10 @@ export const EditProfileTab: React.FC = () => {
                   <textarea
                     id="bio"
                     value={bio}
-                    onChange={(e) => setBio(e.target.value)}
+                    onChange={(e) => {
+                      setBio(e.target.value);
+                      setIsDirty(true);
+                    }}
                     placeholder="Tell clients about yourself, your skills, and your experience..."
                     className={inputClass + " resize-y "}
                     style={{
@@ -442,7 +491,10 @@ export const EditProfileTab: React.FC = () => {
                     id="location"
                     type="text"
                     value={location}
-                    onChange={(e) => setLocation(e.target.value)}
+                    onChange={(e) => {
+                      setLocation(e.target.value);
+                      setIsDirty(true);
+                    }}
                     placeholder="e.g. New York, USA"
                     className={inputClass}
                   />
@@ -455,7 +507,10 @@ export const EditProfileTab: React.FC = () => {
                     id="companyName"
                     type="text"
                     value={companyName}
-                    onChange={(e) => setCompanyName(e.target.value)}
+                    onChange={(e) => {
+                      setCompanyName(e.target.value);
+                      setIsDirty(true);
+                    }}
                     placeholder="e.g. Acme Corp"
                     className={inputClass}
                   />
@@ -465,7 +520,10 @@ export const EditProfileTab: React.FC = () => {
                     id="companyWebsite"
                     type="url"
                     value={companyWebsite}
-                    onChange={(e) => setCompanyWebsite(e.target.value)}
+                    onChange={(e) => {
+                      setCompanyWebsite(e.target.value);
+                      setIsDirty(true);
+                    }}
                     placeholder="https://acme-corp.com"
                     className={inputClass}
                   />
@@ -490,7 +548,10 @@ export const EditProfileTab: React.FC = () => {
                   inputId="skills"
                   options={skillOptions}
                   value={selectedSkills}
-                  onChange={(newValue) => setSelectedSkills(newValue)}
+                  onChange={(newValue) => {
+                    setSelectedSkills(newValue);
+                    setIsDirty(true);
+                  }}
                   styles={selectStyles}
                   placeholder="Select skills..."
                   menuPlacement="auto"
@@ -734,21 +795,9 @@ export const EditProfileTab: React.FC = () => {
               );
             })
           ) : (
-            <p className="text-sm text-text-muted">
-              No languages added yet.
-            </p>
+            <p className="text-sm text-text-muted">No languages added yet.</p>
           )}
         </div>
-      </div>
-
-      {/* Save Profile Button */}
-      <div className="pt-4 flex justify-end">
-        <SubmitButton
-          form="edit-profile-form"
-          isLoading={isUpdating}
-          label="Save Profile Changes"
-          loadingLabel="Saving..."
-        />
       </div>
     </div>
   );

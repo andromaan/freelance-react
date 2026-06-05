@@ -68,7 +68,7 @@ const EmployerProfilePage: React.FC = () => {
 
         {/* Header Section */}
         <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm mt-12 sm:mt-16">
-          <div className="relative flex flex-col sm:flex-row gap-6 sm:items-end">
+          <div className="relative flex flex-col items-center text-center sm:text-left sm:flex-row gap-4 sm:gap-6 sm:items-end">
             <div className="relative shrink-0 -mt-16 sm:-mt-20">
               {user.avatarImg ? (
                 <img

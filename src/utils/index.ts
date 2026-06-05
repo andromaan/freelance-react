@@ -1,5 +1,6 @@
 import APP_ENV from "../env";
 import { format, isThisWeek, isToday, isYesterday } from "date-fns";
+import type { UserVM } from "../types/user.types";
 
 export const getStatusText = (s: string) => s.split(/(?=[A-Z])/).join(" ");
 
@@ -20,3 +21,7 @@ export function formatMessageDate(sentAt: string): string {
 
   return format(date, "dd.MM.yyyy, HH:mm");
 }
+
+export const avatarLetters = (user: UserVM | null) => user?.displayName
+    ? user.displayName.slice(0, 2).toUpperCase()
+    : (user?.email?.slice(0, 2).toUpperCase() ?? "??");

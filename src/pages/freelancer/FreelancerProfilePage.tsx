@@ -103,7 +103,7 @@ const FreelancerProfilePage: React.FC = () => {
 
         {/* Header Section */}
         <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm mt-12 sm:mt-16">
-          <div className="relative flex flex-col sm:flex-row gap-6 sm:items-end">
+          <div className="relative flex flex-col items-center text-center sm:text-left sm:flex-row gap-4 sm:gap-6 sm:items-end">
             <div className="relative shrink-0 -mt-16 sm:-mt-20">
               {user.avatarImg ? (
                 <img
@@ -118,11 +118,11 @@ const FreelancerProfilePage: React.FC = () => {
               )}
             </div>
 
-            <div className="flex-1 pb-2 mt-2 sm:mt-0">
+            <div className="flex-1 pb-2 mt-2 sm:mt-0 flex flex-col items-center sm:items-start">
               <h1 className="text-2xl sm:text-3xl font-bold text-text-main">
                 {user.displayName || user.email}
               </h1>
-              <div className="flex flex-wrap items-center gap-3 mt-2 text-sm text-text-muted">
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mt-2 text-sm text-text-muted">
                 <span className="flex items-center gap-1">
                   <svg
                     className="w-4 h-4"

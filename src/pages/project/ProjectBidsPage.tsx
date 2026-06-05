@@ -99,14 +99,14 @@ const SenderInfo: React.FC<SenderInfoProps> = ({ createdBy }) => {
           </div>
         </div>
 
-        <div className="flex items-center justify-between mt-0.5">
-          <span className="text-xs text-text-muted line-clamp-1">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mt-1.5">
+          <span className="text-xs text-text-muted truncate sm:mr-2">
             {user.email}
           </span>
           {user.country?.name && (
-            <span className="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-0.5">
+            <span className="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-0.5 flex-shrink-0">
               <svg
-                className="w-3 h-3"
+                className="w-3 h-3 flex-shrink-0"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -124,7 +124,7 @@ const SenderInfo: React.FC<SenderInfoProps> = ({ createdBy }) => {
                   d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                 />
               </svg>
-              {user.country.name}
+              <span className="truncate max-w-[120px] sm:max-w-none">{user.country.name}</span>
             </span>
           )}
         </div>
