@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { tokenStorage } from "../../../services/auth/tokenStorage";
 import { avatarLetters, userImageUrl } from "../../../utils";
 import { useTheme } from "../../../context/ThemeContext";
+import { ROLES } from "../../../constants/roles";
 
 interface Props {
   menuOpen: boolean;
@@ -32,7 +33,7 @@ const NavbarMobile: React.FC<Props> = ({
               `text-sm font-medium py-2 px-3 rounded-lg transition-all duration-300 ease-in-out ${
                 isActive
                   ? "text-primary bg-primary/10 dark:text-sky-400"
-                  : "text-text-main hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 border border-border"
+                  : "text-text-main hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 bg-gray-200/70 dark:bg-gray-700/50"
               }`
             }
             onClick={() => setMenuOpen(false)}
@@ -45,7 +46,7 @@ const NavbarMobile: React.FC<Props> = ({
               `text-sm font-medium py-2 px-3 rounded-lg transition-all duration-300 ease-in-out ${
                 isActive
                   ? "text-primary bg-primary/10 dark:text-sky-400"
-                  : "text-text-main hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 border border-border"
+                  : "text-text-main hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 bg-gray-200/70 dark:bg-gray-700/50"
               }`
             }
             onClick={() => setMenuOpen(false)}
@@ -58,7 +59,7 @@ const NavbarMobile: React.FC<Props> = ({
               `text-sm font-medium py-2 px-3 rounded-lg transition-all duration-300 ease-in-out ${
                 isActive
                   ? "text-primary bg-primary/10 dark:text-sky-400"
-                  : "text-text-main hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 border border-border"
+                  : "text-text-main hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 bg-gray-200/70 dark:bg-gray-700/50"
               }`
             }
             onClick={() => setMenuOpen(false)}
@@ -68,7 +69,7 @@ const NavbarMobile: React.FC<Props> = ({
           <div className="border-t border-border pt-2 mt-1 flex flex-col gap-2">
             {isAuthenticated ? (
               <>
-                <div className="flex items-center gap-3 px-3 py-2 border border-border rounded-lg">
+                <div className="flex items-center gap-3 px-3 py-2">
                   {user?.avatarImg ? (
                     <img
                       src={userImageUrl(user.avatarImg)}
@@ -86,17 +87,33 @@ const NavbarMobile: React.FC<Props> = ({
                 </div>
                 <Link
                   to="/profile/edit-profile"
-                  className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary px-3 border border-border rounded-lg"
+                  className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary px-3 bg-gray-200/70 dark:bg-gray-700/50 rounded-lg"
                   onClick={() => setMenuOpen(false)}
                 >
                   My Profile
+                </Link>
+                {user?.role?.name === ROLES.EMPLOYER && (
+                  <Link
+                    to="/my-projects"
+                    className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary px-3 bg-gray-200/70 dark:bg-gray-700/50 rounded-lg"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    My Projects
+                  </Link>
+                )}
+                <Link
+                  to="/my-contracts"
+                  className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary px-3 bg-gray-200/70 dark:bg-gray-700/50 rounded-lg"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  My Contracts
                 </Link>
                 <button
                   onClick={() => {
                     handleLogout();
                     setMenuOpen(false);
                   }}
-                  className="text-left text-sm font-medium text-red-600 py-2 px-3 border border-red-500/50 rounded-lg"
+                  className="text-left text-sm font-medium text-red-600 dark:text-red-400 py-2 px-3 border border-red-500/50 rounded-lg bg-red-100/70 dark:bg-red-900/30"
                 >
                   Logout
                 </button>
@@ -105,14 +122,14 @@ const NavbarMobile: React.FC<Props> = ({
               <>
                 <Link
                   to="/login"
-                  className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary px-3 border border-border rounded-lg"
+                  className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary px-3 bg-gray-200/70 dark:bg-gray-700/50 rounded-lg"
                   onClick={() => setMenuOpen(false)}
                 >
                   Login
                 </Link>
                 <Link
                   to="/register"
-                  className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary px-3 border border-primary/50 rounded-lg"
+                  className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary px-3 border border-primary/50 rounded-lg bg-primary/10 dark:bg-sky-900/30"
                   onClick={() => setMenuOpen(false)}
                 >
                   Register
@@ -123,42 +140,42 @@ const NavbarMobile: React.FC<Props> = ({
           <div className="border-t border-border py-2 ">
             <button
               onClick={toggleTheme}
-              className="py-2 text-text-muted hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-between w-full border border-border rounded-lg"
+              className="py-2 text-text-muted bg-gray-200/70 dark:bg-gray-700/50 rounded-lg transition-colors flex items-center justify-between w-full rounded-lg"
             >
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300 px-3">
                 Theme
               </span>
 
               <div className="px-2">
-                  {theme === "dark" ? (
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 3v1m0 16v1m8.66-8.66h-1M4.34 12H3m15.36 4.95l-.7-.7M6.34 6.34l-.7-.7m12.02 0l-.7.7M6.34 17.66l-.7.7M12 8a4 4 0 100 8 4 4 0 000-8z"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                      />
-                    </svg>
-                  )}
+                {theme === "dark" ? (
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 3v1m0 16v1m8.66-8.66h-1M4.34 12H3m15.36 4.95l-.7-.7M6.34 6.34l-.7-.7m12.02 0l-.7.7M6.34 17.66l-.7.7M12 8a4 4 0 100 8 4 4 0 000-8z"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                    />
+                  </svg>
+                )}
               </div>
             </button>
           </div>
