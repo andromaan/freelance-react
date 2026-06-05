@@ -35,6 +35,15 @@ export const reviewsApi = createApi({
       }),
       transformResponse: (response: any) => response.data ?? response,
     }),
+
+    getIsReviewed: builder.query<ReviewVM | null, string>({
+      query: (contractId) => ({
+        url: `/Review/is-reviewed/${contractId}`,
+        method: "GET",
+      }),
+      providesTags: ["Review"],
+      transformResponse: (response: any) => response.data ?? null,
+    }),
   }),
 });
 
@@ -42,4 +51,5 @@ export const {
   useCreateReviewMutation,
   useGetReviewsByEmailQuery,
   useGetAverageRatingQuery,
+  useGetIsReviewedQuery,
 } = reviewsApi;

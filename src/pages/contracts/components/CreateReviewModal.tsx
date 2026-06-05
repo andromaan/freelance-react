@@ -36,7 +36,7 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
       toast.success("Review added successfully");
       onClose();
     } catch (error: any) {
-      toast.error(error?.data?.title || "Failed to add review");
+      toast.error(error?.data?.title || error?.data?.message || "Failed to add review");
     }
   };
 
@@ -146,7 +146,7 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
           </label>
           <textarea
             id="reviewText"
-            className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:text-white transition-all resize-none shadow-sm"
+            className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 text-text-main transition-all resize-none shadow-sm"
             rows={4}
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
