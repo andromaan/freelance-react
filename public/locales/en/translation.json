@@ -1,0 +1,43 @@
+{
+  "navbar": {
+    "home": "Home",
+    "projects": "Projects",
+    "freelancers": "Freelancers",
+    "logout": "Logout",
+    "myContracts": "My Contracts",
+    "profile": "Profile",
+    "admin": "Admin",
+    "login": "Login",
+    "signup": "Sign Up",
+    "hello": "Hello"
+  },
+  "footer": {
+    "brandDesc": "A platform for connecting freelancers and employers. Find work or talented professionals.",
+    "freelancers": "Freelancers",
+    "findWork": "Find Work",
+    "register": "Register",
+    "myProfile": "My Profile",
+    "employers": "Employers",
+    "findFreelancers": "Find Freelancers",
+    "postJob": "Post a Job",
+    "info": "Information",
+    "about": "About Us",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "rights": "© {{year}} FreeLance. All rights reserved."
+  },
+  "home": {
+    "heroTitle1": "Find the Perfect",
+    "heroTitle2": "Freelance",
+    "heroTitle3": "Services",
+    "heroSubtitle": "Connect with talented professionals globally to bring your ideas to life.",
+    "searchPlaceholder": "What are you looking for?",
+    "searchButton": "Search",
+    "featuredCategories": "Featured Categories",
+    "topFreelancers": "Top Freelancers",
+    "latestProjects": "Latest Projects",
+    "viewAll": "View all",
+    "trustTitle": "Trusted by businesses worldwide",
+    "trustSubtitle": "Join thousands of companies who use our platform to find the best talent."
+  }
+}

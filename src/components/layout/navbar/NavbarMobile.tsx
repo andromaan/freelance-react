@@ -6,6 +6,8 @@ import { tokenStorage } from "../../../services/auth/tokenStorage";
 import { avatarLetters, userImageUrl } from "../../../utils";
 import { useTheme } from "../../../context/ThemeContext";
 import { ROLES } from "../../../constants/roles";
+import LanguageSwitcher from "../../ui/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   menuOpen: boolean;
@@ -21,6 +23,7 @@ const NavbarMobile: React.FC<Props> = ({
   const isAuthenticated = tokenStorage.isAuthenticated();
   const user = useSelector(selectCurrentUser);
   const { theme, toggleTheme } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <div>
@@ -38,7 +41,7 @@ const NavbarMobile: React.FC<Props> = ({
             }
             onClick={() => setMenuOpen(false)}
           >
-            Home
+            {t("navbar.home")}
           </NavLink>
           <NavLink
             to="/projects"
@@ -51,7 +54,7 @@ const NavbarMobile: React.FC<Props> = ({
             }
             onClick={() => setMenuOpen(false)}
           >
-            Projects
+            {t("navbar.projects")}
           </NavLink>
           <NavLink
             to="/freelancers"
@@ -64,7 +67,7 @@ const NavbarMobile: React.FC<Props> = ({
             }
             onClick={() => setMenuOpen(false)}
           >
-            Freelancers
+            {t("navbar.freelancers")}
           </NavLink>
           <div className="border-t border-border pt-2 mt-1 flex flex-col gap-2">
             {isAuthenticated ? (
@@ -90,7 +93,7 @@ const NavbarMobile: React.FC<Props> = ({
                   className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary px-3 bg-gray-200/70 dark:bg-gray-700/50 rounded-lg"
                   onClick={() => setMenuOpen(false)}
                 >
-                  My Profile
+                  {t("navbar.profile")}
                 </Link>
                 {user?.role?.name === ROLES.EMPLOYER && (
                   <Link
@@ -98,7 +101,7 @@ const NavbarMobile: React.FC<Props> = ({
                     className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary px-3 bg-gray-200/70 dark:bg-gray-700/50 rounded-lg"
                     onClick={() => setMenuOpen(false)}
                   >
-                    My Projects
+                    {t("navbar.projects")}
                   </Link>
                 )}
                 <Link
@@ -106,7 +109,7 @@ const NavbarMobile: React.FC<Props> = ({
                   className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary px-3 bg-gray-200/70 dark:bg-gray-700/50 rounded-lg"
                   onClick={() => setMenuOpen(false)}
                 >
-                  My Contracts
+                  {t("navbar.myContracts")}
                 </Link>
                 <button
                   onClick={() => {
@@ -115,7 +118,7 @@ const NavbarMobile: React.FC<Props> = ({
                   }}
                   className="text-left text-sm font-medium text-red-600 dark:text-red-400 py-2 px-3 border border-red-500/50 rounded-lg bg-red-100/70 dark:bg-red-900/30"
                 >
-                  Logout
+                  {t("navbar.logout")}
                 </button>
               </>
             ) : (
@@ -125,22 +128,23 @@ const NavbarMobile: React.FC<Props> = ({
                   className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary px-3 bg-gray-200/70 dark:bg-gray-700/50 rounded-lg"
                   onClick={() => setMenuOpen(false)}
                 >
-                  Login
+                  {t("navbar.login")}
                 </Link>
                 <Link
                   to="/register"
                   className="text-gray-700 dark:text-gray-300 text-sm font-medium py-2 hover:text-primary px-3 border border-primary/50 rounded-lg bg-primary/10 dark:bg-sky-900/30"
                   onClick={() => setMenuOpen(false)}
                 >
-                  Register
+                  {t("navbar.signup")}
                 </Link>
               </>
             )}
           </div>
-          <div className="border-t border-border py-2 ">
+          <div className="border-t border-border py-2 flex items-center justify-between gap-2">
+            <LanguageSwitcher />
             <button
               onClick={toggleTheme}
-              className="py-2 text-text-muted bg-gray-200/70 dark:bg-gray-700/50 rounded-lg transition-colors flex items-center justify-between w-full rounded-lg"
+              className="py-2 px-3 text-text-muted bg-gray-200/70 dark:bg-gray-700/50 rounded-lg transition-colors flex items-center justify-between w-full"
             >
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300 px-3">
                 Theme

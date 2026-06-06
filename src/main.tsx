@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 import "./index.css";
 import "./styles/custom.scss";
+import "./i18n";
 import App from "./App.tsx";
 import { ThemeProvider } from "./context/ThemeContext";
 

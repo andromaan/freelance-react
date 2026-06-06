@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { tokenStorage } from "../services/auth/tokenStorage";
 import { useSearchFreelancersQuery } from "../services/freelancer/freelancerApi";
 import { useGetProjectsFilteredQuery } from "../services/projects/projectsApi";
+import { useTranslation } from "react-i18next";
 
 import FreelancerCard from "./freelancers/components/FreelancerCard";
 import ProjectCard from "./projects/components/ProjectCard";
@@ -42,6 +43,7 @@ const DefaultCategoryIcon = <path strokeLinecap="round" strokeLinejoin="round" s
 
 const Home: React.FC = () => {
   const isAuthenticated = tokenStorage.isAuthenticated();
+  const { t } = useTranslation();
 
   // Fetch Skills
   const { data: skills = [] } = useGetSkillsQuery();
@@ -70,13 +72,13 @@ const Home: React.FC = () => {
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-text-main leading-tight mb-6 tracking-tight">
-            Find the perfect <br className="hidden sm:block" />
+            {t("home.heroTitle1")} <br className="hidden sm:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600 dark:from-primary dark:to-blue-400">
-              freelancer
-            </span> for your project
+              {t("home.heroTitle2")}
+            </span> {t("home.heroTitle3")}
           </h1>
           <p className="text-lg sm:text-xl text-text-muted mb-10 max-w-2xl mx-auto">
-            Thousands of verified professionals are ready to help your business grow. Fast, secure, quality.
+            {t("home.heroSubtitle")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {isAuthenticated ? (
@@ -85,13 +87,13 @@ const Home: React.FC = () => {
                   to="/projects"
                   className="inline-flex justify-center items-center px-8 py-3.5 text-base font-semibold rounded-xl text-white bg-primary hover:bg-primary-hover shadow-sm hover:shadow transition-all"
                 >
-                  Find Work
+                  {t("footer.findWork")}
                 </Link>
                 <Link
                   to="/freelancers"
                   className="inline-flex justify-center items-center px-8 py-3.5 text-base font-semibold rounded-xl text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:text-gray-200 dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700 shadow-sm hover:shadow transition-all"
                 >
-                  Find Freelancer
+                  {t("footer.findFreelancers")}
                 </Link>
               </>
             ) : (
@@ -106,7 +108,7 @@ const Home: React.FC = () => {
                   to="/login"
                   className="inline-flex justify-center items-center px-8 py-3.5 text-base font-semibold rounded-xl text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:text-gray-200 dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700 shadow-sm hover:shadow transition-all"
                 >
-                  Login
+                  {t("navbar.login")}
                 </Link>
               </>
             )}
@@ -148,7 +150,7 @@ const Home: React.FC = () => {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-4">
             <div>
               <h2 className="text-2xl sm:text-3xl font-bold text-text-main mb-2">
-                Latest Projects
+                {t("home.latestProjects")}
               </h2>
               <p className="text-text-muted">
                 Find the perfect opportunity to showcase your skills.
@@ -158,7 +160,7 @@ const Home: React.FC = () => {
               to="/projects"
               className="text-primary hover:text-primary-hover font-semibold text-sm flex items-center gap-1 transition-colors"
             >
-              View all projects
+              {t("home.viewAll")}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
@@ -190,7 +192,7 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-text-main mb-3">
-              Popular Categories
+              {t("home.featuredCategories")}
             </h2>
             <p className="text-text-muted max-w-xl mx-auto">
               Browse top categories and find professionals in any field

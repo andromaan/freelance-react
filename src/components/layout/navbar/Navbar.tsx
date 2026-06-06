@@ -13,6 +13,8 @@ import { useTheme } from "../../../context/ThemeContext";
 import freelanceIconUrl from "../../icons/FreelanceIcon.svg";
 import { avatarLetters, userImageUrl } from "../../../utils";
 import NavbarMobile from "./NavbarMobile";
+import LanguageSwitcher from "../../ui/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -23,6 +25,7 @@ const Navbar: React.FC = () => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const { theme, toggleTheme } = useTheme();
+  const { t } = useTranslation();
 
   // Close user dropdown on outside click
   useEffect(() => {
@@ -75,7 +78,7 @@ const Navbar: React.FC = () => {
               }`
             }
           >
-            Home
+            {t("navbar.home")}
           </NavLink>
           <NavLink
             to="/projects"
@@ -87,7 +90,7 @@ const Navbar: React.FC = () => {
               }`
             }
           >
-            Projects
+            {t("navbar.projects")}
           </NavLink>
           <NavLink
             to="/freelancers"
@@ -99,12 +102,14 @@ const Navbar: React.FC = () => {
               }`
             }
           >
-            Freelancers
+            {t("navbar.freelancers")}
           </NavLink>
         </div>
 
         {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center gap-3">
+          <LanguageSwitcher />
+
           <button
             onClick={toggleTheme}
             className="p-2 text-text-muted hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
@@ -208,7 +213,7 @@ const Navbar: React.FC = () => {
                       className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
                       onClick={() => setUserMenuOpen(false)}
                     >
-                      My Profile
+                      {t("navbar.profile")}
                     </Link>
                     {user?.role?.name === ROLES.EMPLOYER && (
                       <Link
@@ -216,7 +221,7 @@ const Navbar: React.FC = () => {
                         className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
                         onClick={() => setUserMenuOpen(false)}
                       >
-                        My Projects
+                        {t("navbar.projects")}
                       </Link>
                     )}
                     <Link
@@ -224,7 +229,7 @@ const Navbar: React.FC = () => {
                       className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
                       onClick={() => setUserMenuOpen(false)}
                     >
-                      My Contracts
+                      {t("navbar.myContracts")}
                     </Link>
                     <div className="border-t border-border my-1" />
                     <button
@@ -234,7 +239,7 @@ const Navbar: React.FC = () => {
                       }}
                       className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
                     >
-                      Logout
+                      {t("navbar.logout")}
                     </button>
                   </div>
                 )}
@@ -246,13 +251,13 @@ const Navbar: React.FC = () => {
                 to="/login"
                 className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
               >
-                Login
+                {t("navbar.login")}
               </Link>
               <Link
                 to="/register"
                 className="text-sm font-medium bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg transition-colors"
               >
-                Register
+                {t("navbar.signup")}
               </Link>
             </>
           )}

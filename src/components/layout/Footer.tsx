@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Footer: React.FC = () => {
   const year = new Date().getFullYear();
+  const { t } = useTranslation();
 
   return (
     <footer className="bg-gray-900 dark:bg-gray-950 text-gray-300 mt-auto">
@@ -30,14 +32,14 @@ const Footer: React.FC = () => {
               FreeLance
             </Link>
             <p className="text-sm text-gray-400 leading-relaxed">
-              A platform for connecting freelancers and employers. Find work or talented professionals.
+              {t("footer.brandDesc")}
             </p>
           </div>
 
           {/* For freelancers */}
           <div className="col-span-1">
             <h4 className="text-white text-sm font-semibold mb-4 uppercase tracking-wide">
-              Freelancers
+              {t("footer.freelancers")}
             </h4>
             <ul className="space-y-3 text-sm">
               <li>
@@ -45,7 +47,7 @@ const Footer: React.FC = () => {
                   to="/projects"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Find Work
+                  {t("footer.findWork")}
                 </Link>
               </li>
               <li>
@@ -53,7 +55,7 @@ const Footer: React.FC = () => {
                   to="/register"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Register
+                  {t("footer.register")}
                 </Link>
               </li>
               <li>
@@ -61,7 +63,7 @@ const Footer: React.FC = () => {
                   to="/profile"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  My Profile
+                  {t("footer.myProfile")}
                 </Link>
               </li>
             </ul>
@@ -70,7 +72,7 @@ const Footer: React.FC = () => {
           {/* For employers */}
           <div className="col-span-1">
             <h4 className="text-white text-sm font-semibold mb-4 uppercase tracking-wide">
-              Employers
+              {t("footer.employers")}
             </h4>
             <ul className="space-y-3 text-sm">
               <li>
@@ -78,7 +80,7 @@ const Footer: React.FC = () => {
                   to="/freelancers"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Find Freelancers
+                  {t("footer.findFreelancers")}
                 </Link>
               </li>
               <li>
@@ -86,7 +88,7 @@ const Footer: React.FC = () => {
                   to="/post-job"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Post a Job
+                  {t("footer.postJob")}
                 </Link>
               </li>
               <li>
@@ -94,7 +96,7 @@ const Footer: React.FC = () => {
                   to="/register"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Register
+                  {t("footer.register")}
                 </Link>
               </li>
             </ul>
@@ -103,7 +105,7 @@ const Footer: React.FC = () => {
           {/* Info */}
           <div className="col-span-1 sm:col-span-1 lg:col-span-1">
             <h4 className="text-white text-sm font-semibold mb-4 uppercase tracking-wide">
-              Information
+              {t("footer.info")}
             </h4>
             <ul className="space-y-3 text-sm">
               <li>
@@ -111,7 +113,7 @@ const Footer: React.FC = () => {
                   to="/about"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  About Us
+                  {t("footer.about")}
                 </Link>
               </li>
               <li>
@@ -119,7 +121,7 @@ const Footer: React.FC = () => {
                   to="/terms"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Terms of Service
+                  {t("footer.terms")}
                 </Link>
               </li>
               <li>
@@ -127,7 +129,7 @@ const Footer: React.FC = () => {
                   to="/privacy"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  Privacy Policy
+                  {t("footer.privacy")}
                 </Link>
               </li>
             </ul>
@@ -137,7 +139,7 @@ const Footer: React.FC = () => {
         {/* Bottom bar */}
         <div className="border-t border-gray-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-gray-500">
-            © {year} FreeLance. All rights reserved.
+            {t("footer.rights", { year })}
           </p>
           <div className="flex items-center gap-4">
             <a
