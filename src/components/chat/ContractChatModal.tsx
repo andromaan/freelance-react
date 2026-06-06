@@ -122,7 +122,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
       : `/employers/${chatDetails?.interlocutorId}`;
 
   return createPortal(
-    <div className="fixed bottom-6 right-6 sm:bottom-6 sm:right-6 z-50 flex flex-col w-[90vw] sm:w-[500px] h-[600px] max-h-[85vh] bg-surface rounded-2xl shadow-2xl overflow-hidden border border-border animate-in slide-in-from-bottom-8">
+    <div className="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-50 flex flex-col w-full sm:w-[500px] h-[100dvh] sm:h-[600px] sm:max-h-[85vh] bg-surface sm:rounded-2xl shadow-2xl overflow-hidden border-0 sm:border border-border animate-in slide-in-from-bottom-8">
       {detailsLoading || messagesLoading ? (
         <div className="flex-1 flex flex-col items-center justify-center">
           <span className="text-text-muted">

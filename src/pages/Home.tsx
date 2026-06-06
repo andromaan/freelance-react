@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import { tokenStorage } from "../services/auth/tokenStorage";
 import { useSearchFreelancersQuery } from "../services/freelancer/freelancerApi";
 import { useGetProjectsFilteredQuery } from "../services/projects/projectsApi";
-import { useGetAllCategoriesQuery } from "../services/categories/categoriesApi";
+
 import FreelancerCard from "./freelancers/components/FreelancerCard";
 import ProjectCard from "./projects/components/ProjectCard";
+import { useGetSkillsQuery } from "../services/skills/skillsApi";
 
 const howItWorks = [
   {
@@ -42,8 +43,8 @@ const DefaultCategoryIcon = <path strokeLinecap="round" strokeLinejoin="round" s
 const Home: React.FC = () => {
   const isAuthenticated = tokenStorage.isAuthenticated();
 
-  // Fetch Categories
-  const { data: categories = [] } = useGetAllCategoriesQuery();
+  // Fetch Skills
+  const { data: skills = [] } = useGetSkillsQuery();
 
   // Fetch Latest Projects (also provides total projects)
   const { data: projectsData, isLoading: isLoadingProjects } = useGetProjectsFilteredQuery({ page: 1, pageSize: 3 });
@@ -196,25 +197,25 @@ const Home: React.FC = () => {
             </p>
           </div>
           
-          {categories.length > 0 ? (
+          {skills.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {categories.slice(0, 6).map((cat) => (
+              {skills.slice(0, 6).map((skill) => (
                 <Link
-                  to="/freelancers"
-                  key={cat.id}
+                  to={`/freelancers?skills=${skill.id}`}
+                  key={skill.id}
                   className="group bg-main border border-border rounded-2xl p-6 flex items-start gap-5 hover:border-primary/50 hover:bg-white dark:hover:bg-gray-800 hover:shadow-lg transition-all"
                 >
                   <div className="text-primary bg-surface shadow-sm border border-border-light p-3.5 rounded-xl flex-shrink-0 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      {categoryIcons[cat.name] || DefaultCategoryIcon}
+                      {categoryIcons[skill.name] || DefaultCategoryIcon}
                     </svg>
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-text-main mb-1 group-hover:text-primary transition-colors">
-                      {cat.name}
+                      {skill.name}
                     </h3>
                     <p className="text-sm text-text-muted">
-                      Explore {cat.name.toLowerCase()} experts
+                      Explore {skill.name.toLowerCase()} experts
                     </p>
                   </div>
                 </Link>
@@ -233,7 +234,7 @@ const Home: React.FC = () => {
                 to="/freelancers"
                 className="inline-flex items-center gap-2 text-text-muted hover:text-primary dark:hover:text-primary font-medium transition-colors"
              >
-                Browse all categories
+                Browse all skills
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
