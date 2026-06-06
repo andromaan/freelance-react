@@ -4,6 +4,7 @@ import { useGetUserByIdQuery } from "../../../services/user/userApi";
 import type { ReviewVM } from "../../../types/review.types";
 import { userImageUrl } from "../../../utils";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface ReviewCardProps {
   review: ReviewVM;
@@ -27,6 +28,7 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
 };
 
 const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
+  const { t } = useTranslation();
   // Fetch the project to get title and categories
   const { data: project, isLoading: isProjectLoading } =
     useGetProjectByContractIdQuery(review.contractId);
@@ -98,7 +100,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
       )}
 
       <p className="text-sm text-text-muted italic mb-4 flex-1">
-        "{review.reviewText || "No written review provided."}"
+        "{review.reviewText || t("freelancerProfile.noReviewText")}"
       </p>
 
       {/* Employer Info */}
@@ -116,7 +118,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
             </div>
           )}
           <span className="text-xs text-text-muted font-medium">
-            {employer?.displayName || employer?.email || "Unknown Employer"}
+            {employer?.displayName || employer?.email || t("freelancerProfile.unknownEmployer")}
           </span>
         </div>
 
@@ -138,7 +140,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
                 d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
               />
             </svg>
-            View Project
+            {t("freelancerProfile.viewProject")}
           </Link>
         </div>
       </div>

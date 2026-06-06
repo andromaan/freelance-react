@@ -9,29 +9,6 @@ import FreelancerCard from "./freelancers/components/FreelancerCard";
 import ProjectCard from "./projects/components/ProjectCard";
 import { useGetSkillsQuery } from "../services/skills/skillsApi";
 
-const howItWorks = [
-  {
-    step: "01",
-    title: "Register",
-    description: "Create a freelancer or employer account in a few minutes.",
-  },
-  {
-    step: "02",
-    title: "Find Work or Freelancer",
-    description: "Browse job postings or freelancer profiles and choose the best fit.",
-  },
-  {
-    step: "03",
-    title: "Negotiate and Start",
-    description: "Negotiate terms, sign the agreement, and start the project.",
-  },
-  {
-    step: "04",
-    title: "Receive Results",
-    description: "The freelancer delivers the work, you confirm and pay through the platform.",
-  },
-];
-
 const categoryIcons: Record<string, React.ReactNode> = {
   "Development": <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />,
   "Design": <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />,
@@ -44,6 +21,29 @@ const DefaultCategoryIcon = <path strokeLinecap="round" strokeLinejoin="round" s
 const Home: React.FC = () => {
   const isAuthenticated = tokenStorage.isAuthenticated();
   const { t } = useTranslation();
+
+  const howItWorks = [
+    {
+      step: "01",
+      title: t("home.howItWorks.step1.title"),
+      description: t("home.howItWorks.step1.desc"),
+    },
+    {
+      step: "02",
+      title: t("home.howItWorks.step2.title"),
+      description: t("home.howItWorks.step2.desc"),
+    },
+    {
+      step: "03",
+      title: t("home.howItWorks.step3.title"),
+      description: t("home.howItWorks.step3.desc"),
+    },
+    {
+      step: "04",
+      title: t("home.howItWorks.step4.title"),
+      description: t("home.howItWorks.step4.desc"),
+    },
+  ];
 
   // Fetch Skills
   const { data: skills = [] } = useGetSkillsQuery();
@@ -102,7 +102,7 @@ const Home: React.FC = () => {
                   to="/register"
                   className="inline-flex justify-center items-center px-8 py-3.5 text-base font-semibold rounded-xl text-white bg-primary hover:bg-primary-hover shadow-sm hover:shadow transition-all"
                 >
-                  Start Free
+                  {t("home.startFree")}
                 </Link>
                 <Link
                   to="/login"
@@ -124,21 +124,21 @@ const Home: React.FC = () => {
               <div className="text-3xl font-bold text-text-main mb-1">
                 {totalFreelancers > 0 ? `${totalFreelancers}+` : "10k+"}
               </div>
-              <div className="text-sm font-medium text-text-muted">Freelancers</div>
+              <div className="text-sm font-medium text-text-muted">{t("home.stats.freelancers")}</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-text-main mb-1">
                 {totalProjects > 0 ? `${totalProjects}+` : "5k+"}
               </div>
-              <div className="text-sm font-medium text-text-muted">Projects Posted</div>
+              <div className="text-sm font-medium text-text-muted">{t("home.stats.projectsPosted")}</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-text-main mb-1">98%</div>
-              <div className="text-sm font-medium text-text-muted">Satisfaction Rate</div>
+              <div className="text-sm font-medium text-text-muted">{t("home.stats.satisfactionRate")}</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-text-main mb-1">24/7</div>
-              <div className="text-sm font-medium text-text-muted">Support</div>
+              <div className="text-sm font-medium text-text-muted">{t("home.stats.support")}</div>
             </div>
           </div>
         </div>
@@ -153,7 +153,7 @@ const Home: React.FC = () => {
                 {t("home.latestProjects")}
               </h2>
               <p className="text-text-muted">
-                Find the perfect opportunity to showcase your skills.
+                {t("home.latestProjectsDesc")}
               </p>
             </div>
             <Link
@@ -181,7 +181,7 @@ const Home: React.FC = () => {
             </div>
           ) : (
             <div className="text-center py-10 bg-surface rounded-xl border border-border">
-              <p className="text-text-muted">No projects available at the moment.</p>
+              <p className="text-text-muted">{t("home.noProjects")}</p>
             </div>
           )}
         </div>
@@ -195,7 +195,7 @@ const Home: React.FC = () => {
               {t("home.featuredCategories")}
             </h2>
             <p className="text-text-muted max-w-xl mx-auto">
-              Browse top categories and find professionals in any field
+              {t("home.categoriesDesc")}
             </p>
           </div>
           
@@ -217,7 +217,7 @@ const Home: React.FC = () => {
                       {skill.name}
                     </h3>
                     <p className="text-sm text-text-muted">
-                      Explore {skill.name.toLowerCase()} experts
+                      {t("home.exploreExperts", { skill: skill.name.toLowerCase() })}
                     </p>
                   </div>
                 </Link>
@@ -236,7 +236,7 @@ const Home: React.FC = () => {
                 to="/freelancers"
                 className="inline-flex items-center gap-2 text-text-muted hover:text-primary dark:hover:text-primary font-medium transition-colors"
              >
-                Browse all skills
+                {t("home.browseAllSkills")}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
@@ -251,17 +251,17 @@ const Home: React.FC = () => {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-4">
             <div>
               <h2 className="text-2xl sm:text-3xl font-bold text-text-main mb-2">
-                Find Your Freelancer
+                {t("home.findYourFreelancer")}
               </h2>
               <p className="text-text-muted">
-                Work with the best professionals on the platform.
+                {t("home.findFreelancerDesc")}
               </p>
             </div>
             <Link
               to="/freelancers"
               className="text-primary hover:text-primary-hover font-semibold text-sm flex items-center gap-1 transition-colors"
             >
-              Find more freelancers
+              {t("home.findMoreFreelancers")}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
@@ -282,7 +282,7 @@ const Home: React.FC = () => {
             </div>
           ) : (
             <div className="text-center py-10 bg-surface rounded-xl border border-border">
-              <p className="text-text-muted">No freelancers available at the moment.</p>
+              <p className="text-text-muted">{t("home.noFreelancers")}</p>
             </div>
           )}
         </div>
@@ -293,10 +293,10 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-2xl sm:text-3xl font-bold text-text-main mb-3">
-              How It Works
+              {t("home.howItWorksTitle")}
             </h2>
             <p className="text-text-muted max-w-xl mx-auto">
-              Get started by working or finding freelancers in 4 simple steps
+              {t("home.howItWorksDesc")}
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 relative">
@@ -328,23 +328,23 @@ const Home: React.FC = () => {
           </div>
           <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
             <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 tracking-tight">
-              Ready to get started?
+              {t("home.ctaTitle")}
             </h2>
             <p className="text-blue-100 mb-10 text-lg sm:text-xl max-w-2xl mx-auto font-medium">
-              Join thousands of freelancers and clients who have already found each other.
+              {t("home.ctaDesc")}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/register"
                 className="inline-flex justify-center items-center bg-white text-primary hover:bg-gray-50 font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all"
               >
-                Register as Freelancer
+                {t("home.registerFreelancer")}
               </Link>
               <Link
                 to="/register"
                 className="inline-flex justify-center items-center bg-transparent border-2 border-white/80 text-white hover:bg-white/10 font-bold px-8 py-4 rounded-xl transition-all"
               >
-                Find Freelancer
+                {t("home.findFreelancer")}
               </Link>
             </div>
           </div>

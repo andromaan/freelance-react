@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import type { ProjectVM } from "../../../types/project.types";
 
 function formatDeadline(iso: string) {
@@ -9,18 +10,19 @@ function formatDeadline(iso: string) {
   });
 }
 
-function dueLabel(iso: string): { text: string; urgent: boolean } {
+function dueLabel(iso: string, t: any): { text: string; urgent: boolean } {
   const diff = new Date(iso).getTime() - Date.now();
   const days = Math.ceil(diff / 86_400_000);
   const urgent = diff >= 0 && days <= 3;
-  if (diff < 0) return { text: `${Math.abs(days)}d ago`, urgent: false };
-  if (days < 31) return { text: `${days}d left`, urgent };
+  if (diff < 0) return { text: t("projects.daysAgo", { count: Math.abs(days) }), urgent: false };
+  if (days < 31) return { text: t("projects.daysLeft", { count: days }), urgent };
   const months = Math.floor(days / 30);
-  return { text: `${months}mo left`, urgent: false };
+  return { text: t("projects.monthsLeft", { count: months }), urgent: false };
 }
 
 const ProjectCard: React.FC<{ project: ProjectVM }> = ({ project }) => {
-  const due = dueLabel(project.deadline);
+  const { t } = useTranslation();
+  const due = dueLabel(project.deadline, t);
 
   return (
     <Link

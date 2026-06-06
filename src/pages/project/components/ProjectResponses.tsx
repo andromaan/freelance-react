@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useGetBidsByProjectQuery } from "../../../services/bids/bidsApi";
+import { useTranslation } from "react-i18next";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -57,6 +58,7 @@ const StatCell: React.FC<StatCellProps> = ({
 // ─── Main component ────────────────────────────────────────────────────────────
 
 const ProjectResponses: React.FC<Props> = ({ projectId }) => {
+  const { t } = useTranslation();
   const { data: bids = [], isLoading: isBidsLoading } =
     useGetBidsByProjectQuery(projectId, { skip: !projectId });
 
@@ -64,7 +66,7 @@ const ProjectResponses: React.FC<Props> = ({ projectId }) => {
     <div className="bg-surface rounded-xl border border-border shadow-sm overflow-hidden">
       <div className="p-4 border-b border-border-light">
         <h3 className="text-sm font-bold text-text-main uppercase tracking-wider text-center">
-          Responses
+          {t("projectDetails.responses")}
         </h3>
       </div>
 
@@ -73,7 +75,7 @@ const ProjectResponses: React.FC<Props> = ({ projectId }) => {
           to={`/projects/${projectId}/bids`}
           count={bids.length}
           isLoading={isBidsLoading}
-          label="Bids"
+          label={t("projectDetails.bids")}
           color="text-primary"
         />
       </div>

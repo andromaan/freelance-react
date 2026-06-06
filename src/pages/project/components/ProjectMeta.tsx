@@ -1,11 +1,13 @@
 import React from "react";
 import type { ProjectVM } from "../../../types/project.types";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   project: ProjectVM;
 }
 
 const ProjectMeta: React.FC<Props> = ({ project }) => {
+  const { t } = useTranslation();
   const categories =
     project.categories?.length > 0
       ? project.categories
@@ -37,7 +39,7 @@ const ProjectMeta: React.FC<Props> = ({ project }) => {
           <div className="flex flex-row gap-4 shrink-0 text-right">
             <div className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border border-gray-300 dark:border-gray-700 flex-1">
               <p className="text-[10px] text-gray-500 uppercase font-bold mb-1">
-                Budget
+                {t("projectDetails.budget")}
               </p>
               <p className="text-xl font-bold text-text-main">
                 ${project.budget}
@@ -45,7 +47,7 @@ const ProjectMeta: React.FC<Props> = ({ project }) => {
             </div>
             <div className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border border-gray-300 dark:border-gray-700 flex-1">
               <p className="text-[10px] text-gray-500 uppercase font-bold mb-1">
-                Deadline
+                {t("projectDetails.deadline")}
               </p>
               <p className="font-medium text-text-main">
                 {new Date(project.deadline).toLocaleDateString("uk-UA")}

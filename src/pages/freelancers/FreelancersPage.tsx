@@ -14,6 +14,7 @@ import { type FreelancerFilterVM } from "../../types/freelancer.types";
 import FreelancerCard from "./components/FreelancerCard";
 import { useTheme } from "../../context/ThemeContext";
 import Pagination from "../../components/ui/Pagination";
+import { useTranslation } from "react-i18next";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -44,6 +45,7 @@ const SkeletonCard: React.FC = () => (
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 const FreelancersPage: React.FC = () => {
+  const { t } = useTranslation();
   const searchId = useId();
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -171,10 +173,10 @@ const FreelancersPage: React.FC = () => {
         {/* ── Page header ── */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-text-main mb-2">
-            Find Freelancers
+            {t("freelancers.title")}
           </h1>
           <p className="text-text-muted text-sm leading-relaxed max-w-xl">
-            Discover talented professionals ready to help bring your ideas to life.
+            {t("freelancers.subtitle")}
           </p>
         </div>
 
@@ -184,7 +186,7 @@ const FreelancersPage: React.FC = () => {
             {/* Search */}
             <div className="lg:col-span-2 relative relative">
               <label htmlFor={searchId} className="sr-only">
-                Search by name
+                {t("freelancers.searchPlaceholder")}
               </label>
               <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                 <svg
@@ -200,7 +202,7 @@ const FreelancersPage: React.FC = () => {
               <input
                 id={searchId}
                 type="search"
-                placeholder="Search by name…"
+                placeholder={t("freelancers.searchPlaceholder")}
                 value={nameInput}
                 onChange={(e) => setNameInput(e.target.value)}
                 className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-500 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
@@ -214,7 +216,7 @@ const FreelancersPage: React.FC = () => {
                 min="0"
                 max="5"
                 step="0.5"
-                placeholder="Min Rating (0-5)"
+                placeholder={t("freelancers.minRating")}
                 value={minRating}
                 onChange={(e) => {
                   setMinRating(e.target.value);
@@ -232,9 +234,9 @@ const FreelancersPage: React.FC = () => {
               onChange={handleSkillsChange}
               styles={styles}
               aria-label="Filter by skills"
-              placeholder="Select skills…"
+              placeholder={t("freelancers.selectSkills")}
               className="lg:col-span-2"
-              noOptionsMessage={() => "No skills available"}
+              noOptionsMessage={() => t("freelancers.noSkills")}
               value={skillOptions.filter((o) => selectedSkillIds.includes(o.value))}
             />
 
@@ -246,8 +248,8 @@ const FreelancersPage: React.FC = () => {
               styles={styles}
               aria-label="Filter by countries"
               className="lg:col-span-2"
-              placeholder="Select countries…"
-              noOptionsMessage={() => "No countries available"}
+              placeholder={t("freelancers.selectCountries")}
+              noOptionsMessage={() => t("freelancers.noCountries")}
               value={countryOptions.filter((o) => selectedCountryIds.includes(o.value))}
             />
 
@@ -258,9 +260,9 @@ const FreelancersPage: React.FC = () => {
               onChange={handleLanguagesChange}
               styles={styles}
               aria-label="Filter by languages"
-              placeholder="Select languages…"
+              placeholder={t("freelancers.selectLanguages")}
               className="lg:col-span-2"
-              noOptionsMessage={() => "No languages available"}
+              noOptionsMessage={() => t("freelancers.noLanguages")}
               value={languageOptions.filter((o) => selectedLanguageIds.includes(o.value))}
             />
 
@@ -281,7 +283,7 @@ const FreelancersPage: React.FC = () => {
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
-                  Clear filters
+                  {t("freelancers.clearFilters")}
                 </button>
               </div>
             )}
@@ -292,9 +294,9 @@ const FreelancersPage: React.FC = () => {
         {!isLoadingContent && (
           <p className="text-sm text-text-muted mb-4">
             {totalCount === 0
-              ? "No freelancers found"
-              : `${totalCount} freelancer${totalCount === 1 ? "" : "s"} found`}
-            {hasFilters && " · filtered"}
+              ? t("freelancers.noFreelancersFound")
+              : `${totalCount} ${totalCount === 1 ? t("freelancers.freelancerFound") : t("freelancers.freelancersFound")}`}
+            {hasFilters && ` · ${t("freelancers.filtered")}`}
           </p>
         )}
 
@@ -313,10 +315,10 @@ const FreelancersPage: React.FC = () => {
               </svg>
             </div>
             <p className="text-text-muted font-medium mb-1">
-              No freelancers found
+              {t("freelancers.noFreelancersFound")}
             </p>
             <p className="text-sm text-gray-400 dark:text-gray-500">
-              Try adjusting your filters or search terms.
+              {t("freelancers.tryAdjusting")}
             </p>
             {hasFilters && (
               <button
@@ -325,7 +327,7 @@ const FreelancersPage: React.FC = () => {
                 className="mt-4 px-4 py-2 rounded-lg text-sm font-medium bg-primary hover:bg-primary-hover text-white transition-colors"
                 aria-label="Clear filters"
               >
-                Clear filters
+                {t("freelancers.clearFilters")}
               </button>
             )}
           </div>

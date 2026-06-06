@@ -2,12 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useGetUserByIdQuery } from "../../../services/user/userApi";
 import { userImageUrl } from "../../../utils";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   createdBy?: string;
 }
 
 const ProjectEmployer: React.FC<Props> = ({ createdBy }) => {
+  const { t } = useTranslation();
   const { data: user, isLoading } = useGetUserByIdQuery(createdBy ?? "", {
     skip: !createdBy,
   });
@@ -35,7 +37,7 @@ const ProjectEmployer: React.FC<Props> = ({ createdBy }) => {
 
   return (
     <div className="bg-surface rounded-xl border border-border shadow-sm p-5">
-      <h3 className="font-semibold text-text-main mb-4">About the Client</h3>
+      <h3 className="font-semibold text-text-main mb-4">{t("projectDetails.aboutClient")}</h3>
       
       <div className="flex items-center gap-3 mb-4">
         <div className="w-12 h-12 rounded-full overflow-hidden bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
@@ -51,7 +53,7 @@ const ProjectEmployer: React.FC<Props> = ({ createdBy }) => {
         </div>
         <div className="min-w-0">
           <p className="font-medium text-text-main truncate">
-            {user.displayName || "Anonymous Client"}
+            {user.displayName || t("projectDetails.anonymousClient")}
           </p>
           <div className="flex items-center gap-1 text-sm text-text-muted mt-0.5">
             <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -59,7 +61,7 @@ const ProjectEmployer: React.FC<Props> = ({ createdBy }) => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
             <span className="truncate">
-              {user.country?.name || "Unknown Location"}
+              {user.country?.name || t("projectDetails.unknownLocation")}
             </span>
           </div>
         </div>
@@ -69,7 +71,7 @@ const ProjectEmployer: React.FC<Props> = ({ createdBy }) => {
         to={`/employers/${user.id}`}
         className="block w-full py-2 text-center text-sm font-semibold rounded-lg bg-gray-50 border border-gray-200 text-gray-700 hover:bg-gray-100 hover:text-primary dark:bg-gray-700/50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors"
       >
-        View Profile
+        {t("projectDetails.viewProfile")}
       </Link>
     </div>
   );

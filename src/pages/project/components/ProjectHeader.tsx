@@ -7,6 +7,7 @@ import AddBidModal from "./AddBidModal";
 import { ProjectStatus } from "../../../types/project.types";
 import { getStatusText } from "../../../utils";
 import ArrowIcon from "../../../components/icons/ArrowIcon";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   projectId: string;
@@ -20,6 +21,7 @@ const ProjectHeader: React.FC<Props> = ({
   projectStatus,
 }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const user = useSelector(selectCurrentUser);
   const [bidOpen, setBidOpen] = useState(false);
 
@@ -32,7 +34,7 @@ const ProjectHeader: React.FC<Props> = ({
           className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors text-sm font-medium"
         >
           <ArrowIcon direction="left" />
-          Back to Projects
+          {t("projectDetails.backToProjects")}
         </button>
 
         {user?.role?.name === ROLES.FREELANCER &&
@@ -57,7 +59,7 @@ const ProjectHeader: React.FC<Props> = ({
                   d="M12 4v16m8-8H4"
                 />
               </svg>
-              Place a Bid
+              {t("projectDetails.placeBid")}
             </button>
           ) : (
             <span className="text-sm font-bold tracking-wider px-3 py-1 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">

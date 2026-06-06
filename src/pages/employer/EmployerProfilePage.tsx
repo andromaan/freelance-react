@@ -6,8 +6,10 @@ import { useGetLanguagesQuery } from "../../services/languages/languagesApi";
 import { userImageUrl } from "../../utils";
 import PageError from "../../components/ui/PageError";
 import ArrowIcon from "../../components/icons/ArrowIcon";
+import { useTranslation } from "react-i18next";
 
 const EmployerProfilePage: React.FC = () => {
+  const { t } = useTranslation();
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
 
@@ -41,8 +43,8 @@ const EmployerProfilePage: React.FC = () => {
   if (!user || !employer) {
     return (
       <PageError 
-        message="This profile might be incomplete or does not exist." 
-        backToLabel="Go Back"
+        message={t("employerProfile.incomplete")} 
+        backToLabel={t("employerProfile.goBack")}
         backToPath="-1"
       />
     );
@@ -52,7 +54,7 @@ const EmployerProfilePage: React.FC = () => {
     ? user.displayName.slice(0, 2).toUpperCase()
     : (user.email?.slice(0, 2).toUpperCase() ?? "??");
 
-  const countryText = user.country?.name ?? "Location not specified";
+  const countryText = user.country?.name ?? t("employerProfile.noLocation");
 
   return (
     <div className="min-h-[calc(100vh-64px)] bg-main py-8 px-4 sm:px-6 lg:px-8">
@@ -63,7 +65,7 @@ const EmployerProfilePage: React.FC = () => {
           className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors text-sm font-medium mb-2"
         >
           <ArrowIcon direction="left" />
-          Back
+          {t("employerProfile.back")}
         </button>
 
         {/* Header Section */}
@@ -87,7 +89,7 @@ const EmployerProfilePage: React.FC = () => {
               <h1 className="text-2xl sm:text-3xl font-bold text-text-main flex items-center gap-2">
                 {user.displayName || user.email}
                 <span className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
-                  Employer
+                  {t("employerProfile.employerRole")}
                 </span>
               </h1>
               <div className="flex flex-wrap items-center gap-3 mt-2 text-sm text-text-muted">
@@ -123,23 +125,23 @@ const EmployerProfilePage: React.FC = () => {
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
               <h2 className="text-lg font-bold text-text-main mb-4 border-b border-border-light pb-2">
-                Company Details
+                {t("employerProfile.companyDetails")}
               </h2>
 
               <div className="space-y-4">
                 <div>
                   <h3 className="text-sm font-medium text-text-muted">
-                    Company Name
+                    {t("employerProfile.companyName")}
                   </h3>
                   <p className="mt-1 text-text-main font-medium">
-                    {employer.companyName || "Not specified"}
+                    {employer.companyName || t("employerProfile.notSpecified")}
                   </p>
                 </div>
 
                 {employer.companyWebsite && (
                   <div>
                     <h3 className="text-sm font-medium text-text-muted">
-                      Website
+                      {t("employerProfile.website")}
                     </h3>
                     <a
                       href={
@@ -176,7 +178,7 @@ const EmployerProfilePage: React.FC = () => {
           <div className="space-y-6">
             <div className="bg-surface rounded-2xl p-6 border border-border shadow-sm">
               <h2 className="text-lg font-bold text-text-main mb-4 border-b border-border-light pb-2">
-                Languages
+                {t("employerProfile.languages")}
               </h2>
               {user.languages && user.languages.length > 0 ? (
                 <div className="flex flex-col gap-3">
@@ -201,7 +203,7 @@ const EmployerProfilePage: React.FC = () => {
                 </div>
               ) : (
                 <p className="text-text-muted text-sm">
-                  No languages specified.
+                  {t("employerProfile.noLanguages")}
                 </p>
               )}
             </div>

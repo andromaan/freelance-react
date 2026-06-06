@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 const languages = [
-  { code: "en", name: "English", flag: "🇺🇸" },
-  { code: "uk", name: "Українська", flag: "🇺🇦" },
+  { code: "en", nativeCode: "en", name: "English", flag: "https://flagcdn.com/us.svg" },
+  { code: "uk", nativeCode: "укр", name: "Українська", flag: "https://flagcdn.com/ua.svg" },
 ];
 
 const LanguageSwitcher: React.FC = () => {
@@ -11,11 +11,15 @@ const LanguageSwitcher: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const currentLanguage = languages.find((lang) => lang.code === i18n.language) || languages[0];
+  const currentLanguage =
+    languages.find((lang) => lang.code === i18n.language) || languages[0];
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -35,8 +39,14 @@ const LanguageSwitcher: React.FC = () => {
         className="flex items-center gap-2 p-2 rounded-lg text-sm font-medium text-text-muted hover:text-text-main hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none"
         aria-label="Switch language"
       >
-        <span className="text-base">{currentLanguage.flag}</span>
-        <span className="hidden sm:inline-block uppercase">{currentLanguage.code}</span>
+        <img
+          src={currentLanguage.flag}
+          alt={`${currentLanguage.code} flag`}
+          className="w-5 h-auto rounded-[2px]"
+        />
+        <span className="hidden sm:inline-block uppercase">
+          {currentLanguage.nativeCode}
+        </span>
       </button>
 
       {isOpen && (
@@ -45,17 +55,31 @@ const LanguageSwitcher: React.FC = () => {
             <button
               key={lang.code}
               onClick={() => handleLanguageChange(lang.code)}
-              className={`w-full text-left flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50 ${
+              className={`w-full text-left flex items-center gap-3 px-4 py-2.5 text-sm dark:text-sky-400 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50 ${
                 i18n.language === lang.code
                   ? "bg-primary/10 text-primary font-medium"
                   : "text-text-main"
               }`}
             >
-              <span className="text-base">{lang.flag}</span>
+              <img
+                src={lang.flag}
+                alt={`${lang.code} flag`}
+                className="w-5 h-auto rounded-[2px]"
+              />
               {lang.name}
               {i18n.language === lang.code && (
-                <svg className="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                <svg
+                  className="w-4 h-4 ml-auto"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
               )}
             </button>

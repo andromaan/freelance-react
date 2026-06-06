@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import type { SearchFreelancerVM } from "../../../types/freelancer.types";
 import { userImageUrl } from "../../../utils";
 
@@ -8,6 +9,7 @@ interface Props {
 }
 
 const FreelancerCard: React.FC<Props> = ({ freelancer }) => {
+  const { t } = useTranslation();
   const firstLetter = (freelancer.displayName ||
     freelancer.email ||
     "?")[0].toUpperCase();
@@ -15,7 +17,7 @@ const FreelancerCard: React.FC<Props> = ({ freelancer }) => {
     ? userImageUrl(freelancer.avatarImg)
     : null;
   const rating =
-    freelancer.rating > 0 ? freelancer.rating.toFixed(1) : "No rating yet";
+    freelancer.rating > 0 ? freelancer.rating.toFixed(1) : t("freelancers.noRating");
 
   return (
     <Link
@@ -42,9 +44,9 @@ const FreelancerCard: React.FC<Props> = ({ freelancer }) => {
             <div className="min-w-0 flex-1">
               <h3
                 className="font-semibold text-lg text-text-main truncate group-hover:text-primary transition-colors"
-                title={freelancer.displayName || "Anonymous Freelancer"}
+                title={freelancer.displayName || t("freelancers.anonymous")}
               >
-                {freelancer.displayName || "Anonymous Freelancer"}
+                {freelancer.displayName || t("freelancers.anonymous")}
               </h3>
               <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-sm text-text-muted mt-0.5">
                 {freelancer.country && (
@@ -79,15 +81,14 @@ const FreelancerCard: React.FC<Props> = ({ freelancer }) => {
               <span>{rating}</span>
             </div>
             <span className="text-gray-400 dark:text-gray-500 text-xs">
-              {freelancer.reviewsCount} review
-              {freelancer.reviewsCount !== 1 ? "s" : ""}
+              {freelancer.reviewsCount} {freelancer.reviewsCount !== 1 ? t("freelancers.reviews") : t("freelancers.review")}
             </span>
           </div>
         </div>
 
         {/* Bio */}
         <p className="text-sm text-text-muted line-clamp-3 mb-4 flex-1">
-          {freelancer.bio || "This freelancer hasn't provided a bio yet."}
+          {freelancer.bio || t("freelancers.noBio")}
         </p>
 
         {/* Skills */}
@@ -103,7 +104,7 @@ const FreelancerCard: React.FC<Props> = ({ freelancer }) => {
             ))}
             {freelancer.skills.length > 4 && (
               <span className="px-2 py-1 text-xs font-medium rounded-md bg-gray-50 text-gray-400 dark:bg-gray-800 dark:text-gray-500">
-                +{freelancer.skills.length - 4} more
+                {t("freelancers.more", { count: freelancer.skills.length - 4 })}
               </span>
             )}
           </div>

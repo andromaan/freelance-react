@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSignUpMutation } from "../../services/auth/authApi";
 import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { userApi } from "../../services/user/userApi";
 import type { AppDispatch } from "../../store";
 import type { SignUpVM, FormErrors, UserRole } from "../../types/auth.types";
@@ -15,6 +16,7 @@ import PasswordEyeIcon from "../../components/icons/PasswordEyeIcon";
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const { t } = useTranslation();
   const [signUp, { isLoading }] = useSignUpMutation();
 
   const [formValues, setFormValues] = useState({
@@ -49,21 +51,21 @@ const Register: React.FC = () => {
     const newErrors: FormErrors = {};
 
     if (!formValues.displayName) {
-      newErrors.displayName = "Обов'язкове поле";
+      newErrors.displayName = t("auth.requiredField");
     }
 
     if (!formValues.email) {
-      newErrors.email = "Обов'язкове поле";
+      newErrors.email = t("auth.requiredField");
     } else if (!/\S+@\S+\.\S+/.test(formValues.email)) {
-      newErrors.email = "Некоректний email";
+      newErrors.email = t("auth.invalidEmail");
     }
 
     if (!formValues.password || formValues.password.length < 8) {
-      newErrors.password = "Повинно бути 8 і більше символів";
+      newErrors.password = t("auth.passwordLength");
     }
 
     if (formValues.password !== formValues.confirmPassword) {
-      newErrors.confirmPassword = "Паролі не співпадають";
+      newErrors.confirmPassword = t("auth.passwordsNotMatch");
     }
 
     setErrors(newErrors);
@@ -89,11 +91,11 @@ const Register: React.FC = () => {
       dispatch(
         userApi.endpoints.getMyself.initiate(undefined, { forceRefetch: true }),
       );
-      toast.success("Registration successful!");
+      toast.success(t("auth.registerSuccess"));
       navigate("/");
     } catch (error: any) {
       const errorMessage =
-        error?.message || error?.data?.message || "Registration error";
+        error?.message || error?.data?.message || t("auth.registerError");
       toast.error(errorMessage);
     }
   };
@@ -106,16 +108,16 @@ const Register: React.FC = () => {
       >
         <ArrowIcon direction="left" />
         <span className="font-medium text-sm hidden sm:inline">
-          Back to Home
+          {t("auth.backHome")}
         </span>
       </Link>
 
       <div className="bg-surface border border-border rounded-xl p-8 w-full max-w-md shadow-lg">
         <div className="text-center mb-6">
           <h1 className="text-text-main text-2xl font-semibold mb-2">
-            Register
+            {t("auth.registerTitle")}
           </h1>
-          <p className="text-text-muted text-sm">Create your account</p>
+          <p className="text-text-muted text-sm">{t("auth.registerSubtitle")}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -124,7 +126,7 @@ const Register: React.FC = () => {
               htmlFor="displayName"
               className="text-gray-700 dark:text-gray-300 text-sm font-medium mb-2 block"
             >
-              Name
+              {t("auth.nameLabel")}
             </label>
             <input
               id="displayName"
@@ -137,7 +139,7 @@ const Register: React.FC = () => {
                   ? "border-red-500 focus:border-red-500"
                   : "border-gray-200 dark:border-gray-600 focus:border-primary"
               }`}
-              placeholder="Enter name"
+              placeholder={t("auth.namePlaceholder")}
               disabled={isLoading}
             />
             {errors.displayName && (
@@ -152,7 +154,7 @@ const Register: React.FC = () => {
               htmlFor="email"
               className="text-gray-700 dark:text-gray-300 text-sm font-medium mb-2 block"
             >
-              Email
+              {t("auth.emailLabel")}
             </label>
             <input
               id="email"
@@ -165,7 +167,7 @@ const Register: React.FC = () => {
                   ? "border-red-500 focus:border-red-500"
                   : "border-gray-200 dark:border-gray-600 focus:border-primary"
               }`}
-              placeholder="Enter email"
+              placeholder={t("auth.emailPlaceholder")}
               disabled={isLoading}
             />
             {errors.email && (
@@ -178,7 +180,7 @@ const Register: React.FC = () => {
               htmlFor="password"
               className="text-gray-700 dark:text-gray-300 text-sm font-medium mb-2 block"
             >
-              Password
+              {t("auth.passwordLabel")}
             </label>
             <div className="relative">
               <input
@@ -192,7 +194,7 @@ const Register: React.FC = () => {
                     ? "border-red-500 focus:border-red-500"
                     : "border-gray-200 dark:border-gray-600 focus:border-primary"
                 }`}
-                placeholder="Enter password (minimum 8 characters)"
+                placeholder={t("auth.passwordMinPlaceholder")}
                 disabled={isLoading}
               />
               <button
@@ -214,7 +216,7 @@ const Register: React.FC = () => {
               htmlFor="confirmPassword"
               className="text-gray-700 dark:text-gray-300 text-sm font-medium mb-2 block"
             >
-              Confirm Password
+              {t("auth.confirmPasswordLabel")}
             </label>
             <div className="relative">
               <input
@@ -228,7 +230,7 @@ const Register: React.FC = () => {
                     ? "border-red-500 focus:border-red-500"
                     : "border-gray-200 dark:border-gray-600 focus:border-primary"
                 }`}
-                placeholder="Confirm password"
+                placeholder={t("auth.confirmPasswordPlaceholder")}
                 disabled={isLoading}
               />
               <button
@@ -252,7 +254,7 @@ const Register: React.FC = () => {
 
           <div className="w-full">
             <label className="text-gray-700 dark:text-gray-300 text-sm font-medium mb-2 block">
-              Select Role
+              {t("auth.selectRole")}
             </label>
             <div className="flex flex-col gap-3 mt-2">
               <label className="flex items-center px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer transition-all hover:border-primary hover:bg-blue-50 dark:hover:bg-blue-900/20 bg-white dark:bg-gray-700">
@@ -266,7 +268,7 @@ const Register: React.FC = () => {
                   className="w-4 h-4 mr-3 cursor-pointer accent-primary"
                 />
                 <span className="text-gray-700 dark:text-gray-300 text-sm font-medium">
-                  Freelancer
+                  {t("auth.freelancer")}
                 </span>
               </label>
               <label className="flex items-center px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer transition-all hover:border-primary hover:bg-blue-50 dark:hover:bg-blue-900/20 bg-white dark:bg-gray-700">
@@ -280,7 +282,7 @@ const Register: React.FC = () => {
                   className="w-4 h-4 mr-3 cursor-pointer accent-primary"
                 />
                 <span className="text-gray-700 dark:text-gray-300 text-sm font-medium">
-                  Employer
+                  {t("auth.employer")}
                 </span>
               </label>
             </div>
@@ -291,7 +293,7 @@ const Register: React.FC = () => {
             className="bg-primary hover:bg-primary-hover text-white border-none rounded-lg px-3 py-3 text-base font-medium cursor-pointer transition-all w-full disabled:opacity-60 disabled:cursor-not-allowed"
             disabled={isLoading}
           >
-            {isLoading ? "Loading..." : "Register"}
+            {isLoading ? t("auth.loading") : t("auth.registerBtn")}
           </button>
 
           <div className="text-center mt-4">
@@ -299,7 +301,7 @@ const Register: React.FC = () => {
               to="/login"
               className="text-primary hover:text-primary-hover text-sm transition-colors hover:underline"
             >
-              Already have an account? Sign in
+              {t("auth.hasAccount")}
             </Link>
           </div>
         </form>
@@ -307,7 +309,7 @@ const Register: React.FC = () => {
         <div className="mt-6 text-center">
           <div className="flex items-center my-5 text-text-muted">
             <div className="flex-1 border-b border-gray-200 dark:border-gray-600"></div>
-            <span className="px-3 text-sm">or</span>
+            <span className="px-3 text-sm">{t("auth.or")}</span>
             <div className="flex-1 border-b border-gray-200 dark:border-gray-600"></div>
           </div>
           <GoogleLogin />

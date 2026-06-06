@@ -12,6 +12,7 @@ import { type ProjectFilterVM } from "../../types/project.types";
 import ProjectCard from "./components/ProjectCard";
 import { useTheme } from "../../context/ThemeContext";
 import Pagination from "../../components/ui/Pagination";
+import { useTranslation } from "react-i18next";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -44,6 +45,7 @@ const SkeletonCard: React.FC = () => (
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 const ProjectsPage: React.FC = () => {
+  const { t } = useTranslation();
   const searchId = useId();
   const budgetMinId = useId();
   const budgetMaxId = useId();
@@ -183,10 +185,10 @@ const ProjectsPage: React.FC = () => {
         {/* ── Page header ── */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-text-main mb-2">
-            Browse Projects
+            {t("projects.title")}
           </h1>
           <p className="text-text-muted text-sm leading-relaxed max-w-xl">
-            Discover open projects and find work that matches your skills.
+            {t("projects.subtitle")}
           </p>
         </div>
 
@@ -196,7 +198,7 @@ const ProjectsPage: React.FC = () => {
             {/* Search */}
             <div className="lg:col-span-2 relative">
               <label htmlFor={searchId} className="sr-only">
-                Search by title
+                {t("projects.searchPlaceholder")}
               </label>
               <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                 <svg
@@ -217,7 +219,7 @@ const ProjectsPage: React.FC = () => {
               <input
                 id={searchId}
                 type="search"
-                placeholder="Search by title…"
+                placeholder={t("projects.searchPlaceholder")}
                 value={titleInput}
                 onChange={(e) => setTitleInput(e.target.value)}
                 className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-main text-text-main placeholder:text-gray-500 dark:placeholder:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:border-primary transition-colors"
@@ -227,14 +229,14 @@ const ProjectsPage: React.FC = () => {
             {/* Budget min */}
             <div>
               <label htmlFor={budgetMinId} className="sr-only">
-                Budget min
+                {t("projects.budgetMin")}
               </label>
               <input
                 id={budgetMinId}
                 type="number"
                 min="0"
                 step="1"
-                placeholder="Budget min ($)"
+                placeholder={t("projects.budgetMin")}
                 value={budgetMin}
                 onChange={(e) => {
                   setBudgetMin(e.target.value);
@@ -247,14 +249,14 @@ const ProjectsPage: React.FC = () => {
             {/* Budget max */}
             <div>
               <label htmlFor={budgetMaxId} className="sr-only">
-                Budget max
+                {t("projects.budgetMax")}
               </label>
               <input
                 id={budgetMaxId}
                 type="number"
                 min="0"
                 step="1"
-                placeholder="Budget max ($)"
+                placeholder={t("projects.budgetMax")}
                 value={budgetMax}
                 onChange={(e) => {
                   setBudgetMax(e.target.value);
@@ -267,7 +269,7 @@ const ProjectsPage: React.FC = () => {
             {/* Deadline max */}
             <div>
               <label htmlFor={deadlineMaxId} className="sr-only">
-                Max deadline
+                {t("projects.maxDeadline")}
               </label>
               <input
                 id={deadlineMaxId}
@@ -276,8 +278,8 @@ const ProjectsPage: React.FC = () => {
                 onBlur={(e) => {
                   if (!e.target.value) e.target.type = "text";
                 }}
-                placeholder="Max deadline"
-                title="Maximum deadline"
+                placeholder={t("projects.maxDeadline")}
+                title={t("projects.maxDeadline")}
                 value={deadlineMax}
                 onChange={(e) => {
                   setDeadlineMax(e.target.value);
@@ -294,9 +296,9 @@ const ProjectsPage: React.FC = () => {
               onChange={handleCategoryChange}
               styles={styles}
               className="lg:col-span-2"
-              placeholder="Select categories…"
-              noOptionsMessage={() => "No categories available"}
-              aria-label="Select project categories"
+              placeholder={t("projects.selectCategories")}
+              noOptionsMessage={() => t("projects.noCategories")}
+              aria-label={t("projects.selectCategories")}
               value={categoryOptions.filter((o) =>
                 selectedCategoryIds.includes(o.value),
               )}
@@ -324,7 +326,7 @@ const ProjectsPage: React.FC = () => {
                       d="M6 18L18 6M6 6l12 12"
                     />
                   </svg>
-                  Clear filters
+                  {t("projects.clearFilters")}
                 </button>
               </div>
             )}
@@ -335,9 +337,9 @@ const ProjectsPage: React.FC = () => {
         {!isLoadingContent && (
           <p className="text-sm text-text-muted mb-4">
             {totalCount === 0
-              ? "No projects found"
-              : `${totalCount} project${totalCount === 1 ? "" : "s"} found`}
-            {hasFilters && " · filtered"}
+              ? t("projects.noProjectsFound")
+              : `${totalCount} ${totalCount === 1 ? t("projects.projectFound") : t("projects.projectsFound")}`}
+            {hasFilters && ` · ${t("projects.filtered")}`}
           </p>
         )}
 
@@ -371,10 +373,10 @@ const ProjectsPage: React.FC = () => {
               </svg>
             </div>
             <p className="text-text-muted font-medium mb-1">
-              No projects found
+              {t("projects.noProjectsFound")}
             </p>
             <p className="text-sm text-gray-400 dark:text-gray-500">
-              Try adjusting your filters or search terms.
+              {t("projects.tryAdjusting")}
             </p>
             {hasFilters && (
               <button
@@ -382,7 +384,7 @@ const ProjectsPage: React.FC = () => {
                 onClick={clearFilters}
                 className="mt-4 px-4 py-2 rounded-lg text-sm font-medium bg-primary hover:bg-primary-hover text-white transition-colors"
               >
-                Clear filters
+                {t("projects.clearFilters")}
               </button>
             )}
           </div>

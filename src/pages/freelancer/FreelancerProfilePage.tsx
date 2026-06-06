@@ -12,8 +12,10 @@ import ReviewCard from "./components/ReviewCard";
 import { userImageUrl } from "../../utils";
 import PageError from "../../components/ui/PageError";
 import ArrowIcon from "../../components/icons/ArrowIcon";
+import { useTranslation } from "react-i18next";
 
 const FreelancerProfilePage: React.FC = () => {
+  const { t } = useTranslation();
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
 
@@ -72,8 +74,8 @@ const FreelancerProfilePage: React.FC = () => {
   if (!user || !freelancer) {
     return (
       <PageError
-        message="This profile might be incomplete or does not exist."
-        backToLabel="Go Back"
+        message={t("freelancerProfile.incomplete")}
+        backToLabel={t("freelancerProfile.goBack")}
         backToPath="-1"
       />
     );
@@ -83,7 +85,7 @@ const FreelancerProfilePage: React.FC = () => {
     ? user.displayName.slice(0, 2).toUpperCase()
     : (user.email?.slice(0, 2).toUpperCase() ?? "??");
 
-  const countryText = user.country?.name ?? "Location not specified";
+  const countryText = user.country?.name ?? t("freelancerProfile.noLocation");
 
   const latestReviews = [...reviews]
     .sort((a, b) => b.id.localeCompare(a.id))
@@ -98,7 +100,7 @@ const FreelancerProfilePage: React.FC = () => {
           className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors text-sm font-medium mb-2"
         >
           <ArrowIcon direction="left" />
-          Back
+          {t("freelancerProfile.back")}
         </button>
 
         {/* Header Section */}
@@ -157,7 +159,7 @@ const FreelancerProfilePage: React.FC = () => {
                 {/* Rating */}
                 <div
                   className="flex items-center gap-1.5"
-                  title={`${averageRating} average rating`}
+                  title={`${averageRating} ${t("freelancerProfile.averageRating")}`}
                 >
                   <svg
                     className="w-4 h-4 text-amber-400"
@@ -169,10 +171,10 @@ const FreelancerProfilePage: React.FC = () => {
                   <span className="font-semibold text-text-main">
                     {averageRating > 0
                       ? averageRating.toFixed(1)
-                      : "No rating yet"}
+                      : t("freelancerProfile.noRating")}
                   </span>
                   <span className="text-text-muted">
-                    ({reviews.length} review{reviews.length !== 1 ? "s" : ""})
+                    ({reviews.length} {reviews.length !== 1 ? t("freelancerProfile.reviews") : t("freelancerProfile.review")})
                   </span>
                 </div>
 
@@ -183,7 +185,7 @@ const FreelancerProfilePage: React.FC = () => {
                 {/* Completed Contracts */}
                 <div
                   className="flex items-center gap-1.5"
-                  title={`${completedContractsCount} completed contracts`}
+                  title={`${completedContractsCount} ${t("freelancerProfile.completedContractsTitle")}`}
                 >
                   <svg
                     className="w-4 h-4 text-emerald-500"
@@ -202,8 +204,8 @@ const FreelancerProfilePage: React.FC = () => {
                     {completedContractsCount}
                   </span>
                   <span className="text-text-muted">
-                    completed{" "}
-                    {completedContractsCount === 1 ? "contract" : "contracts"}
+                    {t("freelancerProfile.completed")}{" "}
+                    {completedContractsCount === 1 ? t("freelancerProfile.contract") : t("freelancerProfile.contracts")}
                   </span>
                 </div>
               </div>
@@ -216,10 +218,10 @@ const FreelancerProfilePage: React.FC = () => {
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
               <h2 className="text-lg font-bold text-text-main mb-4 border-b border-border-light pb-2">
-                About
+                {t("freelancerProfile.about")}
               </h2>
               <p className="text-text-muted leading-relaxed whitespace-pre-line">
-                {freelancer.bio || "No bio provided."}
+                {freelancer.bio || t("freelancerProfile.noBio")}
               </p>
             </div>
 
@@ -227,10 +229,10 @@ const FreelancerProfilePage: React.FC = () => {
             <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
               <div className="flex items-center justify-between mb-4 border-b border-border-light pb-2">
                 <h2 className="text-lg font-bold text-text-main">
-                  Recent Reviews
+                  {t("freelancerProfile.recentReviews")}
                 </h2>
                 <span className="text-sm text-text-muted font-medium bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">
-                  {reviews.length} total
+                  {reviews.length} {t("freelancerProfile.total")}
                 </span>
               </div>
 
@@ -248,7 +250,7 @@ const FreelancerProfilePage: React.FC = () => {
               ) : (
                 <div className="text-center py-8">
                   <p className="text-text-muted">
-                    No reviews yet.
+                    {t("freelancerProfile.noReviews")}
                   </p>
                 </div>
               )}
@@ -260,7 +262,7 @@ const FreelancerProfilePage: React.FC = () => {
             {/* Skills */}
             <div className="bg-surface rounded-2xl p-6 border border-border shadow-sm">
               <h2 className="text-lg font-bold text-text-main mb-4 border-b border-border-light pb-2">
-                Skills
+                {t("freelancerProfile.skills")}
               </h2>
               {freelancer.skills && freelancer.skills.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
@@ -275,7 +277,7 @@ const FreelancerProfilePage: React.FC = () => {
                 </div>
               ) : (
                 <p className="text-text-muted text-sm">
-                  No skills added.
+                  {t("freelancerProfile.noSkills")}
                 </p>
               )}
             </div>
@@ -283,7 +285,7 @@ const FreelancerProfilePage: React.FC = () => {
             {/* Languages */}
             <div className="bg-surface rounded-2xl p-6 border border-border shadow-sm">
               <h2 className="text-lg font-bold text-text-main mb-4 border-b border-border-light pb-2">
-                Languages
+                {t("freelancerProfile.languages")}
               </h2>
               {user.languages && user.languages.length > 0 ? (
                 <div className="flex flex-col gap-3">
@@ -308,7 +310,7 @@ const FreelancerProfilePage: React.FC = () => {
                 </div>
               ) : (
                 <p className="text-text-muted text-sm">
-                  No languages specified.
+                  {t("freelancerProfile.noLanguages")}
                 </p>
               )}
             </div>
@@ -318,7 +320,7 @@ const FreelancerProfilePage: React.FC = () => {
         {/* Portfolio */}
         <div className="bg-surface rounded-2xl p-6 border border-border shadow-sm">
           <h2 className="text-lg font-bold text-text-main mb-6 border-b border-border-light pb-2">
-            Portfolio & Projects
+            {t("freelancerProfile.portfolio")}
           </h2>
           {freelancer.portfolio && freelancer.portfolio.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -400,7 +402,7 @@ const FreelancerProfilePage: React.FC = () => {
                       )}
                       {item.portfolioUrl && (
                         <div className="mt-auto pt-4 border-t border-border-light flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-gray-400 group-hover:text-primary transition-colors">
-                          <span>View Link</span>
+                          <span>{t("freelancerProfile.viewLink")}</span>
                           <ArrowIcon direction="right" />
                         </div>
                       )}
@@ -427,11 +429,10 @@ const FreelancerProfilePage: React.FC = () => {
                 </svg>
               </div>
               <h3 className="text-base font-semibold text-text-main mb-1">
-                Portfolio is empty
+                {t("freelancerProfile.portfolioEmpty")}
               </h3>
               <p className="text-sm text-text-muted max-w-sm mx-auto">
-                This freelancer hasn't added any projects to their portfolio
-                yet.
+                {t("freelancerProfile.portfolioEmptyDesc")}
               </p>
             </div>
           )}

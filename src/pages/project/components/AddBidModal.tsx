@@ -9,6 +9,7 @@ import {
 import { useCreateBidMutation } from "../../../services/bids/bidsApi";
 import type { CreateBidVM } from "../../../types/bid.types";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 // ─── Form types ───────────────────────────────────────────────────────────────
 
@@ -26,16 +27,16 @@ const EMPTY: FormState = { amount: "", message: "" };
 
 // ─── Validation ───────────────────────────────────────────────────────────────
 
-function validate(f: FormState): FormErrors {
+function validate(f: FormState, t: any): FormErrors {
   const e: FormErrors = {};
 
   const amount = parseFloat(f.amount);
-  if (!f.amount || isNaN(amount)) e.amount = "Please enter your bid amount";
-  else if (amount <= 0) e.amount = "Amount must be a positive number";
+  if (!f.amount || isNaN(amount)) e.amount = t("bids.errors.amountRequired");
+  else if (amount <= 0) e.amount = t("bids.errors.amountPositive");
 
-  if (!f.message.trim()) e.message = "Cover letter is required";
+  if (!f.message.trim()) e.message = t("bids.errors.coverLetterRequired");
   else if (f.message.trim().length < 20)
-    e.message = "At least 20 characters — describe your approach";
+    e.message = t("bids.errors.coverLetterLength");
 
   return e;
 }
@@ -58,6 +59,7 @@ const AddBidModal: React.FC<Props> = ({
   projectId,
   projectBudget,
 }) => {
+  const { t } = useTranslation();
   const amountId = useId();
   const messageId = useId();
 
@@ -85,7 +87,7 @@ const AddBidModal: React.FC<Props> = ({
     const { name, value } = e.target as { name: keyof FormState; value: string };
     setForm((p) => ({ ...p, [name]: value }));
     if (touched[name]) {
-      const errs = validate({ ...form, [name]: value });
+      const errs = validate({ ...form, [name]: value }, t);
       setErrors((p) => ({ ...p, [name]: errs[name] }));
     }
   };
@@ -95,7 +97,7 @@ const AddBidModal: React.FC<Props> = ({
   ) => {
     const { name } = e.target as { name: keyof FormState };
     setTouched((p) => ({ ...p, [name]: true }));
-    const errs = validate(form);
+    const errs = validate(form, t);
     setErrors((p) => ({ ...p, [name]: errs[name] }));
   };
 
@@ -103,7 +105,7 @@ const AddBidModal: React.FC<Props> = ({
     e.preventDefault();
     setSubmitError(null);
 
-    const errs = validate(form);
+    const errs = validate(form, t);
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
       setTouched({ amount: true, message: true });
@@ -119,17 +121,17 @@ const AddBidModal: React.FC<Props> = ({
     try {
       await createBid(payload).unwrap();
 
-      toast.success("Bid submitted successfully");
+      toast.success(t("bids.success"));
       onClose();
     } catch (err: any) {
       let message =
         err?.data?.message ??
         err?.data?.title ??
-        "Failed to submit bid. Please try again.";
+        t("bids.errors.failedSubmit");
       if (err?.status === 403)
-        message = "You don't have permission to bid on this project.";
+        message = t("bids.errors.noPermission");
       if (err?.status === 409)
-        message = "You have already placed a bid on this project.";
+        message = t("bids.errors.alreadyBid");
       setSubmitError(message);
     }
   };
@@ -140,8 +142,8 @@ const AddBidModal: React.FC<Props> = ({
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
-      title="Place a Bid"
-      description="Submit your proposal for this project."
+      title={t("bids.modalTitle")}
+      description={t("bids.modalDesc")}
       size="md"
       preventBackdropClose
     >
@@ -160,8 +162,8 @@ const AddBidModal: React.FC<Props> = ({
           id={amountId}
           label={
             projectBudget
-              ? `Your Bid ($) — project budget: $${projectBudget.toLocaleString("en-US")}`
-              : "Your Bid ($)"
+              ? t("bids.amountLabelBudget", { budget: projectBudget.toLocaleString("en-US") })
+              : t("bids.amountLabel")
           }
           required
           error={errors.amount}
@@ -184,7 +186,7 @@ const AddBidModal: React.FC<Props> = ({
         {/* Cover letter */}
         <FormField
           id={messageId}
-          label="Cover Letter"
+          label={t("bids.coverLetterLabel")}
           required
           error={errors.message}
         >
@@ -196,20 +198,20 @@ const AddBidModal: React.FC<Props> = ({
             value={form.message}
             onChange={handleChange}
             onBlur={handleBlur}
-            placeholder="Describe your relevant experience, approach, and why you're a great fit for this project…"
+            placeholder={t("bids.coverLetterPlaceholder")}
             className={`${inputClass} resize-none`}
           />
         </FormField>
 
         {/* Character counter hint */}
         <p className="text-xs text-gray-400 dark:text-gray-500 -mt-3 text-right">
-          {form.message.trim().length} / 20 min characters
+          {t("bids.charCount", { count: form.message.trim().length })}
         </p>
 
         {/* Required legend + actions */}
         <div className="flex items-center justify-end gap-3 pt-2 border-t border-border-light">
           <p className="text-xs text-gray-400 dark:text-gray-500 mr-auto">
-            <span aria-hidden="true">* </span>Required fields
+            <span aria-hidden="true">* </span>{t("bids.requiredFields")}
           </p>
 
           <button
@@ -224,14 +226,14 @@ const AddBidModal: React.FC<Props> = ({
                        disabled:opacity-50 disabled:cursor-not-allowed
                        transition-colors"
           >
-            Cancel
+            {t("bids.cancel")}
           </button>
 
           <SubmitButton
             form="add-bid-form"
             isLoading={isLoading}
-            label="Submit Bid"
-            loadingLabel="Submitting…"
+            label={t("bids.submitBid")}
+            loadingLabel={t("bids.submitting")}
           />
         </div>
       </form>

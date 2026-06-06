@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSignInMutation } from "../../services/auth/authApi";
 import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { userApi } from "../../services/user/userApi";
 import type { AppDispatch } from "../../store";
 import type { SignInVM, FormErrors } from "../../types/auth.types";
@@ -14,6 +15,7 @@ import PasswordEyeIcon from "../../components/icons/PasswordEyeIcon";
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const { t } = useTranslation();
   const [signIn, { isLoading }] = useSignInMutation();
 
   const [formValues, setFormValues] = useState<SignInVM>({
@@ -44,13 +46,13 @@ const Login: React.FC = () => {
     const newErrors: FormErrors = {};
 
     if (!formValues.email) {
-      newErrors.email = "Required field";
+      newErrors.email = t("auth.requiredField");
     } else if (!/\S+@\S+\.\S+/.test(formValues.email)) {
-      newErrors.email = "Invalid email";
+      newErrors.email = t("auth.invalidEmail");
     }
 
     if (!formValues.password) {
-      newErrors.password = "Required field";
+      newErrors.password = t("auth.requiredField");
     }
 
     setErrors(newErrors);
@@ -72,7 +74,7 @@ const Login: React.FC = () => {
       navigate("/");
     } catch (error: any) {
       const errorMessage =
-        error?.message || error?.data?.message || "Error logging in";
+        error?.message || error?.data?.message || t("auth.loginError");
       toast.error(errorMessage);
     }
   };
@@ -85,14 +87,14 @@ const Login: React.FC = () => {
       >
         <ArrowIcon direction="left" />
         <span className="font-medium text-sm hidden sm:inline">
-          Back to Home
+          {t("auth.backHome")}
         </span>
       </Link>
 
       <div className="bg-surface border border-border rounded-xl p-8 w-full max-w-md shadow-lg">
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <h1 className="text-text-main text-2xl font-semibold mb-6 text-center">
-            Login to Your Account
+            {t("auth.loginTitle")}
           </h1>
 
           <div className="w-full">
@@ -100,7 +102,7 @@ const Login: React.FC = () => {
               htmlFor="email"
               className="text-gray-700 dark:text-gray-300 text-sm font-medium mb-2 block"
             >
-              Email
+              {t("auth.emailLabel")}
             </label>
             <input
               id="email"
@@ -113,7 +115,7 @@ const Login: React.FC = () => {
                   ? "border-red-500 focus:border-red-500"
                   : "border-gray-200 dark:border-gray-600 focus:border-primary"
               }`}
-              placeholder="Enter email"
+              placeholder={t("auth.emailPlaceholder")}
               disabled={isLoading}
             />
             {errors.email && (
@@ -126,7 +128,7 @@ const Login: React.FC = () => {
               htmlFor="password"
               className="text-gray-700 dark:text-gray-300 text-sm font-medium mb-2 block"
             >
-              Password
+              {t("auth.passwordLabel")}
             </label>
             <div className="relative">
               <input
@@ -140,7 +142,7 @@ const Login: React.FC = () => {
                     ? "border-red-500 focus:border-red-500"
                     : "border-gray-200 dark:border-gray-600 focus:border-primary"
                 }`}
-                placeholder="Enter password"
+                placeholder={t("auth.passwordPlaceholder")}
                 disabled={isLoading}
               />
               <button
@@ -162,7 +164,7 @@ const Login: React.FC = () => {
             className="bg-primary hover:bg-primary-hover text-white border-none rounded-lg px-3 py-3 text-base font-medium cursor-pointer transition-all w-full disabled:opacity-60 disabled:cursor-not-allowed"
             disabled={isLoading}
           >
-            {isLoading ? "Loading..." : "Sign in"}
+            {isLoading ? t("auth.loading") : t("auth.signInBtn")}
           </button>
 
           <div className="text-center mt-4">
@@ -170,7 +172,7 @@ const Login: React.FC = () => {
               to="/register"
               className="text-primary hover:text-primary-hover text-sm transition-colors hover:underline"
             >
-              Don't have an account? Register
+              {t("auth.noAccount")}
             </Link>
           </div>
         </form>
@@ -178,7 +180,7 @@ const Login: React.FC = () => {
         <div className="mt-6 text-center">
           <div className="flex items-center my-5 text-text-muted">
             <div className="flex-1 border-b border-gray-200 dark:border-gray-600"></div>
-            <span className="px-3 text-sm">or</span>
+            <span className="px-3 text-sm">{t("auth.or")}</span>
             <div className="flex-1 border-b border-gray-200 dark:border-gray-600"></div>
           </div>
           <GoogleLogin />

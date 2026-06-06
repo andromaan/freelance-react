@@ -8,8 +8,10 @@ import ProjectResponses from "./components/ProjectResponses";
 import ProjectEmployer from "./components/ProjectEmployer";
 import PageLoading from "../../components/ui/PageLoading";
 import PageError from "../../components/ui/PageError";
+import { useTranslation } from "react-i18next";
 
 const ProjectPage: React.FC = () => {
+  const { t } = useTranslation();
   const { projectId } = useParams<{ projectId: string }>();
 
   const {
@@ -21,14 +23,14 @@ const ProjectPage: React.FC = () => {
   });
 
   if (isLoading) {
-    return <PageLoading message="Loading project..." />;
+    return <PageLoading message={t("projectDetails.loading")} />;
   }
 
   if (error || !project) {
     return (
       <PageError 
-        message="Project not found or error loading project." 
-        backToLabel="Back to Projects"
+        message={t("projectDetails.notFound")} 
+        backToLabel={t("projectDetails.backToProjects")}
         backToPath="/projects"
       />
     );
