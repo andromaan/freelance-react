@@ -251,6 +251,13 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
             onBlur={handleBlur}
             placeholder="What does this project involve?"
             className={`${inputClass} resize-none`}
+            style={
+              {
+                fieldSizing: "content",
+                minHeight: "4lh",
+                maxHeight: "10lh",
+              } as React.CSSProperties
+            }
           />
         </FormField>
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ROLES } from "../../constants/roles";
 import { selectCurrentUser } from "../../store/userSlice";
 import type { BidVM } from "../../types/bid.types";
@@ -84,8 +84,6 @@ function resolveTab(param: string | undefined, isFreelancer: boolean): TabKey {
   return isFreelancer ? "my-bids" : "edit-profile";
 }
 
-
-
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 const MyProfilePage: React.FC = () => {
@@ -130,7 +128,16 @@ const MyProfilePage: React.FC = () => {
           )}
           <div className="text-center min-w-0 w-full">
             <p className="font-semibold text-text-main truncate">
-              {user?.displayName ?? "—"}
+              <Link
+                to={
+                  isFreelancer
+                    ? `/freelancers/${user?.id}`
+                    : `/employers/${user?.id}`
+                }
+                className="hover:underline"
+              >
+                {user?.displayName ?? "—"}
+              </Link>
             </p>
             <p className="text-xs text-text-muted truncate mt-0.5">
               {user?.email}

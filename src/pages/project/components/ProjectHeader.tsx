@@ -25,6 +25,14 @@ const ProjectHeader: React.FC<Props> = ({
   const user = useSelector(selectCurrentUser);
   const [bidOpen, setBidOpen] = useState(false);
 
+  const isFreelancer = user?.role?.name === ROLES.FREELANCER;
+  const isOpen = projectStatus === ProjectStatus.Open;
+  const statusBadge = (
+    <span className="text-sm font-bold tracking-wider px-3 py-1 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
+      {getStatusText(projectStatus).toUpperCase()}
+    </span>
+  );
+
   return (
     <>
       <div className="flex items-center justify-between mb-2">
@@ -37,35 +45,32 @@ const ProjectHeader: React.FC<Props> = ({
           {t("projectDetails.backToProjects")}
         </button>
 
-        {user?.role?.name === ROLES.FREELANCER &&
-          (projectStatus === ProjectStatus.Open ? (
-            <button
-              type="button"
-              id="add-bid-btn"
-              onClick={() => setBidOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg transition-colors text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+        {isFreelancer && isOpen ? (
+          <button
+            type="button"
+            id="add-bid-btn"
+            onClick={() => setBidOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg transition-colors text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
             >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-              {t("projectDetails.placeBid")}
-            </button>
-          ) : (
-            <span className="text-sm font-bold tracking-wider px-3 py-1 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
-              {getStatusText(projectStatus).toUpperCase()}
-            </span>
-          ))}
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            {t("projectDetails.placeBid")}
+          </button>
+        ) : (
+          statusBadge
+        )}
       </div>
 
       <AddBidModal
