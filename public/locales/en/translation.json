@@ -9,7 +9,10 @@
     "admin": "Admin",
     "login": "Login",
     "signup": "Sign Up",
-    "hello": "Hello"
+    "hello": "Hello",
+    "theme": "Theme",
+    "wallet": "Wallet",
+    "notifications": "Notifications"
   },
   "footer": {
     "brandDesc": "A platform for connecting freelancers and employers. Find work or talented professionals.",

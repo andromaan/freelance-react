@@ -6,7 +6,7 @@ const languages = [
   { code: "uk", nativeCode: "укр", name: "Українська", flag: "https://flagcdn.com/ua.svg" },
 ];
 
-const LanguageSwitcher: React.FC = () => {
+const LanguageSwitcher: React.FC<{ dropUp?: boolean }> = ({ dropUp = false }) => {
   const { i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -50,7 +50,7 @@ const LanguageSwitcher: React.FC = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute lg:right-0 xs:left-0 mt-2 w-40 bg-surface border border-border rounded-xl shadow-lg overflow-hidden z-50 animate-in slide-in-from-top-2">
+        <div className={`absolute ${dropUp ? "bottom-full mb-2" : "mt-2"} lg:right-0 xs:left-0 w-40 bg-surface border border-border rounded-xl shadow-lg overflow-hidden z-[60] animate-in slide-in-from-top-2`}>
           {languages.map((lang) => (
             <button
               key={lang.code}
