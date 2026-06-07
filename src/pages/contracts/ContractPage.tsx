@@ -8,6 +8,7 @@ import { useGetProjectByIdQuery } from "../../services/projects/projectsApi";
 import { selectCurrentUser } from "../../store/userSlice";
 import ContractMilestonesList from "./components/ContractMilestonesList";
 import CreateReviewModal from "./components/CreateReviewModal";
+import CreateDisputeModal from "./components/CreateDisputeModal";
 import ContractChatModal from "../../components/chat/ContractChatModal";
 import { useGetIsReviewedQuery } from "../../services/reviews/reviewsApi";
 import { getStatusText } from "../../utils";
@@ -23,6 +24,7 @@ const ContractPage: React.FC = () => {
 
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+  const [isDisputeModalOpen, setIsDisputeModalOpen] = useState(false);
 
   const {
     data: contract,
@@ -35,10 +37,10 @@ const ContractPage: React.FC = () => {
     { skip: !contract },
   );
 
-  const { data: reviewedData, isLoading: isReviewLoading } = useGetIsReviewedQuery(
-    contract?.id!,
-    { skip: !contract || contract.status !== "Completed" }
-  );
+  const { data: reviewedData, isLoading: isReviewLoading } =
+    useGetIsReviewedQuery(contract?.id!, {
+      skip: !contract || contract.status !== "Completed",
+    });
 
   if (isLoading) {
     return <PageLoading message="Loading contract details..." />;
@@ -46,8 +48,8 @@ const ContractPage: React.FC = () => {
 
   if (error || !contract) {
     return (
-      <PageError 
-        message="Contract not found or error loading contract." 
+      <PageError
+        message="Contract not found or error loading contract."
         backToLabel="Back to My Contracts"
         backToPath="/my-contracts"
       />
@@ -73,9 +75,21 @@ const ContractPage: React.FC = () => {
             <ArrowIcon direction="left" />
             Back to My Contracts
           </button>
-          <span className="text-sm font-bold tracking-wider px-3 py-1 rounded-full bg-primary/10 text-primary dark:text-white">
-            {getStatusText(contract.status).toUpperCase()}
-          </span>
+          <div className="flex items-center gap-3">
+            {contract.status !== "Disputed" &&
+              contract.status !== "Cancelled" &&
+              contract.status !== "Completed" && (
+                <button
+                  onClick={() => setIsDisputeModalOpen(true)}
+                  className="px-3 py-1 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 rounded-full transition-colors border border-red-200 dark:border-red-800 focus:outline-none"
+                >
+                  Open Dispute
+                </button>
+              )}
+            <span className="text-sm font-bold tracking-wider px-3 py-1 rounded-full bg-primary/10 text-primary dark:text-white">
+              {getStatusText(contract.status).toUpperCase()}
+            </span>
+          </div>
         </div>
 
         {/* Header */}
@@ -137,13 +151,17 @@ const ContractPage: React.FC = () => {
             <span className="text-xl font-bold text-text-main">
               ${contract.agreedRate}
             </span>
-            <div className="flex flex-col sm:flex-row gap-2">
-              {contract.status === "Completed" && (
-                isReviewLoading ? (
-                  <span className="text-sm text-text-muted">Loading review status...</span>
+            <div className="flex flex-col sm:flex-row gap-2 items-center">
+              {contract.status === "Completed" &&
+                (isReviewLoading ? (
+                  <span className="text-sm text-text-muted">
+                    Loading review status...
+                  </span>
                 ) : reviewedData ? (
                   <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 rounded-lg border border-border">
-                    <span className="text-sm font-medium text-text-main">Review Added:</span>
+                    <span className="text-sm font-medium text-text-main">
+                      Review Added:
+                    </span>
                     <span className="flex items-center gap-1 text-yellow-600 dark:text-yellow-500 text-sm font-bold">
                       <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -158,17 +176,14 @@ const ContractPage: React.FC = () => {
                   >
                     Leave a review
                   </button>
-                )
-              )}
+                ))}
             </div>
           </div>
         </div>
 
         {/* Milestones Section */}
         <div className="bg-surface rounded-2xl p-6 border border-border shadow-sm">
-          <h2 className="text-xl font-bold text-text-main mb-6">
-            Milestones
-          </h2>
+          <h2 className="text-xl font-bold text-text-main mb-6">Milestones</h2>
           <ContractMilestonesList
             contractId={contract.id}
             isFreelancer={isFreelancer}
@@ -179,6 +194,11 @@ const ContractPage: React.FC = () => {
       <CreateReviewModal
         isOpen={isReviewModalOpen}
         onClose={() => setIsReviewModalOpen(false)}
+        contractId={contract.id}
+      />
+      <CreateDisputeModal
+        isOpen={isDisputeModalOpen}
+        onClose={() => setIsDisputeModalOpen(false)}
         contractId={contract.id}
       />
       <ContractChatModal

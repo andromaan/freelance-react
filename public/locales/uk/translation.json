@@ -245,7 +245,31 @@
     "companyName": "Назва компанії",
     "notSpecified": "Не вказано",
     "website": "Вебсайт",
-    "languages": "Мови",
     "noLanguages": "Мови не вказані."
+  },
+  "contracts": {
+    "disputeReasonRequired": "Будь ласка, вкажіть причину спору.",
+    "disputeCreatedSuccess": "Спір успішно відкрито.",
+    "disputeCreatedFailed": "Не вдалося відкрити спір.",
+    "openDispute": "Відкрити спір",
+    "disputeReason": "Причина спору",
+    "disputeReasonPlaceholder": "Детально опишіть проблему...",
+    "disputeNotice": "Після відкриття спору виконання контракту буде призупинено, і модератор розгляне вашу справу.",
+    "submitDispute": "Надіслати спір"
+  },
+  "disputes": {
+    "openedOn": "Відкрито",
+    "viewContract": "Переглянути контракт",
+    "reason": "Причина:",
+    "noReasonProvided": "Причину не вказано.",
+    "loading": "Завантаження спорів...",
+    "error": "Не вдалося завантажити спори.",
+    "myDisputesTitle": "Мої Спори",
+    "totalCount": "Всього: {{count}}",
+    "noDisputes": "Спорних ситуацій не знайдено",
+    "noDisputesDesc": "Наразі у вас немає відкритих спорів."
+  },
+  "common": {
+    "cancel": "Скасувати"
   }
 }

@@ -32,6 +32,7 @@ import MyContractsPage from "../pages/contracts/MyContractsPage";
 import FreelancerProfilePage from "../pages/freelancer/FreelancerProfilePage";
 import EmployerProfilePage from "../pages/employer/EmployerProfilePage";
 import ContractPage from "../pages/contracts/ContractPage";
+import MyDisputesPage from "../pages/disputes/MyDisputesPage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -97,6 +98,15 @@ const AppRoutes: React.FC = () => {
           element={
             <ProtectedRoute>
               <ContractPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/my-disputes"
+          element={
+            <ProtectedRoute>
+              <MyDisputesPage />
             </ProtectedRoute>
           }
         />

@@ -245,7 +245,31 @@
     "companyName": "Company Name",
     "notSpecified": "Not specified",
     "website": "Website",
-    "languages": "Languages",
     "noLanguages": "No languages specified."
+  },
+  "contracts": {
+    "disputeReasonRequired": "Please provide a reason for the dispute.",
+    "disputeCreatedSuccess": "Dispute created successfully.",
+    "disputeCreatedFailed": "Failed to create dispute.",
+    "openDispute": "Open Dispute",
+    "disputeReason": "Reason for Dispute",
+    "disputeReasonPlaceholder": "Explain the issue in detail...",
+    "disputeNotice": "Once a dispute is opened, the contract will be paused, and a moderator will review the case.",
+    "submitDispute": "Submit Dispute"
+  },
+  "disputes": {
+    "openedOn": "Opened on",
+    "viewContract": "View Contract",
+    "reason": "Reason:",
+    "noReasonProvided": "No reason provided.",
+    "loading": "Loading disputes...",
+    "error": "Failed to load disputes.",
+    "myDisputesTitle": "My Disputes",
+    "totalCount": "Total: {{count}}",
+    "noDisputes": "No disputes found",
+    "noDisputesDesc": "You don't have any disputes at the moment."
+  },
+  "common": {
+    "cancel": "Cancel"
   }
 }

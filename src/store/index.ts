@@ -20,6 +20,7 @@ import { employerApi } from "../services/employer/employerApi";
 import { countriesApi } from "../services/countries/countriesApi";
 import { skillsApi } from "../services/skills/skillsApi";
 import { chatApi } from "../services/chat/chatApi";
+import { disputesApi } from "../services/disputes/disputesApi";
 
 const appReducer = combineReducers({
   user: userReducer,
@@ -42,6 +43,7 @@ const appReducer = combineReducers({
   [countriesApi.reducerPath]: countriesApi.reducer,
   [skillsApi.reducerPath]: skillsApi.reducer,
   [chatApi.reducerPath]: chatApi.reducer,
+  [disputesApi.reducerPath]: disputesApi.reducer,
 });
 
 const rootReducer = (state: any, action: any) => {
@@ -74,7 +76,8 @@ export const store = configureStore({
       employerApi.middleware,
       countriesApi.middleware,
       skillsApi.middleware,
-      chatApi.middleware
+      chatApi.middleware,
+      disputesApi.middleware
     ),
 });
 
