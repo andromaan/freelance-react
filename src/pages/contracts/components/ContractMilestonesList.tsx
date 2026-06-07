@@ -189,7 +189,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                         role: "freelancer",
                       })
                     }
-                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors disabled:opacity-50"
+                    className="px-4 py-2 text-sm font-medium text-blue-800 bg-blue-100 border border-blue-200 hover:bg-blue-200 dark:text-blue-300 dark:bg-blue-900/30 dark:border-blue-800/50 dark:hover:bg-blue-900/50 rounded-lg transition-colors disabled:opacity-50"
                   >
                     Start Work
                   </button>
@@ -204,7 +204,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                         role: "freelancer",
                       })
                     }
-                    className="px-4 py-2 text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 rounded-lg transition-colors disabled:opacity-50"
+                    className="px-4 py-2 text-sm font-medium text-yellow-800 bg-yellow-100 border border-yellow-200 hover:bg-yellow-200 dark:text-yellow-300 dark:bg-yellow-900/30 dark:border-yellow-800/50 dark:hover:bg-yellow-900/50 rounded-lg transition-colors disabled:opacity-50"
                   >
                     Submit Work
                   </button>
@@ -222,7 +222,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                         role: "employer",
                       })
                     }
-                    className="px-4 py-2 text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors disabled:opacity-50"
+                    className="px-4 py-2 text-sm font-medium text-purple-800 bg-purple-100 border border-purple-200 hover:bg-purple-200 dark:text-purple-300 dark:bg-purple-900/30 dark:border-purple-800/50 dark:hover:bg-purple-900/50 rounded-lg transition-colors disabled:opacity-50"
                   >
                     Review Work
                   </button>
@@ -238,7 +238,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                         role: "employer",
                       })
                     }
-                    className="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors disabled:opacity-50"
+                    className="px-4 py-2 text-sm font-medium text-green-800 bg-green-100 border border-green-200 hover:bg-green-200 dark:text-green-300 dark:bg-green-900/30 dark:border-green-800/50 dark:hover:bg-green-900/50 rounded-lg transition-colors disabled:opacity-50"
                   >
                     Approve
                   </button>
@@ -254,7 +254,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                         role: "employer",
                       })
                     }
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors disabled:opacity-50"
+                    className="px-4 py-2 text-sm font-medium text-gray-800 bg-gray-100 border border-gray-200 hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 rounded-lg transition-colors disabled:opacity-50"
                   >
                     Request Rework
                   </button>
