@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useGetUserByIdQuery } from "../../services/user/userApi";
 import { useGetFreelancerByEmailQuery } from "../../services/freelancer/freelancerApi";
 import {
@@ -246,6 +246,19 @@ const FreelancerProfilePage: React.FC = () => {
                   {latestReviews.map((review) => (
                     <ReviewCard key={review.id} review={review} />
                   ))}
+                  {reviews.length > 3 && (
+                    <div className="text-center">
+                      <Link
+                        to={`/freelancers/${userId}/reviews`}
+                        className="inline-flex items-center gap-1.5 text-primary hover:text-primary-hover font-medium text-sm transition-colors"
+                      >
+                        {t("freelancerProfile.seeAllReviews", "See all reviews")}
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="text-center py-8">
