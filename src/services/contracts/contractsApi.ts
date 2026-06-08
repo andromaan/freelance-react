@@ -1,12 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithRefresh } from "../api/baseQueryWithRefresh";
 import type { ContractVM } from "../../types/contract.types";
-import type {
-  ContractMilestoneVM,
-  UpdContractMilestoneStatusEmployerVM,
-  UpdContractMilestoneStatusFreelancerVM,
-} from "../../types/contract-milestone.types";
 import type { ApiResponse } from "../../types/response.types";
+import { baseQueryWithRefresh } from "../api/baseQueryWithRefresh";
 
 export const contractsApi = createApi({
   reducerPath: "contractsApi",
@@ -27,7 +22,10 @@ export const contractsApi = createApi({
         url: `/Contract/${contractId}`,
         method: "GET",
       }),
-      providesTags: (_result, _error, arg) => [{ type: "Contract", id: arg }],
+      providesTags: (_result, _error, arg) => [
+        { type: "Contract", id: arg },
+        { type: "Contract", id: "DETAIL" },
+      ],
       transformResponse: (response: ApiResponse<ContractVM>) => response.data,
     }),
 
@@ -58,43 +56,6 @@ export const contractsApi = createApi({
       providesTags: ["Contract"],
     }),
 
-    getContractMilestones: builder.query<ContractMilestoneVM[], string>({
-      query: (contractId) => ({
-        url: `/ContractMilestone/by-contract/${contractId}`,
-        method: "GET",
-      }),
-      providesTags: (_result, _error, arg) => [{ type: "ContractMilestone", id: arg }],
-      transformResponse: (response: ApiResponse<ContractMilestoneVM[]>) => response.data ?? [],
-    }),
-
-    updateContractMilestoneFreelancer: builder.mutation<
-      ApiResponse<ContractMilestoneVM>,
-      { id: string; statusVM: UpdContractMilestoneStatusFreelancerVM }
-    >({
-      query: ({ id, statusVM }) => ({
-        url: `/ContractMilestone/status/${id}/freelancer`,
-        method: "PUT",
-        body: statusVM,
-      }),
-      invalidatesTags: (result, _error, _arg) => [
-        { type: "ContractMilestone", id: result?.data?.contractId },
-      ],
-    }),
-
-    updateContractMilestoneEmployer: builder.mutation<
-      ApiResponse<ContractMilestoneVM>,
-      { id: string; statusVM: UpdContractMilestoneStatusEmployerVM }
-    >({
-      query: ({ id, statusVM }) => ({
-        url: `/ContractMilestone/status/${id}/employer`,
-        method: "PUT",
-        body: statusVM,
-      }),
-      invalidatesTags: (result, _error, _arg) => [
-        { type: "ContractMilestone", id: result?.data?.contractId },
-      ],
-    }),
-
     getCompletedContractsByFreelancer: builder.query<ContractVM[], string>({
       query: (freelancerId) => ({
         url: `/Contract/completed-by-freelancer-id/${freelancerId}`,
@@ -112,8 +73,5 @@ export const {
   useIsExistsByQuoteQuery,
   useCreateContractMutation,
   useCanContractBeCreatedQuery,
-  useGetContractMilestonesQuery,
-  useUpdateContractMilestoneFreelancerMutation,
-  useUpdateContractMilestoneEmployerMutation,
   useGetCompletedContractsByFreelancerQuery,
 } = contractsApi;

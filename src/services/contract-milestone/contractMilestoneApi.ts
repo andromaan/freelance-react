@@ -4,8 +4,7 @@ import type {
   CreateContractMilestoneVM,
   UpdContractMilestoneStatusEmployerVM,
   UpdContractMilestoneStatusFreelancerVM,
-  UpdContractMilestoneStatusModeratorVM,
-  UpdateContractMilestoneVM
+  UpdateContractMilestoneVM,
 } from "../../types/contract-milestone.types";
 import type { ApiResponse } from "../../types/response.types";
 import { baseQueryWithRefresh } from "../api/baseQueryWithRefresh";
@@ -13,10 +12,13 @@ import { baseQueryWithRefresh } from "../api/baseQueryWithRefresh";
 export const contractMilestonesApi = createApi({
   reducerPath: "contractMilestonesApi",
   baseQuery: baseQueryWithRefresh,
-  tagTypes: ["ContractMilestone"],
+  tagTypes: ["ContractMilestone", "Contract"],
   endpoints: (builder) => ({
     // GET /ContractMilestone/by-contract/:contractId
-    getContractMilestonesByContract: builder.query<ContractMilestoneVM[], string>({
+    getContractMilestonesByContract: builder.query<
+      ContractMilestoneVM[],
+      string
+    >({
       query: (contractId) => ({
         url: `/ContractMilestone/by-contract/${contractId}`,
         method: "GET",
@@ -81,7 +83,12 @@ export const contractMilestonesApi = createApi({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["ContractMilestone"],
+      invalidatesTags: (result, _error, _arg) => [
+        { type: "ContractMilestone", id: "LIST" }, // список milestone'ів
+        { type: "Contract", id: result?.data?.contractId }, // ← конкретний контракт
+        { type: "Contract", id: "DETAIL" }, // ← всі деталі контрактів
+        { type: "Contract", id: "LIST" }, // ← список контрактів
+      ],
     }),
 
     // PUT /ContractMilestone/status/:id/employer
@@ -94,20 +101,12 @@ export const contractMilestonesApi = createApi({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["ContractMilestone"],
-    }),
-
-    // PUT /ContractMilestone/status/:id/moderator
-    updateContractMilestoneStatusModerator: builder.mutation<
-      ApiResponse<ContractMilestoneVM>,
-      { id: string; data: UpdContractMilestoneStatusModeratorVM }
-    >({
-      query: ({ id, data }) => ({
-        url: `/ContractMilestone/status/${id}/moderator`,
-        method: "PUT",
-        body: data,
-      }),
-      invalidatesTags: ["ContractMilestone"],
+      invalidatesTags: (result, _error, _arg) => [
+        { type: "ContractMilestone", id: "LIST" },
+        { type: "Contract", id: result?.data?.contractId },
+        { type: "Contract", id: "DETAIL" },
+        { type: "Contract", id: "LIST" },
+      ],
     }),
 
     // GET /ContractMilestone/:id
@@ -118,9 +117,7 @@ export const contractMilestonesApi = createApi({
       }),
       transformResponse: (response: { data: ContractMilestoneVM }) =>
         response.data,
-      providesTags: (_result, _err, id) => [
-        { type: "ContractMilestone", id },
-      ],
+      providesTags: (_result, _err, id) => [{ type: "ContractMilestone", id }],
     }),
 
     // PUT /ContractMilestone/:id
@@ -174,7 +171,6 @@ export const {
   useGetContractMilestoneStatusModeratorEnumsQuery,
   useUpdateContractMilestoneStatusFreelancerMutation,
   useUpdateContractMilestoneStatusEmployerMutation,
-  useUpdateContractMilestoneStatusModeratorMutation,
   useGetContractMilestoneByIdQuery,
   useUpdateContractMilestoneMutation,
   useDeleteContractMilestoneMutation,

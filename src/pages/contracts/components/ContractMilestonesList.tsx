@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import { format } from "date-fns";
 import ConfirmModal from "../../../components/ui/ConfirmModal";
 import {
-  useGetContractMilestonesQuery,
-  useUpdateContractMilestoneFreelancerMutation,
-  useUpdateContractMilestoneEmployerMutation,
-} from "../../../services/contracts/contractsApi";
+  useGetContractMilestonesByContractQuery,
+  useUpdateContractMilestoneStatusFreelancerMutation,
+  useUpdateContractMilestoneStatusEmployerMutation,
+} from "../../../services/contract-milestone/contractMilestoneApi";
 import { ContractMilestoneStatusLabel } from "../../../types/contract-milestone.types";
 import {
   ContractMilestoneEmployerStatus,
   ContractMilestoneFreelancerStatus,
 } from "../../../types/contract-milestone.types";
 import { getStatusText } from "../../../utils";
+import { useDispatch } from "react-redux";
+import { contractsApi } from "../../../services/contracts/contractsApi";
 
 interface ContractMilestonesListProps {
   contractId: string;
@@ -41,15 +43,16 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
   contractId,
   isFreelancer,
 }) => {
+  const dispatch = useDispatch();
   const {
     data: milestones,
     isLoading,
     error,
-  } = useGetContractMilestonesQuery(contractId);
+  } = useGetContractMilestonesByContractQuery(contractId);
   const [updateFreelancerStatus, { isLoading: isFreelancerUpdating }] =
-    useUpdateContractMilestoneFreelancerMutation();
+    useUpdateContractMilestoneStatusFreelancerMutation();
   const [updateEmployerStatus, { isLoading: isEmployerUpdating }] =
-    useUpdateContractMilestoneEmployerMutation();
+    useUpdateContractMilestoneStatusEmployerMutation();
 
   const [confirmAction, setConfirmAction] = useState<{
     id: string;
@@ -64,7 +67,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
     status: ContractMilestoneFreelancerStatus,
   ) => {
     try {
-      await updateFreelancerStatus({ id, statusVM: { status } }).unwrap();
+      await updateFreelancerStatus({ id, data: { status } }).unwrap();
       setConfirmAction(null);
     } catch (e) {
       console.error("Failed to update milestone status", e);
@@ -76,7 +79,23 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
     status: ContractMilestoneEmployerStatus,
   ) => {
     try {
-      await updateEmployerStatus({ id, statusVM: { status } }).unwrap();
+      await updateEmployerStatus({ id, data: { status } }).unwrap();
+      
+      if (status === ContractMilestoneEmployerStatus.Approved) {
+        const otherUnapproved = milestones?.filter(
+          (m) => m.id !== id && m.status !== ContractMilestoneStatusLabel.Approved
+        );
+        
+        if (otherUnapproved?.length === 0) {
+          dispatch(
+            contractsApi.util.invalidateTags([
+              { type: "Contract", id: contractId },
+              { type: "Contract", id: "DETAIL" },
+            ])
+          );
+        }
+      }
+      
       setConfirmAction(null);
     } catch (e) {
       console.error("Failed to update milestone status", e);
