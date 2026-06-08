@@ -10,6 +10,7 @@ import type {
   UpdateProjectMilestoneVM,
 } from "../../../types/project-milestone.types";
 import { FormField, inputClass } from "../../../components/ui/FormKit";
+import { useGetProjectByIdQuery } from "../../../services/projects/projectsApi";
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -115,6 +116,8 @@ const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
     useCreateProjectMilestoneMutation();
   const [updateMilestone, { isLoading: isUpdating }] =
     useUpdateProjectMilestoneMutation();
+  // todo: here project getting second time
+  const { data: project } = useGetProjectByIdQuery(projectId);
 
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [errors, setErrors] = useState<FormErrors>({});
@@ -333,6 +336,7 @@ const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
               onChange={handleChange}
               onBlur={handleBlur}
               min={new Date().toISOString().split("T")[0]}
+              max={project?.deadline.split("T")[0]}
               className={inputClass}
             />
           </FormField>

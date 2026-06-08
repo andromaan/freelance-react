@@ -13,6 +13,7 @@ export const quotesApi = createApi({
         url: `/Quote/by-project/${projectId}`,
         method: "GET",
       }),
+      providesTags: ["Quote"],
       transformResponse: (response: any) => response.data ?? response,
     }),
 

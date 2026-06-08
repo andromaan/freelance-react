@@ -5,6 +5,7 @@ import type { ChatDetailsVM, MessageVM } from "../../types/chat.types";
 export const chatApi = createApi({
   reducerPath: "chatApi",
   baseQuery: baseQueryWithRefresh,
+  tagTypes: ["Chat"],
   endpoints: (builder) => ({
     getChatDetails: builder.query<ChatDetailsVM, string>({
       query: (contractId) => ({
@@ -12,6 +13,7 @@ export const chatApi = createApi({
         method: "GET",
       }),
       transformResponse: (response: any) => response.data ?? response,
+      providesTags: ["Chat"],
     }),
     getChatMessages: builder.query<MessageVM[], string>({
       query: (contractId) => ({
@@ -19,6 +21,7 @@ export const chatApi = createApi({
         method: "GET",
       }),
       transformResponse: (response: any) => response.data ?? response,
+      providesTags: ["Chat"],
     }),
   }),
 });

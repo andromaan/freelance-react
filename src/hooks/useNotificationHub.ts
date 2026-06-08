@@ -9,6 +9,15 @@ import type { NotificationVM } from "../types/notification.types";
 import type { AppDispatch } from "../store";
 import { getStatusText } from "../utils";
 import { notificationApi } from "../services/notification/notificationApi";
+import { bidsApi } from "../services/bids/bidsApi";
+import { projectsApi } from "../services/projects/projectsApi";
+import { quotesApi } from "../services/quotes/quotesApi";
+import { chatApi } from "../services/chat/chatApi";
+import { contractMilestonesApi } from "../services/contract-milestone/contractMilestoneApi";
+import { contractsApi } from "../services/contracts/contractsApi";
+import { walletApi } from "../services/wallet/walletApi";
+import { disputesApi } from "../services/disputes/disputesApi";
+import { reviewsApi } from "../services/reviews/reviewsApi";
 
 export const useNotificationHub = (enabled: boolean) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -27,6 +36,43 @@ export const useNotificationHub = (enabled: boolean) => {
     const handler = (notification: NotificationVM) => {
       dispatch(addNotification(notification));
       dispatch(notificationApi.util.invalidateTags(["Notification"]));
+
+      // Invalidate related API caches based on notification type
+      switch (notification.type) {
+        case "NewBidReceived":
+        case "InterestedInYourBid":
+        case "NotInterestedInYourBid":
+          dispatch(bidsApi.util.invalidateTags(["Bid"]));
+          dispatch(projectsApi.util.invalidateTags(["Project"]));
+          break;
+        case "NewQuoteReceived":
+          dispatch(quotesApi.util.invalidateTags(["Quote"]));
+          dispatch(projectsApi.util.invalidateTags(["Project"]));
+          break;
+        case "NewMessage":
+          dispatch(chatApi.util.invalidateTags(["Chat"]));
+          break;
+        case "MilestoneStatusUpdated":
+          dispatch(contractMilestonesApi.util.invalidateTags(["ContractMilestone"]));
+          dispatch(contractsApi.util.invalidateTags(["Contract"]));
+          break;
+        case "ContractCreated":
+          dispatch(contractsApi.util.invalidateTags(["Contract"]));
+          break;
+        case "PaymentReceived":
+          dispatch(walletApi.util.invalidateTags(["Wallet"]));
+          break;
+        case "DisputeOpened":
+          dispatch(disputesApi.util.invalidateTags(["Dispute"]));
+          dispatch(contractsApi.util.invalidateTags(["Contract"]));
+          break;
+        case "ReviewLeft":
+          dispatch(reviewsApi.util.invalidateTags(["Review"]));
+          break;
+        case "ProjectDeadlineReminder":
+          dispatch(projectsApi.util.invalidateTags(["Project"]));
+          break;
+      }
 
       const label = getStatusText(notification.type);
       toast.info(`${label}: ${notification.message}`, {

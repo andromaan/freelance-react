@@ -5,15 +5,14 @@ export const NotificationType = {
   InterestedInYourBid: 1,
   NotInterestedInYourBid: 2,
   NewMessage: 3,
-  MilestoneApproved: 4,
-  MilestoneRejected: 5,
-  ContractCreated: 6,
-  PaymentReceived: 7,
-  DisputeOpened: 8,
-  ReviewLeft: 9,
-  SystemAnnouncement: 10,
-  ProjectDeadlineReminder: 11,
-  NewQuoteReceived: 12,
+  MilestoneStatusUpdated: 4,
+  ContractCreated: 5,
+  PaymentReceived: 6,
+  DisputeOpened: 7,
+  ReviewLeft: 8,
+  SystemAnnouncement: 9,
+  ProjectDeadlineReminder: 10,
+  NewQuoteReceived: 11,
 } as const;
 
 export type NotificationType =
