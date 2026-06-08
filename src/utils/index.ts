@@ -22,6 +22,6 @@ export function formatMessageDate(sentAt: string): string {
   return format(date, "dd.MM.yyyy, HH:mm");
 }
 
-export const avatarLetters = (user: UserVM | null) => user?.displayName
+export const avatarLetters = (user: UserVM | undefined) => user?.displayName
     ? user.displayName.slice(0, 2).toUpperCase()
     : (user?.email?.slice(0, 2).toUpperCase() ?? "??");

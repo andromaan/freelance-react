@@ -12,7 +12,7 @@ import {
 } from "../../services/reviews/reviewsApi";
 import ConfirmModal from "../../components/ui/ConfirmModal";
 import type { BidVM } from "../../types/bid.types";
-import { userImageUrl } from "../../utils";
+import { avatarLetters, userImageUrl } from "../../utils";
 import ArrowIcon from "../../components/icons/ArrowIcon";
 
 // ─── Filter ───────────────────────────────────────────────────────────────────
@@ -132,9 +132,6 @@ const SenderInfo: React.FC<{ createdBy: string }> = ({ createdBy }) => {
 
   if (!user) return null;
 
-  const label = user.displayName ?? user.email;
-  const initial = label.charAt(0).toUpperCase();
-
   return (
     <Link
       to={`/freelancers/${createdBy}`}
@@ -149,7 +146,7 @@ const SenderInfo: React.FC<{ createdBy: string }> = ({ createdBy }) => {
           />
         ) : (
           <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-lg shadow-sm border-2 border-white dark:border-gray-700">
-            {initial}
+            {avatarLetters(user)}
           </div>
         )}
       </div>

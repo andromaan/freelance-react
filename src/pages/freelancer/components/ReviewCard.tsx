@@ -2,27 +2,57 @@ import React from "react";
 import { useGetProjectByContractIdQuery } from "../../../services/projects/projectsApi";
 import { useGetUserByIdQuery } from "../../../services/user/userApi";
 import type { ReviewVM } from "../../../types/review.types";
-import { userImageUrl } from "../../../utils";
+import { avatarLetters, userImageUrl } from "../../../utils";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../../context/ThemeContext";
 
 interface ReviewCardProps {
   review: ReviewVM;
 }
 
 const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
+  const { theme } = useTheme();
+
+  const isDark = theme == "dark";
+  const starYellowColor = isDark ? "rgb(251 191 36)" : "rgb(233, 181, 62)"
+  const starGrayColor = isDark ? "#8e9fb68b" : "rgb(209 213 219)"
+
   return (
     <div className="flex gap-1" aria-label={`Rating: ${rating} out of 5 stars`}>
-      {[1, 2, 3, 4, 5].map((star) => (
-        <svg
-          key={star}
-          className={`w-4 h-4 ${star <= rating ? "text-amber-400" : "text-gray-300 dark:text-gray-600"}`}
-          fill="currentColor"
-          viewBox="0 0 20 20"
-        >
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-        </svg>
-      ))}
+      {[1, 2, 3, 4, 5].map((star) => {
+        const fill =
+          rating >= star ? "full" : rating >= star - 0.5 ? "half" : "empty";
+        const gradientId = `star-half-${star}-${Math.random().toString(36).slice(2, 7)}`;
+
+        return (
+          <svg
+            key={star}
+            className="w-5 h-5"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {fill === "half" && (
+              <defs>
+                <linearGradient id={gradientId} x1="0" x2="1" y1="0" y2="0">
+                  <stop offset="50%" stopColor={starYellowColor} />
+                  <stop offset="50%" stopColor={starGrayColor} />
+                </linearGradient>
+              </defs>
+            )}
+            <path
+              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+              fill={
+                fill === "full"
+                  ? starYellowColor
+                  : fill === "half"
+                    ? `url(#${gradientId})`
+                    : starGrayColor
+              }
+            />
+          </svg>
+        );
+      })}
     </div>
   );
 };
@@ -63,10 +93,6 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
       </div>
     );
   }
-
-  const employerInitial = employer?.displayName
-    ? employer.displayName.charAt(0).toUpperCase()
-    : employer?.email?.charAt(0).toUpperCase() || "?";
 
   return (
     <article className="bg-surface rounded-xl p-5 border border-border-light shadow-sm flex flex-col h-full">
@@ -114,11 +140,13 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
             />
           ) : (
             <div className="w-6 h-6 rounded-full bg-primary/10 text-primary text-[10px] font-bold flex items-center justify-center border border-primary/20">
-              {employerInitial}
+              {avatarLetters(employer)}
             </div>
           )}
           <span className="text-xs text-text-muted font-medium">
-            {employer?.displayName || employer?.email || t("freelancerProfile.unknownEmployer")}
+            {employer?.displayName ||
+              employer?.email ||
+              t("freelancerProfile.unknownEmployer")}
           </span>
         </div>
 

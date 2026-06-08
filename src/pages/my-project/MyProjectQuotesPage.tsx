@@ -11,6 +11,7 @@ import type { QuoteVM } from "../../types/quote.types";
 import ConfirmModal from "../../components/ui/ConfirmModal";
 import { toast } from "react-toastify";
 import ArrowIcon from "../../components/icons/ArrowIcon";
+import { avatarLetters } from "../../utils";
 
 /* ─── Types ────────────────────────────────────────────────────────────── */
 interface CreateContractPayload {
@@ -40,13 +41,10 @@ const SenderInfo: React.FC<SenderInfoProps> = ({ createdBy }) => {
 
   if (!user) return null;
 
-  const label = user.displayName ?? user.email;
-  const initial = label.charAt(0).toUpperCase();
-
   return (
     <div className="flex items-center gap-3 pt-4 border-t border-border-light">
       <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm flex-shrink-0 uppercase">
-        {initial}
+        {avatarLetters(user)}
       </div>
       <div className="flex flex-col min-w-0">
         {user.displayName && (
@@ -213,10 +211,10 @@ const MyProjectQuotesPage: React.FC = () => {
   const handleCreateContract = async () => {
     if (selectedQuote) {
       try {
-        await createContract(selectedQuote.quoteId).unwrap();
+        const result = await createContract(selectedQuote.quoteId).unwrap();
         setIsConfirmOpen(false);
         setSelectedQuote(null);
-        // todo: navigate to contract page after creation
+        navigate(`/contract/${result.data.id}`)
       } catch (err: any) {
         toast.error(
           "Error creating contract: " + (err?.data?.message || err.message),
