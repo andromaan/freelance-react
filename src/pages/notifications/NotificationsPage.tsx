@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "../../store/userSlice";
-import { markAsRead } from "../../store/notificationSlice";
+import { markAsRead, markAllAsRead } from "../../store/notificationSlice";
 import type { AppDispatch } from "../../store";
 import {
   useGetNotificationsPaginatedFilteredQuery,
@@ -111,8 +110,18 @@ const Notifications: React.FC = () => {
 
   const handleReadAll = async () => {
     if (readingAll) return;
-    await readAll().unwrap();
+    try {
+      await readAll().unwrap();
+      dispatch(markAllAsRead());
+    } catch (error) {
+      console.error("Failed to read all:", error);
+    }
   };
+
+  useEffect(() => {
+    handleReadAll();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleFilterChange = (
     newIsRead: boolean | null,

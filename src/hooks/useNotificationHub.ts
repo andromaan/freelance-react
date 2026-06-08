@@ -8,6 +8,7 @@ import { addNotification } from "../store/notificationSlice";
 import type { NotificationVM } from "../types/notification.types";
 import type { AppDispatch } from "../store";
 import { getStatusText } from "../utils";
+import { notificationApi } from "../services/notification/notificationApi";
 
 export const useNotificationHub = (enabled: boolean) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,6 +26,7 @@ export const useNotificationHub = (enabled: boolean) => {
 
     const handler = (notification: NotificationVM) => {
       dispatch(addNotification(notification));
+      dispatch(notificationApi.util.invalidateTags(["Notification"]));
 
       const label = getStatusText(notification.type);
       toast.info(`${label}: ${notification.message}`, {
