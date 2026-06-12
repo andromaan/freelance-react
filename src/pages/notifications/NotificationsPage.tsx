@@ -118,11 +118,6 @@ const Notifications: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    handleReadAll();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const handleFilterChange = (
     newIsRead: boolean | null,
     newType: SelectOption<number> | null,

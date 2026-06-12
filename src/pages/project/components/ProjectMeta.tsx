@@ -36,7 +36,7 @@ const ProjectMeta: React.FC<Props> = ({ project }) => {
             </p>
           </div>
 
-          <div className="flex flex-row gap-4 shrink-0 text-right">
+          <div className="flex lg:flex-col gap-4 shrink-0 text-right">
             <div className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border border-gray-300 dark:border-gray-700 flex-1">
               <p className="text-[10px] text-gray-500 uppercase font-bold mb-1">
                 {t("projectDetails.budget")}

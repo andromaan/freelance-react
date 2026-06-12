@@ -353,6 +353,13 @@ const ProjectEditModal: React.FC<Props> = ({
                 onBlur={handleFieldBlur}
                 placeholder="What does this project involve?"
                 className={`${inputClass} resize-none`}
+                style={
+                  {
+                    fieldSizing: "content",
+                    minHeight: "4lh",
+                    maxHeight: "10lh",
+                  } as React.CSSProperties
+                }
               />
             </FormField>
 
