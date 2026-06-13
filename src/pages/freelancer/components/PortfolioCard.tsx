@@ -32,12 +32,16 @@ const PortfolioCard: React.FC<PortfolioCardProps> = ({ item, index, clampDescrip
   const isDribbble = urlStr.includes("dribbble.com");
 
   return (
-    <a
-      href={item.portfolioUrl || "#"}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group flex flex-col bg-surface rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
-    >
+    <div className="group flex flex-col bg-surface rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 relative">
+      {item.portfolioUrl && (
+        <a
+          href={item.portfolioUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute inset-0 z-0"
+          aria-label={item.title}
+        />
+      )}
       <div
         className={`pl-4 h-16 w-full bg-gradient-to-br ${gradient} opacity-90 group-hover:opacity-100 transition-opacity flex items-center justify-start relative overflow-hidden`}
       >
@@ -82,7 +86,7 @@ const PortfolioCard: React.FC<PortfolioCardProps> = ({ item, index, clampDescrip
           </svg>
         )}
       </div>
-      <div className="p-5 flex-1 flex flex-col">
+      <div className="p-5 flex-1 flex flex-col relative pointer-events-none">
         <h4 className="font-bold text-text-main text-lg group-hover:text-primary transition-colors line-clamp-1 mb-2">
           {item.title}
         </h4>
@@ -99,7 +103,7 @@ const PortfolioCard: React.FC<PortfolioCardProps> = ({ item, index, clampDescrip
                   e.stopPropagation();
                   setIsExpanded(!isExpanded);
                 }}
-                className="text-xs text-primary font-medium mt-1 hover:underline focus:outline-none"
+                className="text-xs text-primary font-medium mt-1 hover:underline focus:outline-none pointer-events-auto relative z-10"
               >
                 {isExpanded
                   ? t("freelancerProfile.showLess", "Show less")
@@ -117,7 +121,7 @@ const PortfolioCard: React.FC<PortfolioCardProps> = ({ item, index, clampDescrip
           </div>
         )}
       </div>
-    </a>
+    </div>
   );
 };
 
