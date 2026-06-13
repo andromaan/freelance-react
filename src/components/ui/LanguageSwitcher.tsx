@@ -1,12 +1,27 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
+import ukFlag from "../../assets/united-kingdom.png";
+import uaFlag from "../../assets/ukraine.png";
+
 const languages = [
-  { code: "en", nativeCode: "en", name: "English", flag: "https://flagcdn.com/us.svg" },
-  { code: "uk", nativeCode: "укр", name: "Українська", flag: "https://flagcdn.com/ua.svg" },
+  {
+    code: "en",
+    nativeCode: "en",
+    name: "English",
+    flag: ukFlag,
+  },
+  {
+    code: "uk",
+    nativeCode: "укр",
+    name: "Українська",
+    flag: uaFlag,
+  },
 ];
 
-const LanguageSwitcher: React.FC<{ dropUp?: boolean }> = ({ dropUp = false }) => {
+const LanguageSwitcher: React.FC<{ dropUp?: boolean }> = ({
+  dropUp = false,
+}) => {
   const { i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -50,14 +65,16 @@ const LanguageSwitcher: React.FC<{ dropUp?: boolean }> = ({ dropUp = false }) =>
       </button>
 
       {isOpen && (
-        <div className={`absolute ${dropUp ? "bottom-full mb-2" : "mt-2"} lg:right-0 xs:left-0 w-40 bg-surface border border-border rounded-xl shadow-lg overflow-hidden z-[60] animate-in slide-in-from-top-2`}>
+        <div
+          className={`absolute ${dropUp ? "bottom-full mb-2" : "mt-2"} lg:right-0 xs:left-0 w-40 bg-surface border border-border rounded-xl shadow-lg overflow-hidden z-[60] animate-in slide-in-from-top-2`}
+        >
           {languages.map((lang) => (
             <button
               key={lang.code}
               onClick={() => handleLanguageChange(lang.code)}
-              className={`w-full text-left flex items-center gap-3 px-4 py-2.5 text-sm dark:text-sky-400 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50 ${
+              className={`w-full text-left flex items-center gap-3 px-4 py-2.5 text-sm dark:text-sky-400 transition-colors hover:bg-primary/10  ${
                 i18n.language === lang.code
-                  ? "bg-primary/10 text-primary font-medium"
+                  ? "text-primary font-medium"
                   : "text-text-main"
               }`}
             >
