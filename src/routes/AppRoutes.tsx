@@ -31,6 +31,7 @@ import MyProfilePage from "../pages/profile/MyProfilePage";
 import MyContractsPage from "../pages/contracts/MyContractsPage";
 import FreelancerProfilePage from "../pages/freelancer/FreelancerProfilePage";
 import FreelancerReviewsPage from "../pages/freelancer/FreelancerReviewsPage";
+import FreelancerPortfolioPage from "../pages/freelancer/FreelancerPortfolioPage";
 import EmployerProfilePage from "../pages/employer/EmployerProfilePage";
 import ContractPage from "../pages/contracts/ContractPage";
 import MyDisputesPage from "../pages/disputes/MyDisputesPage";
@@ -80,11 +81,12 @@ const AppRoutes: React.FC = () => {
 
         <Route
           path="/freelancers/:userId/reviews"
-          element={
-            <ProtectedRoute>
-              <FreelancerReviewsPage />
-            </ProtectedRoute>
-          }
+          element={<FreelancerReviewsPage />}
+        />
+
+        <Route
+          path="/freelancers/:userId/portfolio"
+          element={<FreelancerPortfolioPage />}
         />
 
         <Route

@@ -112,6 +112,7 @@ export const EditProfileTab: React.FC = () => {
   const [portTitle, setPortTitle] = useState("");
   const [portDesc, setPortDesc] = useState("");
   const [portUrl, setPortUrl] = useState("");
+  const [expandedPortfolio, setExpandedPortfolio] = useState<string[]>([]);
 
   // Employer
   const [companyName, setCompanyName] = useState("");
@@ -194,10 +195,10 @@ export const EditProfileTab: React.FC = () => {
   };
 
   function splitCamelCase(str: string): string {
-  return str
-    .replace(/([a-z])([A-Z])/g, "$1 $2")  // "CompanyName" → "Company Name"
-    .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2"); // "HTTPSConnection" → "HTTPS Connection"
-}
+    return str
+      .replace(/([a-z])([A-Z])/g, "$1 $2") // "CompanyName" → "Company Name"
+      .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2"); // "HTTPSConnection" → "HTTPS Connection"
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -589,6 +590,13 @@ export const EditProfileTab: React.FC = () => {
                     onChange={(e) => setPortDesc(e.target.value)}
                     placeholder="Short description..."
                     className={inputClass + " resize-y"}
+                    style={
+                      {
+                        fieldSizing: "content",
+                        minHeight: "4lh",
+                        maxHeight: "10lh",
+                      } as React.CSSProperties
+                    }
                   />
                 </FormField>
                 <FormField id="portUrl" label="Link (URL)">
@@ -616,7 +624,7 @@ export const EditProfileTab: React.FC = () => {
 
             <div className="space-y-4 mt-6">
               {freelancer?.portfolio && freelancer.portfolio.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 items-start">
                   {freelancer.portfolio.map((item, idx) => {
                     const gradients = [
                       "from-blue-500 to-indigo-500",
@@ -684,9 +692,30 @@ export const EditProfileTab: React.FC = () => {
                             {item.title}
                           </h3>
                           {item.description && (
-                            <p className="text-xs text-text-muted mt-1 line-clamp-2">
-                              {item.description}
-                            </p>
+                            <div className="mt-1">
+                              <p
+                                className={`text-xs text-text-muted whitespace-pre-line ${!expandedPortfolio.includes(item.id) ? "line-clamp-2" : ""}`}
+                              >
+                                {item.description}
+                              </p>
+                              {item.description.length > 80 && (
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    setExpandedPortfolio((prev) =>
+                                      prev.includes(item.id)
+                                        ? prev.filter((i) => i !== item.id)
+                                        : [...prev, item.id],
+                                    )
+                                  }
+                                  className="text-xs text-primary font-medium mt-1 hover:underline focus:outline-none"
+                                >
+                                  {expandedPortfolio.includes(item.id)
+                                    ? "Show less"
+                                    : "Read more"}
+                                </button>
+                              )}
+                            </div>
                           )}
                           {item.portfolioUrl && (
                             <a
