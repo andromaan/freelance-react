@@ -35,6 +35,12 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [messageToDelete, setMessageToDelete] = useState<string | null>(null);
 
+  // Accessibility refs
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const micButtonRef = useRef<HTMLButtonElement>(null);
+  const openButtonRef = useRef<HTMLButtonElement>(null);
+  const chatPanelRef = useRef<HTMLDivElement>(null);
+
   const handleTranscript = useCallback((text: string) => {
     setNewMessage((prev) => (prev ? prev + " " + text : text));
   }, []);
@@ -99,6 +105,17 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
   useEffect(() => {
     if (isOpen) {
       scrollToBottom();
+      // Autofocus: mic if available, otherwise textarea
+      requestAnimationFrame(() => {
+        if (micButtonRef.current && voiceStatus !== "unsupported") {
+          micButtonRef.current.focus();
+        } else {
+          textareaRef.current?.focus();
+        }
+      });
+    } else {
+      // Return focus to open button when closing
+      openButtonRef.current?.focus();
     }
   }, [messages, isOpen, isConnected]);
 
@@ -121,12 +138,58 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
     }
   }, [isOpen, isConnected, messages, currentUser, markAsRead]);
 
+  // ── Keyboard: Escape closes, Tab stays inside ─────────────────────────
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Escape → close
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+        return;
+      }
+
+      // Focus trap — keep Tab inside the panel
+      if (e.key === "Tab" && chatPanelRef.current) {
+        const focusable = Array.from(
+          chatPanelRef.current.querySelectorAll<HTMLElement>(
+            'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+          )
+        ).filter((el) => el.offsetParent !== null); // visible only
+
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) {
     return createPortal(
       <button
+        ref={openButtonRef}
         onClick={onOpen}
-        className="fixed bottom-6 right-6 z-50 p-4 bg-primary text-white rounded-full shadow-xl hover:bg-primary-hover hover:scale-105 transition-all focus:outline-none focus:ring-2 focus:ring-primary/50 flex items-center justify-center"
-        aria-label="Open Chat"
+        onKeyDown={(e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); onOpen(); } }}
+        className="fixed bottom-6 right-6 z-50 p-4 bg-primary text-white rounded-full shadow-xl hover:bg-primary-hover hover:scale-105 transition-all focus:outline-none focus:ring-4 focus:ring-primary/50 flex items-center justify-center"
+        aria-label="Open chat"
+        aria-haspopup="dialog"
+        aria-expanded={false}
       >
         <svg
           className="w-7 h-7"
@@ -152,7 +215,13 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
       : `/employers/${chatDetails?.interlocutorId}`;
 
   return createPortal(
-    <div className="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 flex flex-col w-full sm:w-[500px] h-[100dvh] sm:h-[600px] sm:max-h-[85vh] bg-surface sm:rounded-2xl shadow-2xl overflow-hidden border-0 sm:border border-border animate-in slide-in-from-bottom-8">
+    <div
+      ref={chatPanelRef}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="chat-dialog-title"
+      className="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 flex flex-col w-full sm:w-[500px] h-[100dvh] sm:h-[600px] sm:max-h-[85vh] bg-surface sm:rounded-2xl shadow-2xl overflow-hidden border-0 sm:border border-border animate-in slide-in-from-bottom-8"
+    >
       {detailsLoading || messagesLoading ? (
         <div className="flex-1 flex flex-col items-center justify-center">
           <span className="text-text-muted">Loading chat...</span>
@@ -192,10 +261,10 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                 <div>
                   <div className="flex gap-3">
                     <Link
-                      to={linkToInterlocutor}
-                      className="text-xl font-bold text-text-main leading-tight flex items-center gap-3 hover:underline"
-                    >
-                      <h2>{chatDetails.interlocutorName}</h2>
+                  to={linkToInterlocutor}
+                  className="text-xl font-bold text-text-main leading-tight flex items-center gap-3 hover:underline focus:outline-none focus:ring-2 focus:ring-primary/50 rounded"
+                >
+                  <h2 id="chat-dialog-title">{chatDetails.interlocutorName}</h2>
                     </Link>
                     {isConnecting ? (
                       <span className="px-2 py-0.5 text-xs/[1.5] font-medium rounded-full text-blue-600 dark:text-blue-500 bg-blue-50 dark:bg-blue-800/5 border border-blue-200 dark:border-blue-500/50 flex items-center gap-1">
@@ -250,8 +319,8 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
             <div className="flex items-center gap-3">
               <button
                 onClick={onClose}
-                className="p-2 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors focus:outline-none"
-                aria-label="Close Chat"
+                className="p-2 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50"
+                aria-label="Close chat"
               >
                 <svg
                   className="w-5 h-5"
@@ -395,18 +464,31 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
               {/* Mic button */}
               {voiceStatus !== "unsupported" && (
                 <button
+                  ref={micButtonRef}
                   type="button"
                   onClick={toggleVoice}
                   disabled={!isChatActive || !isConnected || isVoiceBusy}
                   title={
                     isListening
-                      ? "Stop recording"
+                      ? "Stop recording (Space)"
                       : isVoiceBusy
                         ? "Processing…"
                         : voiceStatus === "error"
                           ? "Error, try again"
-                          : "Voice input"
+                          : "Start voice input (Space)"
                   }
+                  onKeyDown={(e) => {
+                    // Space or Enter starts/stops recording
+                    if (e.key === " " || e.key === "Enter") {
+                      e.preventDefault();
+                      if (!isVoiceBusy) toggleVoice();
+                    }
+                    // Arrow right moves focus to textarea
+                    if (e.key === "ArrowRight" || e.key === "Tab" && !e.shiftKey) {
+                      e.preventDefault();
+                      textareaRef.current?.focus();
+                    }
+                  }}
                   className={`shrink-0 p-2 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-60 disabled:cursor-not-allowed ${
                     isListening
                       ? "bg-red-500 border-red-500 text-white shadow-lg shadow-red-500/30 animate-pulse"
@@ -417,8 +499,9 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                           : "bg-gray-100 dark:bg-gray-700 border-border text-gray-500 dark:text-gray-400 hover:bg-primary/10 hover:border-primary hover:text-primary"
                   }`}
                   aria-label={
-                    isListening ? "Stop recording" : "Start voice input"
+                    isListening ? "Stop voice recording" : "Start voice input"
                   }
+                  aria-pressed={isListening}
                 >
                   {isListening ? (
                     <svg
@@ -462,6 +545,9 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                 </button>
               )}
               <textarea
+                ref={textareaRef}
+                id="chat-message-input"
+                aria-label="Message input. Press Enter to send, Shift+Enter for new line"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyDown={async (e) => {
