@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { ROLES } from "../../constants/roles";
@@ -17,6 +18,7 @@ import PageError from "../../components/ui/PageError";
 import ArrowIcon from "../../components/icons/ArrowIcon";
 
 const ContractPage: React.FC = () => {
+  const { t } = useTranslation();
   const { contractId } = useParams<{ contractId: string }>();
   const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
@@ -43,14 +45,14 @@ const ContractPage: React.FC = () => {
     });
 
   if (isLoading) {
-    return <PageLoading message="Loading contract details..." />;
+    return <PageLoading message={t("contracts.page.loadingDetails")} />;
   }
 
   if (error || !contract) {
     return (
       <PageError
-        message="Contract not found or error loading contract."
-        backToLabel="Back to My Contracts"
+        message={t("contracts.page.notFound")}
+        backToLabel={t("contracts.page.back")}
         backToPath="/my-contracts"
       />
     );
@@ -73,7 +75,7 @@ const ContractPage: React.FC = () => {
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors text-sm font-medium"
           >
             <ArrowIcon direction="left" />
-            Back to My Contracts
+            {t("contracts.page.back")}
           </button>
           <div className="flex items-center gap-3">
             {contract.status !== "Disputed" &&
@@ -82,9 +84,7 @@ const ContractPage: React.FC = () => {
                 <button
                   onClick={() => setIsDisputeModalOpen(true)}
                   className="px-3 py-1 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 rounded-full transition-colors border border-red-300 dark:border-red-800/70 dark:text-red-600/90 focus:outline-none"
-                >
-                  Open Dispute
-                </button>
+                >{t("contracts.page.openDispute")}</button>
               )}
             <span className="text-sm font-bold tracking-wider px-3 py-1 rounded-full bg-primary/5 text-primary dark:text-white border border-primary/50 dark:border-white/30">
               {getStatusText(contract.status).toUpperCase()}
@@ -96,7 +96,7 @@ const ContractPage: React.FC = () => {
         <div className="bg-surface rounded-2xl p-6 border border-border shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h3 className="text-lg font-bold text-text-main flex items-center gap-2 min-w-0">
-              <span className="shrink-0">Contract for:</span>
+              <span className="shrink-0">{t("contracts.page.contractFor")}</span>
 
               {isProjectLoading ? (
                 <span className="inline-flex items-center gap-1">
@@ -106,7 +106,7 @@ const ContractPage: React.FC = () => {
                 </span>
               ) : (
                 <span className="truncate" title={project?.title || undefined}>
-                  {project?.title || "Project not found"}
+                  {project?.title || t("contracts.page.projectNotFound")}
                 </span>
               )}
             </h3>
@@ -125,7 +125,7 @@ const ContractPage: React.FC = () => {
                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   />
                 </svg>
-                Started: {formattedStartDate}
+                {t("contracts.page.started")} {formattedStartDate}
               </span>
               {formattedEndDate && (
                 <span className="flex items-center gap-1">
@@ -142,7 +142,7 @@ const ContractPage: React.FC = () => {
                       d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  Ended: {formattedEndDate}
+                  {t("contracts.page.ended")} {formattedEndDate}
                 </span>
               )}
             </div>
@@ -154,14 +154,10 @@ const ContractPage: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-2 items-center">
               {contract.status === "Completed" &&
                 (isReviewLoading ? (
-                  <span className="text-sm text-text-muted">
-                    Loading review status...
-                  </span>
+                  <span className="text-sm text-text-muted">{t("contracts.page.loadingReview")}</span>
                 ) : reviewedData ? (
                   <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 rounded-lg border border-border">
-                    <span className="text-sm font-medium text-text-main">
-                      Review Added:
-                    </span>
+                    <span className="text-sm font-medium text-text-main">{t("contracts.page.reviewAdded")}</span>
                     <span className="flex items-center gap-1 text-yellow-600 dark:text-yellow-500 text-sm font-bold">
                       <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -173,9 +169,7 @@ const ContractPage: React.FC = () => {
                   <button
                     onClick={() => setIsReviewModalOpen(true)}
                     className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-hover transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-                  >
-                    Leave a review
-                  </button>
+                  >{t("contracts.page.leaveReview")}</button>
                 ))}
             </div>
           </div>
@@ -183,7 +177,7 @@ const ContractPage: React.FC = () => {
 
         {/* Milestones Section */}
         <div className="bg-surface rounded-2xl p-6 border border-border shadow-sm">
-          <h2 className="text-xl font-bold text-text-main mb-6">Milestones</h2>
+          <h2 className="text-xl font-bold text-text-main mb-6">{t("contracts.page.milestones")}</h2>
           <ContractMilestonesList
             contractId={contract.id}
             isFreelancer={isFreelancer}

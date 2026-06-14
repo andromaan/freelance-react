@@ -8,6 +8,7 @@ import type { AppDispatch } from "../../store";
 import type { ExternalLoginVM, UserRole } from "../../types/auth.types";
 import { UserRoles } from "../../types/auth.types";
 import APP_ENV from "../../env";
+import { useTranslation } from "react-i18next";
 
 // Типи для Google Identity Services
 declare global {
@@ -59,6 +60,8 @@ const GoogleLogin: React.FC = () => {
     UserRoles.FREELANCER,
   );
 
+  const { t } = useTranslation();
+
   const handleLoginSuccess = async (response: GoogleCallbackResponse) => {
     const { credential } = response;
 
@@ -83,7 +86,9 @@ const GoogleLogin: React.FC = () => {
         return;
       }
       const errorMessage =
-        error?.message || error?.data?.message || "Error logging in with Google";
+        error?.message ||
+        error?.data?.message ||
+        "Error logging in with Google";
       toast.error(errorMessage);
     }
   };
@@ -161,13 +166,16 @@ const GoogleLogin: React.FC = () => {
         <div className="modal-overlay fixed inset-0 w-full h-full bg-black/50 flex items-center justify-center z-[1000] p-5">
           <div className="modal-content bg-surface rounded-xl p-8 w-full max-w-md shadow-2xl">
             <h3 className="m-0 mb-3 text-text-main text-xl font-semibold text-center">
-              Select Role
+              {t("auth.selectRole")}
             </h3>
             <p className="m-0 mb-6 text-text-muted text-sm text-center">
-              To complete registration, please select your role:
+              {t("auth.roleSelectDesc")}
             </p>
             <div className="flex flex-col gap-3 mb-6">
-              <label htmlFor="role-freelancer" className="flex items-center px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer transition-all hover:border-primary hover:bg-blue-50 dark:hover:bg-blue-900/20 bg-white dark:bg-gray-700">
+              <label
+                htmlFor="role-freelancer"
+                className="flex items-center px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer transition-all hover:border-primary hover:bg-blue-50 dark:hover:bg-blue-900/20 bg-white dark:bg-gray-700"
+              >
                 <input
                   id="role-freelancer"
                   type="radio"
@@ -179,10 +187,13 @@ const GoogleLogin: React.FC = () => {
                   className="w-4 h-4 mr-3 cursor-pointer accent-primary"
                 />
                 <span className="text-gray-700 dark:text-gray-300 text-sm font-medium">
-                  Freelancer
+                  {t("auth.freelancer")}
                 </span>
               </label>
-              <label htmlFor="role-employer" className="flex items-center px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer transition-all hover:border-primary hover:bg-blue-50 dark:hover:bg-blue-900/20 bg-white dark:bg-gray-700">
+              <label
+                htmlFor="role-employer"
+                className="flex items-center px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer transition-all hover:border-primary hover:bg-blue-50 dark:hover:bg-blue-900/20 bg-white dark:bg-gray-700"
+              >
                 <input
                   id="role-employer"
                   type="radio"
@@ -194,7 +205,7 @@ const GoogleLogin: React.FC = () => {
                   className="w-4 h-4 mr-3 cursor-pointer accent-primary"
                 />
                 <span className="text-gray-700 dark:text-gray-300 text-sm font-medium">
-                  Employer
+                  {t("auth.employer")}
                 </span>
               </label>
             </div>
@@ -203,7 +214,7 @@ const GoogleLogin: React.FC = () => {
               className="bg-primary hover:bg-primary-hover text-white border-none rounded-lg px-3 py-3 text-base font-medium cursor-pointer transition-all w-full disabled:opacity-60 disabled:cursor-not-allowed mt-2"
               disabled={isLoading}
             >
-              {isLoading ? "Loading..." : "Continue"}
+              {isLoading ? t("auth.loading") : t("auth.continue")}
             </button>
           </div>
         </div>

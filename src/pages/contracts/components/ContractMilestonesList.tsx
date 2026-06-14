@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import ConfirmModal from "../../../components/ui/ConfirmModal";
 import {
@@ -43,6 +44,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
   contractId,
   isFreelancer,
 }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const {
     data: milestones,
@@ -127,14 +129,14 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
 
   if (error || !milestones) {
     return (
-      <div className="text-sm text-red-500">Failed to load milestones.</div>
+      <div className="text-sm text-red-500">{t("contracts.milestones.errorLoad")}</div>
     );
   }
 
   if (milestones.length === 0) {
     return (
       <div className="text-sm text-text-muted">
-        No milestones found.
+        {t("contracts.milestones.notFound")}
       </div>
     );
   }
@@ -155,7 +157,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
               </span>
             </div>
             <p className="text-text-main font-medium mb-2">
-              {milestone.description || "No description provided."}
+              {milestone.description || t("contracts.milestones.noDescription")}
             </p>
             <div className="flex items-center gap-4 text-sm text-text-muted">
               <div className="flex items-center gap-1">
@@ -188,9 +190,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   />
                 </svg>
-                <span>
-                  Due: {format(new Date(milestone.dueDate), "MMM d, yyyy")}
-                </span>
+                <span>{t("contracts.milestones.due")} {format(new Date(milestone.dueDate), "MMM d, yyyy")}</span>
               </div>
             </div>
           </div>
@@ -209,9 +209,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                       })
                     }
                     className="px-4 py-2 text-sm font-medium text-blue-800 bg-blue-100 border border-blue-200 hover:bg-blue-200 dark:text-blue-300 dark:bg-blue-900/30 dark:border-blue-800/50 dark:hover:bg-blue-900/50 rounded-lg transition-colors disabled:opacity-50"
-                  >
-                    Start Work
-                  </button>
+                  >{t("contracts.milestones.startWork")}</button>
                 )}
                 {milestone.status === ContractMilestoneStatusLabel.InProgress && (
                   <button
@@ -224,9 +222,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                       })
                     }
                     className="px-4 py-2 text-sm font-medium text-yellow-800 bg-yellow-100 border border-yellow-200 hover:bg-yellow-200 dark:text-yellow-300 dark:bg-yellow-900/30 dark:border-yellow-800/50 dark:hover:bg-yellow-900/50 rounded-lg transition-colors disabled:opacity-50"
-                  >
-                    Submit Work
-                  </button>
+                  >{t("contracts.milestones.submitWork")}</button>
                 )}
               </>
             ) : (
@@ -242,9 +238,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                       })
                     }
                     className="px-4 py-2 text-sm font-medium text-purple-800 bg-purple-100 border border-purple-200 hover:bg-purple-200 dark:text-purple-300 dark:bg-purple-900/30 dark:border-purple-800/50 dark:hover:bg-purple-900/50 rounded-lg transition-colors disabled:opacity-50"
-                  >
-                    Review Work
-                  </button>
+                  >{t("contracts.milestones.reviewWork")}</button>
                 )}
                 {(milestone.status === ContractMilestoneStatusLabel.UnderReview ||
                   milestone.status === ContractMilestoneStatusLabel.Submitted) && (
@@ -258,9 +252,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                       })
                     }
                     className="px-4 py-2 text-sm font-medium text-green-800 bg-green-100 border border-green-200 hover:bg-green-200 dark:text-green-300 dark:bg-green-900/30 dark:border-green-800/50 dark:hover:bg-green-900/50 rounded-lg transition-colors disabled:opacity-50"
-                  >
-                    Approve
-                  </button>
+                  >{t("contracts.milestones.approve")}</button>
                 )}
                 {(milestone.status === ContractMilestoneStatusLabel.UnderReview ||
                   milestone.status === ContractMilestoneStatusLabel.Submitted) && (
@@ -274,9 +266,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                       })
                     }
                     className="px-4 py-2 text-sm font-medium text-gray-800 bg-gray-100 border border-gray-200 hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 rounded-lg transition-colors disabled:opacity-50"
-                  >
-                    Request Rework
-                  </button>
+                  >{t("contracts.milestones.requestRework")}</button>
                 )}
               </>
             )}
@@ -288,10 +278,10 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
         isOpen={!!confirmAction}
         onClose={() => setConfirmAction(null)}
         onConfirm={handleConfirm}
-        title="Confirm Status Change"
-        description="Are you sure you want to change the status of this milestone?"
-        confirmLabel="Yes, change"
-        cancelLabel="Cancel"
+        title={t("contracts.milestones.confirmTitle")}
+        description={t("contracts.milestones.confirmDesc")}
+        confirmLabel={t("contracts.milestones.confirmYes")}
+        cancelLabel={t("common.cancel")}
         isLoading={isUpdating}
         variant="primary"
       />

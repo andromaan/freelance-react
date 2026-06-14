@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetContractsByUserQuery } from "../../services/contracts/contractsApi";
 
@@ -9,7 +10,7 @@ type TabKey = "active" | "pending" | "completed" | "cancelled" | "disputed";
 const TABS: { key: TabKey; label: string; icon: React.ReactNode; statuses: string[] }[] = [
   {
     key: "active",
-    label: "Active Contracts",
+    label: "contracts.tabs.active",
     statuses: ["Active"],
     icon: (
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -19,7 +20,7 @@ const TABS: { key: TabKey; label: string; icon: React.ReactNode; statuses: strin
   },
   {
     key: "pending",
-    label: "Pending",
+    label: "contracts.tabs.pending",
     statuses: ["Pending"],
     icon: (
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -29,7 +30,7 @@ const TABS: { key: TabKey; label: string; icon: React.ReactNode; statuses: strin
   },
   {
     key: "completed",
-    label: "Completed",
+    label: "contracts.tabs.completed",
     statuses: ["Completed"],
     icon: (
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -39,7 +40,7 @@ const TABS: { key: TabKey; label: string; icon: React.ReactNode; statuses: strin
   },
   {
     key: "cancelled",
-    label: "Cancelled",
+    label: "contracts.tabs.cancelled",
     statuses: ["Cancelled"],
     icon: (
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -49,7 +50,7 @@ const TABS: { key: TabKey; label: string; icon: React.ReactNode; statuses: strin
   },
   {
     key: "disputed",
-    label: "Disputed",
+    label: "contracts.tabs.disputed",
     statuses: ["Disputed"],
     icon: (
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,6 +68,7 @@ function resolveTab(param: string | undefined): TabKey {
 }
 
 const MyContractsPage: React.FC = () => {
+  const { t } = useTranslation();
   const { tab } = useParams<{ tab?: string }>();
   const navigate = useNavigate();
 
@@ -85,7 +87,7 @@ const MyContractsPage: React.FC = () => {
       {/* ── Sidebar ──────────────────────────────────────────────────────── */}
       <aside className="hidden lg:flex flex-col w-64 flex-shrink-0 bg-surface border-r border-border min-h-[calc(100vh-64px)]">
         <div className="text-2xl font-bold text-center text-text-main p-6 border-b border-border">
-          Contracts Page
+          {t("contracts.pageTitle")}
         </div>
 
         <nav aria-label="Contracts sections" className="flex-1 py-3">
@@ -104,7 +106,7 @@ const MyContractsPage: React.FC = () => {
               <span className={activeTab === key ? "text-primary" : "text-gray-400 dark:text-gray-500"}>
                 {icon}
               </span>
-              {label}
+              {t(label)}
             </button>
           ))}
         </nav>
@@ -127,7 +129,7 @@ const MyContractsPage: React.FC = () => {
               }`}
             >
               {icon}
-              {label}
+              {t(label)}
             </button>
           ))}
         </div>
@@ -136,7 +138,7 @@ const MyContractsPage: React.FC = () => {
         <main className="flex-1 p-6 lg:p-8 max-w-4xl w-full mx-auto">
           <div className="mb-6 pb-5 border-b border-border flex items-center justify-between">
             <h1 className="text-2xl font-bold text-text-main">
-              {activeTabConfig?.label}
+              {t(activeTabConfig?.label || "")}
             </h1>
           </div>
 
@@ -148,7 +150,7 @@ const MyContractsPage: React.FC = () => {
             )}
             {error && (
               <div className="p-4 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800">
-                Failed to load contracts.
+                {t("contracts.errorLoad")}
               </div>
             )}
             {!isLoading && !error && filteredContracts.length === 0 && (
@@ -156,7 +158,7 @@ const MyContractsPage: React.FC = () => {
                 <svg className="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <p className="text-text-muted text-lg">No contracts found in this category.</p>
+                <p className="text-text-muted text-lg">{t("contracts.noContracts")}</p>
               </div>
             )}
             {filteredContracts.map((contract) => (

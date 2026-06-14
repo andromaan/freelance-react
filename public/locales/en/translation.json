@@ -113,7 +113,9 @@
     "passwordsNotMatch": "Passwords do not match",
     "loginError": "Error logging in",
     "registerError": "Registration error",
-    "registerSuccess": "Registration successful!"
+    "registerSuccess": "Registration successful!",
+    "roleSelectDesc": "To complete registration, please select your role:",
+    "continue": "Continue"
   },
   "projects": {
     "title": "Browse Projects",
@@ -256,7 +258,82 @@
     "disputeReason": "Reason for Dispute",
     "disputeReasonPlaceholder": "Explain the issue in detail...",
     "disputeNotice": "Once a dispute is opened, the contract will be paused, and a moderator will review the case.",
-    "submitDispute": "Submit Dispute"
+    "submitDispute": "Submit Dispute",
+    "pageTitle": "Contracts Page",
+    "errorLoad": "Failed to load contracts.",
+    "noContracts": "No contracts found in this category.",
+    "tabs": {
+      "active": "Active Contracts",
+      "pending": "Pending",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "disputed": "Disputed"
+    },
+    "page": {
+      "loadingDetails": "Loading contract details...",
+      "notFound": "Contract not found or error loading contract.",
+      "back": "Back to My Contracts",
+      "openDispute": "Open Dispute",
+      "contractFor": "Contract for:",
+      "projectNotFound": "Project not found",
+      "started": "Started:",
+      "ended": "Ended:",
+      "loadingReview": "Loading review status...",
+      "reviewAdded": "Review Added:",
+      "leaveReview": "Leave a review",
+      "milestones": "Milestones"
+    },
+    "card": {
+      "contractFor": "Contract for:",
+      "projectNotFound": "Project not found",
+      "started": "Started:",
+      "ended": "Ended:",
+      "reviewed": "(Reviewed)",
+      "viewContract": "View Contract"
+    },
+    "review": {
+      "minRating": "Please provide a rating of at least 0.5 stars",
+      "success": "Review added successfully",
+      "fail": "Failed to add review",
+      "title": "Leave a review",
+      "rate": "Rate your collaboration",
+      "optionalText": "Your review (optional)",
+      "placeholder": "Describe your experience...",
+      "submit": "Submit Review",
+      "saving": "Saving..."
+    },
+    "milestones": {
+      "errorLoad": "Failed to load milestones.",
+      "notFound": "No milestones found.",
+      "noDescription": "No description provided.",
+      "due": "Due:",
+      "startWork": "Start Work",
+      "submitWork": "Submit Work",
+      "reviewWork": "Review Work",
+      "approve": "Approve",
+      "requestRework": "Request Rework",
+      "confirmTitle": "Confirm Status Change",
+      "confirmDesc": "Are you sure you want to change the status of this milestone?",
+      "confirmYes": "Yes, change"
+    },
+    "chat": {
+      "openChat": "Open Chat",
+      "disconnected": "Chat disconnected",
+      "connecting": "Connecting...",
+      "disabled": "Chat disabled",
+      "listening": "Listening...",
+      "processing": "Processing...",
+      "editMessage": "Edit message...",
+      "typeMessage": "Type your message...",
+      "deleteTitle": "Delete Message",
+      "deleteConfirm": "Are you sure you want to delete this message? This action cannot be undone.",
+      "edited": "Edited",
+      "online": "online",
+      "offline": "offline",
+      "loadingChat": "Loading chat...",
+      "chatNotFound": "Chat details not found.",
+      "project": "Project"
+    }
   },
   "disputes": {
     "openedOn": "Opened on",
@@ -271,7 +348,9 @@
     "noDisputesDesc": "You don't have any disputes at the moment."
   },
   "common": {
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "save": "Save",
+    "send": "Send"
   },
   "profile": {
     "tabs": {

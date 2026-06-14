@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import BaseModal from "../../../components/ui/BaseModal";
 import { toast } from "react-toastify";
 import { useCreateReviewMutation } from "../../../services/reviews/reviewsApi";
@@ -14,6 +15,7 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
   onClose,
   contractId,
 }) => {
+  const { t } = useTranslation();
   const [rating, setRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number>(0);
   const [reviewText, setReviewText] = useState("");
@@ -22,7 +24,7 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
 
   const handleCreate = async () => {
     if (rating < 0.5) {
-      toast.error("Please provide a rating of at least 0.5 stars");
+      toast.error(t("contracts.review.minRating"));
       return;
     }
 
@@ -33,10 +35,10 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
         reviewText,
       }).unwrap();
 
-      toast.success("Review added successfully");
+      toast.success(t("contracts.review.success"));
       onClose();
     } catch (error: any) {
-      toast.error(error?.data?.title || error?.data?.message || "Failed to add review");
+      toast.error(error?.data?.title || error?.data?.message || t("contracts.review.fail"));
     }
   };
 
@@ -111,12 +113,10 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
   };
 
   return (
-    <BaseModal isOpen={isOpen} onClose={onClose} title="Leave a review">
+    <BaseModal isOpen={isOpen} onClose={onClose} title={t("contracts.review.title")}>
       <div className="space-y-6 pt-2">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Rate your collaboration
-          </label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t("contracts.review.rate")}</label>
           <div
             className="flex gap-1 items-center"
             onMouseLeave={() => setHoverRating(0)}
@@ -141,16 +141,14 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
         </div>
 
         <div>
-          <label htmlFor="reviewText" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Your review (optional)
-          </label>
+          <label htmlFor="reviewText" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t("contracts.review.optionalText")}</label>
           <textarea
             id="reviewText"
             className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 text-text-main transition-all resize-none shadow-sm"
             rows={4}
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
-            placeholder="Describe your experience..."
+            placeholder={t("contracts.review.placeholder")}
           />
         </div>
 
@@ -158,15 +156,13 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = ({
           <button
             onClick={onClose}
             className="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 border border-border rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all focus:outline-none focus:ring-2 focus:ring-gray-200"
-          >
-            Cancel
-          </button>
+          >{t("common.cancel")}</button>
           <button
             onClick={handleCreate}
             disabled={isLoading || rating < 0.5}
             className="px-5 py-2.5 text-sm font-medium text-white bg-primary rounded-xl hover:bg-primary-hover shadow-sm shadow-primary/30 hover:shadow-primary/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
-            {isLoading ? "Saving..." : "Submit Review"}
+            {isLoading ? t("contracts.review.saving") : t("contracts.review.submit")}
           </button>
         </div>
       </div>

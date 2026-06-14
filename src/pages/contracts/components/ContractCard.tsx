@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import type { ContractVM } from "../../../types/contract.types";
 import { useGetProjectByIdQuery } from "../../../services/projects/projectsApi";
 import { useGetIsReviewedQuery } from "../../../services/reviews/reviewsApi";
@@ -12,6 +13,7 @@ interface ContractCardProps {
 }
 
 const ContractCard: React.FC<ContractCardProps> = ({ contract }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const formattedStartDate = contract.startDate
@@ -35,7 +37,7 @@ const ContractCard: React.FC<ContractCardProps> = ({ contract }) => {
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
             <h3 className="text-lg font-bold text-text-main flex items-center gap-2 min-w-0">
-              <span className="shrink-0">Contract for:</span>
+              <span className="shrink-0">{t("contracts.card.contractFor")}</span>
 
               {isProjectLoading ? (
                 <span className="inline-flex items-center gap-1">
@@ -45,7 +47,7 @@ const ContractCard: React.FC<ContractCardProps> = ({ contract }) => {
                 </span>
               ) : (
                 <span className="truncate" title={project?.title || undefined}>
-                  {project?.title || "Project not found"}
+                  {project?.title || t("contracts.card.projectNotFound")}
                 </span>
               )}
             </h3>
@@ -68,7 +70,7 @@ const ContractCard: React.FC<ContractCardProps> = ({ contract }) => {
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
               </svg>
-              <span>Started: {formattedStartDate}</span>
+              <span>{t("contracts.card.started")} {formattedStartDate}</span>
             </div>
             {contract.endDate && (
               <div className="flex items-center gap-1.5">
@@ -85,9 +87,7 @@ const ContractCard: React.FC<ContractCardProps> = ({ contract }) => {
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <span>
-                  Ended: {format(new Date(contract.endDate), "MMM d, yyyy")}
-                </span>
+                <span>{t("contracts.card.ended")} {format(new Date(contract.endDate), "MMM d, yyyy")}</span>
               </div>
             )}
             {contract.status === "Completed" && reviewedData && (
@@ -96,14 +96,14 @@ const ContractCard: React.FC<ContractCardProps> = ({ contract }) => {
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
                 {reviewedData.rating}
-                <span className="text-xs text-text-muted ml-1 hidden sm:inline">(Reviewed)</span>
+                <span className="text-xs text-text-muted ml-1 hidden sm:inline">{t("contracts.card.reviewed")}</span>
               </div>
             )}
           </div>
         </div>
 
         <div className="flex items-center gap-1 self-end sm:self-auto text-primary text-sm font-medium">
-          View Contract{" "}
+          {t("contracts.card.viewContract")}{" "}
           <ArrowIcon direction="right" />
         </div>
       </div>

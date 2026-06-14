@@ -15,6 +15,7 @@ import { useVoiceInput } from "../../hooks/useVoiceInput";
 import { useTranslation } from "react-i18next";
 import ArrowIcon from "../icons/ArrowIcon";
 
+
 interface ContractChatWidgetProps {
   isOpen: boolean;
   onClose: () => void;
@@ -45,7 +46,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
     setNewMessage((prev) => (prev ? prev + " " + text : text));
   }, []);
 
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const voiceLang = i18n.language === "uk" ? "uk-UA" : "en-US";
 
   const {
@@ -223,12 +224,13 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
       className="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 flex flex-col w-full sm:w-[500px] h-[100dvh] sm:h-[600px] sm:max-h-[85vh] bg-surface sm:rounded-2xl shadow-2xl overflow-hidden border-0 sm:border border-border animate-in slide-in-from-bottom-8"
     >
       {detailsLoading || messagesLoading ? (
-        <div className="flex-1 flex flex-col items-center justify-center">
-          <span className="text-text-muted">Loading chat...</span>
+        <div className="flex flex-col items-center justify-center p-12 space-y-3">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-text-muted">{t("contracts.chat.loadingChat")}</span>
         </div>
       ) : !chatDetails ? (
-        <div className="flex-1 flex flex-col items-center justify-center">
-          <span className="text-red-500">Chat details not found.</span>
+        <div className="flex flex-col items-center justify-center p-12">
+          <span className="text-red-500">{t("contracts.chat.chatNotFound")}</span>
           <button
             onClick={onClose}
             className="mt-4 text-primary hover:underline"
@@ -302,7 +304,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                             : "text-text-muted"
                         }
                       >
-                        {isInterlocutorOnline ? "Online" : "Offline"}
+                        {isInterlocutorOnline ? t("contracts.chat.online") : t("contracts.chat.offline")}
                       </span>
                     </span>
                     <span className="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-500"></span>
@@ -310,7 +312,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                       className="text-sm text-text-muted max-w-xs truncate"
                       title={chatDetails.projectTitle}
                     >
-                      Project: {chatDetails.projectTitle}
+                      {t("contracts.chat.project")}: {chatDetails.projectTitle}
                     </p>
                   </div>
                 </div>
@@ -376,7 +378,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                             className="italic opacity-70"
                             title={
                               msg.modifiedAt
-                                ? `Edited: ${formatMessageDate(msg.modifiedAt)}`
+                                ? `${t("contracts.chat.edited")}: ${formatMessageDate(msg.modifiedAt)}`
                                 : "Edited"
                             }
                           >
@@ -568,14 +570,14 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                 disabled={!isChatActive || !isConnected}
                 placeholder={
                   !isChatActive
-                    ? "Chat disabled"
+                    ? t("contracts.chat.disabled")
                     : isListening
-                      ? "Listening..."
+                      ? t("contracts.chat.listening")
                       : isVoiceBusy
-                        ? "Processing..."
+                        ? t("contracts.chat.processing")
                         : editingMessageId
-                          ? "Edit message..."
-                          : "Type your message..."
+                          ? t("contracts.chat.editMessage")
+                          : t("contracts.chat.typeMessage")
                 }
                 rows={1}
                 style={
@@ -599,10 +601,10 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                 className={`${editingMessageId ? "p-3" : "pr-2 pl-3"} py-2 bg-primary text-white text-xs sm:text-sm font-medium rounded-xl hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shrink-0 shadow-sm shadow-primary/30 flex items-center justify-center`}
               >
                 {editingMessageId ? (
-                  "Save"
+                  t("common.save")
                 ) : (
                   <div className="flex alight-center items-center">
-                    Send
+                    {t("common.send")}
                     <ArrowIcon direction="right" />
                   </div>
                 )}
@@ -615,9 +617,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                     setNewMessage("");
                   }}
                   className="px-3 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs sm:text-sm font-medium rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none transition-all"
-                >
-                  Cancel
-                </button>
+                >{t("common.cancel")}</button>
               )}
             </form>
           </div>
@@ -628,9 +628,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
         <div className="absolute inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-[2px] animate-in fade-in duration-200 px-4">
           <div className="max-w-xs bg-surface rounded-2xl shadow-xl overflow-hidden animate-in zoom-in-95 duration-200 text-left align-middle border border-border">
             <div className="flex items-center justify-between p-3 border-b border-border-light">
-              <h3 className="text-xl font-semibold text-text-main leading-none">
-                Delete Message
-              </h3>
+              <h3 className="text-xl font-semibold text-text-main leading-none">{t("contracts.chat.deleteTitle")}</h3>
               <button
                 type="button"
                 onClick={() => setMessageToDelete(null)}
@@ -652,18 +650,13 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
               </button>
             </div>
             <div className="p-3">
-              <p className="mb-3 text-sm leading-relaxed text-text-muted">
-                Are you sure you want to delete this message? This action cannot
-                be undone.
-              </p>
+              <p className="mb-3 text-sm leading-relaxed text-text-muted">{t("contracts.chat.deleteConfirm")}</p>
               <div className="flex items-center justify-center gap-3 flex-wrap">
                 <button
                   type="button"
                   onClick={() => setMessageToDelete(null)}
                   className="px-4 py-2 text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 border border-border hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 transition-colors"
-                >
-                  Cancel
-                </button>
+                >{t("common.cancel")}</button>
                 <button
                   type="button"
                   onClick={() => {
@@ -671,9 +664,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                     setMessageToDelete(null);
                   }}
                   className="inline-flex items-center justify-center gap-2 min-w-[6rem] px-5 py-2 text-sm font-semibold rounded-lg bg-red-500 hover:bg-red-600 text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 shadow-sm hover:shadow-md transition-all duration-150"
-                >
-                  Delete
-                </button>
+                >{t("common.delete")}</button>
               </div>
             </div>
           </div>
