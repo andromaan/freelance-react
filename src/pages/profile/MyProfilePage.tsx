@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { ROLES } from "../../constants/roles";
 import { selectCurrentUser } from "../../store/userSlice";
 import type { BidVM } from "../../types/bid.types";
@@ -20,7 +21,7 @@ type TabKey = "edit-profile" | "my-bids" | "my-quotes";
 const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
   {
     key: "edit-profile",
-    label: "Edit Profile",
+    label: "profile.tabs.editProfile",
     icon: (
       <svg
         className="w-4 h-4"
@@ -39,7 +40,7 @@ const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
   },
   {
     key: "my-bids",
-    label: "My Bids",
+    label: "profile.tabs.myBids",
     icon: (
       <svg
         className="w-4 h-4"
@@ -58,7 +59,7 @@ const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
   },
   {
     key: "my-quotes",
-    label: "My Quotes",
+    label: "profile.tabs.myQuotes",
     icon: (
       <svg
         className="w-4 h-4"
@@ -87,6 +88,7 @@ function resolveTab(param: string | undefined, isFreelancer: boolean): TabKey {
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 const MyProfilePage: React.FC = () => {
+  const { t } = useTranslation();
   const { tab } = useParams<{ tab?: string }>();
   const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
@@ -173,7 +175,7 @@ const MyProfilePage: React.FC = () => {
               >
                 {icon}
               </span>
-              {label}
+              {t(label)}
             </button>
           ))}
         </nav>
@@ -196,7 +198,7 @@ const MyProfilePage: React.FC = () => {
               }`}
             >
               {icon}
-              {label}
+              {t(label)}
             </button>
           ))}
         </div>
@@ -206,7 +208,7 @@ const MyProfilePage: React.FC = () => {
           {/* Tab heading */}
           <div className="mb-6 pb-5 border-b border-border">
             <h1 className="text-2xl font-bold text-text-main">
-              {activeTabLabel}
+              {t(activeTabLabel)}
             </h1>
           </div>
 

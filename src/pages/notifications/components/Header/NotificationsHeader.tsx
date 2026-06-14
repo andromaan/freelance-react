@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   readingAll: boolean;
@@ -6,10 +7,11 @@ type Props = {
 };
 
 const NotificationsHeader: React.FC<Props> = ({ readingAll, onReadAll }) => {
+  const { t } = useTranslation();
   return (
     <div className="flex items-center justify-between mb-6">
       <h1 className="text-2xl font-bold text-text-main">
-        Notifications
+        {t("notifications.title")}
       </h1>
       <button
         onClick={onReadAll}
@@ -37,7 +39,7 @@ const NotificationsHeader: React.FC<Props> = ({ readingAll, onReadAll }) => {
             />
           </svg>
         )}
-        Mark all as read
+        {t("notifications.markAllRead")}
       </button>
     </div>
   );

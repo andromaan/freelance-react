@@ -17,22 +17,12 @@ import NotificationsFilters from "./components/Filters/NotificationsFilters";
 import NotificationsList from "./components/List/NotificationsList";
 import Pagination from "../../components/ui/Pagination";
 import type { SelectOption } from "../../styles/selectStyles";
+import { useTranslation } from "react-i18next";
 
 const PAGE_SIZE = 10;
 
-const formatTime = (iso: string) => {
-  const date = new Date(iso);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMin = Math.floor(diffMs / 60000);
-  if (diffMin < 1) return "just now";
-  if (diffMin < 60) return `${diffMin} min ago`;
-  const diffH = Math.floor(diffMin / 60);
-  if (diffH < 24) return `${diffH} hours ago`;
-  return date.toLocaleDateString(document.documentElement.lang === "uk" ? "uk-UA" : "en-US");
-};
-
 const Notifications: React.FC = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useSelector(selectCurrentUser);
 
@@ -144,7 +134,6 @@ const Notifications: React.FC = () => {
         isLoading={isLoading}
         togglingIds={togglingIds}
         onToggle={handleToggle}
-        formatTime={formatTime}
       />
 
       {/* Pagination */}

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useDeleteQuoteMutation, useGetQuotesByFreelancerQuery } from "../../services/quotes/quotesApi";
 import { useIsExistsByQuoteQuery } from "../../services/contracts/contractsApi";
@@ -34,7 +35,9 @@ const ContractStatus: React.FC<{ quoteId: string }> = ({ quoteId }) => {
   );
 };
 
-const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onEditQuote, onDeleteQuote }) => (
+const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onEditQuote, onDeleteQuote }) => {
+  const { t } = useTranslation();
+  return (
   <article className="shadow-lg bg-surface rounded-xl border border-border p-5 flex flex-col gap-3">
     {/* Top row */}
     <div className="flex items-start justify-between gap-3 flex-wrap">
@@ -43,7 +46,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onEditQuote, onDeleteQuote
           ${quote.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
         </span>
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 uppercase tracking-wide font-medium">
-          Submitted {new Date(quote.createdAt).toLocaleDateString(document.documentElement.lang === "uk" ? "uk-UA" : "en-US")}
+          {t("profile.bids.submitted")} {new Date(quote.createdAt).toLocaleDateString(document.documentElement.lang === "uk" ? "uk-UA" : "en-US")}
         </p>
       </div>
       <ContractStatus quoteId={quote.id} />
@@ -76,7 +79,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onEditQuote, onDeleteQuote
             d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
           />
         </svg>
-        View Project
+        {t("profile.quotes.viewProject")}
       </Link>
 
       <div className="ml-auto flex items-center gap-1">
@@ -85,7 +88,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onEditQuote, onDeleteQuote
           type="button"
           onClick={() => onEditQuote(quote)}
           className="p-2 rounded-lg text-gray-400 hover:text-amber-500 dark:text-gray-500 dark:hover:text-amber-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/70"
-          title="Edit Quote"
+          title={t("profile.quotes.editQuote")}
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -102,14 +105,15 @@ const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onEditQuote, onDeleteQuote
           type="button"
           onClick={() => onDeleteQuote(quote)}
           className="p-2 rounded-lg text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500/70"
-          title="Delete"
+          title={t("profile.quotes.delete")}
         >
           <DeleteIcon className="w-5 h-5" />
         </button>
       </div>
     </div>
   </article>
-);
+  );
+};
 
 // ─── Skeleton quote card ───────────────────────────────────────────────────────
 
@@ -141,6 +145,7 @@ interface MyQuotesTabProps {
 // ─── Main component ─────────────────────────────────────────────────────────────
 
 const MyQuotesTab: React.FC<MyQuotesTabProps> = ({ onEditQuote }) => {
+  const { t } = useTranslation();
   const { data: quotes = [], isLoading } = useGetQuotesByFreelancerQuery();
   const [deleteQuote, { isLoading: isDeleting }] = useDeleteQuoteMutation();
   const [deleteTarget, setDeleteTarget] = useState<QuoteVM | null>(null);
@@ -174,16 +179,16 @@ const MyQuotesTab: React.FC<MyQuotesTabProps> = ({ onEditQuote }) => {
           </svg>
         </div>
         <p className="text-text-muted font-medium">
-          No quotes yet
+          {t("profile.quotes.noQuotesYet")}
         </p>
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-          Browse projects and submit your first quote.
+          {t("profile.bids.noBidsBrowse")}
         </p>
         <Link
           to="/projects"
           className="mt-4 px-4 py-2 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-semibold transition-colors"
         >
-          Browse Projects
+          {t("profile.bids.browseProjects")}
         </Link>
       </div>
     );
@@ -213,17 +218,17 @@ const MyQuotesTab: React.FC<MyQuotesTabProps> = ({ onEditQuote }) => {
           }
           setDeleteTarget(null);
         }}
-        title="Delete Quote?"
+        title={t("profile.quotes.deleteConfirmTitle")}
         description={
           <>
-            Are you sure you want to delete this quote for{" "}
+            {t("profile.quotes.deleteConfirmDesc")}{" "}
             <strong>${deleteTarget?.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</strong>?
             <br />
-            This action cannot be undone.
+            {t("profile.quotes.deleteConfirmWarn")}
           </>
         }
-        confirmLabel="Delete"
-        cancelLabel="Cancel"
+        confirmLabel={t("profile.quotes.delete")}
+        cancelLabel={t("common.cancel")}
         isLoading={isDeleting}
       />
     </div>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import {
   useDeleteBidMutation,
@@ -10,6 +11,7 @@ import DeleteIcon from "../../components/icons/DeleteIcon";
 import { useGetQuotesByFreelancerQuery } from "../../services/quotes/quotesApi";
 
 const InterestBadge: React.FC<{ value?: boolean | null }> = ({ value }) => {
+  const { t } = useTranslation();
   if (value === true)
     return (
       <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">
@@ -26,7 +28,7 @@ const InterestBadge: React.FC<{ value?: boolean | null }> = ({ value }) => {
             d="M5 13l4 4L19 7"
           />
         </svg>
-        Interesting
+        {t("profile.bids.interesting")}
       </span>
     );
   if (value === false)
@@ -45,7 +47,7 @@ const InterestBadge: React.FC<{ value?: boolean | null }> = ({ value }) => {
             d="M6 18L18 6M6 6l12 12"
           />
         </svg>
-        Not Interesting
+        {t("profile.bids.notInteresting")}
       </span>
     );
   return (
@@ -63,7 +65,7 @@ const InterestBadge: React.FC<{ value?: boolean | null }> = ({ value }) => {
           d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
         />
       </svg>
-      Pending
+      {t("profile.bids.pending")}
     </span>
   );
 };
@@ -73,10 +75,10 @@ const InterestBadge: React.FC<{ value?: boolean | null }> = ({ value }) => {
 type InterestFilter = "all" | "pending" | "interesting" | "not-interesting";
 
 const FILTER_TABS: { key: InterestFilter; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "pending", label: "Pending" },
-  { key: "interesting", label: "Interesting" },
-  { key: "not-interesting", label: "Not Interesting" },
+  { key: "all", label: "profile.bids.all" },
+  { key: "pending", label: "profile.bids.pending" },
+  { key: "interesting", label: "profile.bids.interesting" },
+  { key: "not-interesting", label: "profile.bids.notInteresting" },
 ];
 
 function filterBids(bids: BidVM[], filter: InterestFilter): BidVM[] {
@@ -110,7 +112,9 @@ const BidCard: React.FC<BidCardProps> = ({
   onEditBid,
   onDeleteBid,
   isQuoteSubmitted,
-}) => (
+}) => {
+  const { t } = useTranslation();
+  return (
   <article className="shadow-lg bg-surface rounded-xl border border-border p-5 flex flex-col gap-3">
     {/* Top row */}
     <div className="flex items-start justify-between gap-3 flex-wrap">
@@ -119,7 +123,7 @@ const BidCard: React.FC<BidCardProps> = ({
           ${bid.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
         </span>
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 uppercase tracking-wide font-medium">
-          Submitted {new Date(bid.createdAt).toLocaleDateString(document.documentElement.lang === "uk" ? "uk-UA" : "en-US")}
+          {t("profile.bids.submitted")} {new Date(bid.createdAt).toLocaleDateString(document.documentElement.lang === "uk" ? "uk-UA" : "en-US")}
         </p>
       </div>
       <InterestBadge value={bid.isInteresting} />
@@ -152,7 +156,7 @@ const BidCard: React.FC<BidCardProps> = ({
             d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
           />
         </svg>
-        View Project
+        {t("profile.bids.viewProject")}
       </Link>
 
       <div className="ml-auto flex items-center gap-2">
@@ -180,7 +184,7 @@ const BidCard: React.FC<BidCardProps> = ({
                   d="M12 4v16m8-8H4"
                 />
               </svg>
-              Submit Quote
+              {t("profile.bids.submitQuote")}
             </button>
           ) : (
             <button
@@ -203,7 +207,7 @@ const BidCard: React.FC<BidCardProps> = ({
                   d="M5 13l4 4L19 7"
                 />
               </svg>
-              Quote Submitted
+              {t("profile.bids.quoteSubmitted")}
             </button>
           )
         ) : (
@@ -211,7 +215,7 @@ const BidCard: React.FC<BidCardProps> = ({
             type="button"
             onClick={() => onEditBid(bid)}
             className="p-2 rounded-lg text-gray-400 hover:text-amber-500 dark:text-gray-500 dark:hover:text-amber-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/70"
-            title="Edit Bid"
+            title={t("profile.bids.editBid")}
           >
             <svg
               className="w-5 h-5"
@@ -234,14 +238,15 @@ const BidCard: React.FC<BidCardProps> = ({
           type="button"
           onClick={() => onDeleteBid(bid)}
           className="p-2 rounded-lg text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500/70"
-          title="Delete"
+          title={t("profile.bids.delete")}
         >
           <DeleteIcon className="w-5 h-5" />
         </button>
       </div>
     </div>
   </article>
-);
+  );
+};
 
 // ─── Skeleton bid card ────────────────────────────────────────────────────────
 
@@ -271,6 +276,7 @@ interface MyBidsTabProps {
 }
 
 const MyBidsTab: React.FC<MyBidsTabProps> = ({ onSubmitQuote, onEditBid }) => {
+  const { t } = useTranslation();
   const { data: bids = [], isLoading } = useGetBidsByFreelancerQuery();
   const [deleteBid, { isLoading: isDeleting }] = useDeleteBidMutation();
   const [filter, setFilter] = useState<InterestFilter>("all");
@@ -307,16 +313,16 @@ const MyBidsTab: React.FC<MyBidsTabProps> = ({ onSubmitQuote, onEditBid }) => {
           </svg>
         </div>
         <p className="text-text-muted font-medium">
-          No bids yet
+          {t("profile.bids.noBidsYet")}
         </p>
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-          Browse projects and place your first bid.
+          {t("profile.bids.noBidsBrowse")}
         </p>
         <Link
           to="/projects"
           className="mt-4 px-4 py-2 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-semibold transition-colors"
         >
-          Browse Projects
+          {t("profile.bids.browseProjects")}
         </Link>
       </div>
     );
@@ -354,7 +360,7 @@ const MyBidsTab: React.FC<MyBidsTabProps> = ({ onSubmitQuote, onEditBid }) => {
                 : "bg-surface text-text-muted border-border hover:border-gray-300 dark:hover:border-gray-600"
             }`}
           >
-            {label}
+            {t(label)}
             <span
               className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[1.25rem] text-center ${
                 filter === key
@@ -372,14 +378,14 @@ const MyBidsTab: React.FC<MyBidsTabProps> = ({ onSubmitQuote, onEditBid }) => {
       {filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <p className="text-text-muted text-sm">
-            No bids match this filter.
+            {t("profile.bids.noBidsFilter")}
           </p>
           <button
             type="button"
             onClick={() => setFilter("all")}
             className="mt-2 text-xs font-medium text-primary hover:text-primary-hover transition-colors"
           >
-            Show all
+            {t("profile.bids.showAll")}
           </button>
         </div>
       ) : (
@@ -413,10 +419,10 @@ const MyBidsTab: React.FC<MyBidsTabProps> = ({ onSubmitQuote, onEditBid }) => {
           }
           setDeleteTarget(null);
         }}
-        title="Delete Bid?"
+        title={t("profile.bids.deleteConfirmTitle")}
         description={
           <>
-            Are you sure you want to delete this bid for{" "}
+            {t("profile.bids.deleteConfirmDesc")}{" "}
             <strong>
               $
               {deleteTarget?.amount.toLocaleString("en-US", {
@@ -425,11 +431,11 @@ const MyBidsTab: React.FC<MyBidsTabProps> = ({ onSubmitQuote, onEditBid }) => {
             </strong>
             ?
             <br />
-            This action cannot be undone.
+            {t("profile.bids.deleteConfirmWarn")}
           </>
         }
-        confirmLabel="Delete"
-        cancelLabel="Cancel"
+        confirmLabel={t("profile.bids.delete")}
+        cancelLabel={t("common.cancel")}
         isLoading={isDeleting}
       />
     </div>

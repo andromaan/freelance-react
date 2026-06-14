@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import Select from "react-select";
 import { selectCurrentUser } from "../../store/userSlice";
@@ -37,6 +38,7 @@ import DeleteIcon from "../../components/icons/DeleteIcon";
 import ArrowIcon from "../../components/icons/ArrowIcon";
 
 export const EditProfileTab: React.FC = () => {
+  const { t } = useTranslation();
   const user = useSelector(selectCurrentUser);
   const isFreelancer = user?.role?.name === ROLES.FREELANCER;
   const email = user?.email || "";
@@ -184,12 +186,12 @@ export const EditProfileTab: React.FC = () => {
       const formData = new FormData();
       formData.append("file", selectedAvatar);
       await updateAvatar(formData).unwrap();
-      toast.success("Profile image updated successfully.");
+      toast.success(t("profile.edit.avatarSuccess"));
       setSelectedAvatar(null);
     } catch (err: any) {
       console.error(err);
       setErrorMsg([
-        err?.data?.title || err?.data?.message || "Could not update avatar.",
+        err?.data?.title || err?.data?.message || t("profile.edit.avatarError"),
       ]);
     }
   };
@@ -230,7 +232,7 @@ export const EditProfileTab: React.FC = () => {
         }).unwrap();
       }
 
-      toast.success("Profile updated successfully.");
+      toast.success(t("profile.edit.profileSuccess"));
       setIsDirty(false);
     } catch (err: any) {
       console.error(err);
@@ -269,7 +271,7 @@ export const EditProfileTab: React.FC = () => {
     } catch (err: any) {
       console.error(err);
       setErrorMsg([
-        err?.data?.title || err?.data?.message || "Could not add language.",
+        err?.data?.title || err?.data?.message || t("profile.edit.langError"),
       ]);
     }
   };
@@ -303,7 +305,7 @@ export const EditProfileTab: React.FC = () => {
     } catch (err: any) {
       console.error(err);
       toast.error(
-        err?.data?.title || err?.data?.message || "Could not add portfolio.",
+        err?.data?.title || err?.data?.message || t("profile.edit.portfolioError"),
       );
     }
   };
@@ -342,7 +344,7 @@ export const EditProfileTab: React.FC = () => {
             <SubmitButton
               form="edit-profile-form"
               isLoading={isUpdating}
-              label="Save Profile"
+              label={t("profile.edit.saveProfile")}
             />
           </div>
         </div>
@@ -350,7 +352,7 @@ export const EditProfileTab: React.FC = () => {
         <div className="flex gap-6 flex-col lg:flex-row">
           <div className="w-full lg:w-1/2 bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
             <h2 className="text-lg font-bold text-text-main mb-6 pb-3 border-b border-border-light">
-              Profile Picture
+              {t("profile.edit.profileImage")}
             </h2>
             <div className="flex flex-col items-center gap-5">
               <div className="relative group w-28 h-28 flex-shrink-0">
@@ -394,9 +396,9 @@ export const EditProfileTab: React.FC = () => {
                 )}
                 <label
                   htmlFor="avatar-upload"
-                  className="absolute inset-0 flex items-center justify-center bg-black/50 text-white text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity rounded-full cursor-pointer text-center px-2"
+                  className="absolute inset-0 flex items-center text-center justify-center bg-black/50 text-white text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity rounded-full cursor-pointer text-center px-2"
                 >
-                  Upload Image
+                  {t("profile.edit.uploadImage")}
                 </label>
               </div>
               <div className="flex flex-col items-center gap-3">
@@ -410,17 +412,17 @@ export const EditProfileTab: React.FC = () => {
                 <div className="flex flex-col sm:flex-row gap-3 items-center">
                   <label
                     htmlFor="avatar-upload"
-                    className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                    className="cursor-pointer inline-flex items-center text-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                   >
-                    Upload Image
+                    {t("profile.edit.uploadImage")}
                   </label>
                   {selectedAvatar && (
                     <SubmitButton
                       type="button"
                       onClick={handleUpdateAvatar}
                       isLoading={isUpdatingAvatar}
-                      label="Save Avatar"
-                      loadingLabel="Saving..."
+                      label={t("profile.edit.saveAvatar")}
+                      loadingLabel={t("profile.edit.saving")}
                     />
                   )}
                 </div>
@@ -430,10 +432,10 @@ export const EditProfileTab: React.FC = () => {
 
           <div className="w-full lg:w-1/2 bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
             <h2 className="text-lg font-bold text-text-main mb-6 pb-3 border-b border-border-light">
-              Basic Information
+              {t("profile.edit.basicInfo")}
             </h2>
             <div className="space-y-5 max-w-xl">
-              <FormField id="displayName" label="Display Name">
+              <FormField id="displayName" label={t("profile.edit.displayName")}>
                 <input
                   id="displayName"
                   type="text"
@@ -442,11 +444,11 @@ export const EditProfileTab: React.FC = () => {
                     setDisplayName(e.target.value);
                     setIsDirty(true);
                   }}
-                  placeholder="e.g. John Doe"
+                  placeholder={t("profile.edit.displayNamePlaceholder")}
                   className={inputClass}
                 />
               </FormField>
-              <FormField id="countryId" label="Country" required>
+              <FormField id="countryId" label={t("profile.edit.country")} required>
                 <Select<SelectOption<number>>
                   inputId="countryId"
                   options={countryOptions}
@@ -456,7 +458,7 @@ export const EditProfileTab: React.FC = () => {
                     setIsDirty(true);
                   }}
                   styles={selectStyles}
-                  placeholder="Select a country..."
+                  placeholder={t("profile.edit.selectCountry")}
                 />
               </FormField>
             </div>
@@ -464,13 +466,13 @@ export const EditProfileTab: React.FC = () => {
         </div>
 
         <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
-          <h2 className="text-lg font-bold text-text-main mb-6 pb-3 border-b border-border-light">
-            {isFreelancer ? "Freelancer Details" : "Company Details"}
+          <h2 className="text-xl font-bold text-text-main mb-6 pb-3 border-b border-border-light">
+            {isFreelancer ? t("profile.edit.freelancerInfo") : t("profile.edit.employerInfo")}
           </h2>
           <div className="space-y-5">
             {isFreelancer ? (
               <>
-                <FormField id="bio" label="Bio">
+                <FormField id="bio" label={t("profile.edit.bio")}>
                   <textarea
                     id="bio"
                     value={bio}
@@ -478,7 +480,7 @@ export const EditProfileTab: React.FC = () => {
                       setBio(e.target.value);
                       setIsDirty(true);
                     }}
-                    placeholder="Tell clients about yourself, your skills, and your experience..."
+                    placeholder={t("profile.edit.bioPlaceholder")}
                     className={inputClass + " resize-y "}
                     style={{
                       fieldSizing: "content",
@@ -487,7 +489,7 @@ export const EditProfileTab: React.FC = () => {
                     }}
                   />
                 </FormField>
-                <FormField id="location" label="Location / Timezone">
+                <FormField id="location" label={t("profile.edit.location")}>
                   <input
                     id="location"
                     type="text"
@@ -496,14 +498,14 @@ export const EditProfileTab: React.FC = () => {
                       setLocation(e.target.value);
                       setIsDirty(true);
                     }}
-                    placeholder="e.g. New York, USA"
+                    placeholder={t("profile.edit.locationPlaceholder")}
                     className={inputClass}
                   />
                 </FormField>
               </>
             ) : (
               <>
-                <FormField id="companyName" label="Company Name">
+                <FormField id="companyName" label={t("profile.edit.companyName")}>
                   <input
                     id="companyName"
                     type="text"
@@ -512,11 +514,11 @@ export const EditProfileTab: React.FC = () => {
                       setCompanyName(e.target.value);
                       setIsDirty(true);
                     }}
-                    placeholder="e.g. Acme Corp"
+                    placeholder={t("profile.edit.companyNamePlaceholder")}
                     className={inputClass}
                   />
                 </FormField>
-                <FormField id="companyWebsite" label="Company Website">
+                <FormField id="companyWebsite" label={t("profile.edit.companyWebsite")}>
                   <input
                     id="companyWebsite"
                     type="url"
@@ -525,7 +527,7 @@ export const EditProfileTab: React.FC = () => {
                       setCompanyWebsite(e.target.value);
                       setIsDirty(true);
                     }}
-                    placeholder="https://acme-corp.com"
+                    placeholder={t("profile.edit.companyWebsitePlaceholder")}
                     className={inputClass}
                   />
                 </FormField>
@@ -540,10 +542,10 @@ export const EditProfileTab: React.FC = () => {
           {/* Skills Card */}
           <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
             <h2 className="text-lg font-bold text-text-main mb-6 pb-3 border-b border-border-light">
-              Skills
+              {t("profile.edit.skills")}
             </h2>
             <div className="max-w-xl">
-              <FormField id="skills" label="Selected Skills">
+              <FormField id="skills" label={t("profile.edit.skills")}>
                 <Select
                   isMulti
                   inputId="skills"
@@ -554,7 +556,7 @@ export const EditProfileTab: React.FC = () => {
                     setIsDirty(true);
                   }}
                   styles={selectStyles}
-                  placeholder="Select skills..."
+                  placeholder={t("profile.edit.selectSkills")}
                   menuPlacement="auto"
                 />
               </FormField>
@@ -563,32 +565,30 @@ export const EditProfileTab: React.FC = () => {
 
           {/* Portfolio Card */}
           <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
-            <h2 className="text-lg font-bold text-text-main mb-6 pb-3 border-b border-border-light">
-              Portfolio
-            </h2>
+            <h2 className="text-lg font-bold text-text-main mb-6 pb-3 border-b border-border-light">{t("profile.edit.portfolio")}</h2>
 
             <div className="mb-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl p-5 border border-border-light">
-              <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-4 uppercase tracking-wider">
-                Add New Item
+              <h3 className="text-sm font-bold text-text-main uppercase tracking-wider mb-4">
+                {t("profile.edit.addPortfolioItem")}
               </h3>
               <div className="space-y-4 max-w-xl">
-                <FormField id="portTitle" label="Title" required>
+                <FormField id="portTitle" label={t("profile.edit.title")} required>
                   <input
                     id="portTitle"
                     type="text"
                     value={portTitle}
                     onChange={(e) => setPortTitle(e.target.value)}
-                    placeholder="Project Name"
+                    placeholder={t("profile.edit.projectNamePlaceholder")}
                     className={inputClass}
                   />
                 </FormField>
-                <FormField id="portDesc" label="Description">
+                <FormField id="portDesc" label={t("profile.edit.description")}>
                   <textarea
                     id="portDesc"
                     rows={3}
                     value={portDesc}
                     onChange={(e) => setPortDesc(e.target.value)}
-                    placeholder="Short description..."
+                    placeholder={t("profile.edit.shortDescPlaceholder")}
                     className={inputClass + " resize-y"}
                     style={
                       {
@@ -599,25 +599,23 @@ export const EditProfileTab: React.FC = () => {
                     }
                   />
                 </FormField>
-                <FormField id="portUrl" label="Link (URL)">
+                <FormField id="portUrl" label={t("profile.edit.linkUrl")}>
                   <input
                     id="portUrl"
                     type="url"
                     value={portUrl}
                     onChange={(e) => setPortUrl(e.target.value)}
-                    placeholder="https://..."
+                    placeholder={t("profile.edit.companyWebsitePlaceholder")}
                     className={inputClass}
                   />
                 </FormField>
                 <div className="pt-2">
-                  <button
+                  <SubmitButton
                     type="button"
                     onClick={handleAddPortfolio}
-                    disabled={isAddingPortfolio || !portTitle.trim()}
-                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors disabled:opacity-60"
-                  >
-                    {isAddingPortfolio ? "Adding..." : "Add to Portfolio"}
-                  </button>
+                    isLoading={isAddingPortfolio}
+                    label={t("profile.edit.add")}
+                  />
                 </div>
               </div>
             </div>
@@ -711,8 +709,8 @@ export const EditProfileTab: React.FC = () => {
                                   className="text-xs text-primary font-medium mt-1 hover:underline focus:outline-none"
                                 >
                                   {expandedPortfolio.includes(item.id)
-                                    ? "Show less"
-                                    : "Read more"}
+                                    ? t("profile.edit.showLess")
+                                    : t("profile.edit.readMore")}
                                 </button>
                               )}
                             </div>
@@ -754,32 +752,30 @@ export const EditProfileTab: React.FC = () => {
       )}
 
       <div className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
-        <h2 className="text-lg font-bold text-text-main mb-6 pb-3 border-b border-border-light">
-          Languages
-        </h2>
+        <h2 className="text-lg font-bold text-text-main mb-6 pb-3 border-b border-border-light">{t("profile.edit.languages")}</h2>
         <div className="flex items-end gap-3 flex-wrap mb-6">
           <div className="flex-1 min-w-[200px]">
-            <FormField id="add-language" label="Language">
+            <FormField id="add-language" label={t("profile.edit.language")}>
               <Select<SelectOption<number>>
                 inputId="add-language"
                 options={langOptions}
                 value={langToAdd}
                 onChange={setLangToAdd}
                 styles={selectStyles}
-                placeholder="Select language..."
+                placeholder={t("profile.edit.selectLanguage")}
                 menuPlacement="auto"
               />
             </FormField>
           </div>
           <div className="flex-1 min-w-[200px]">
-            <FormField id="add-proficiency" label="Proficiency Level">
+            <FormField id="add-proficiency" label={t("profile.edit.proficiencyLevel")}>
               <Select<SelectOption<number>>
                 inputId="add-proficiency"
                 options={profOptions}
                 value={profToAdd}
                 onChange={setProfToAdd}
                 styles={selectStyles}
-                placeholder="Select level..."
+                placeholder={t("profile.edit.selectProficiency")}
                 menuPlacement="auto"
               />
             </FormField>
@@ -824,7 +820,7 @@ export const EditProfileTab: React.FC = () => {
               );
             })
           ) : (
-            <p className="text-sm text-text-muted">No languages added yet.</p>
+            <p className="text-sm text-text-muted">{t("profile.edit.noLanguages")}</p>
           )}
         </div>
       </div>

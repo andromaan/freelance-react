@@ -7,6 +7,7 @@ import {
   type SelectOption,
 } from "../../../../styles/selectStyles";
 import { getStatusText } from "../../../../utils";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   isReadFilter: boolean | null;
@@ -15,20 +16,21 @@ type Props = {
   onChange: (newIsRead: boolean | null, newType: SelectOption<number> | null) => void;
 };
 
-const isReadOptions = [
-  { label: "All", value: null },
-  { label: "Unread", value: false },
-  { label: "Read", value: true },
-];
-
 const NotificationsFilters: React.FC<Props> = ({
   isReadFilter,
   typeFilter,
   notificationTypes,
   onChange,
 }) => {
+  const { t } = useTranslation();
   const { theme } = useTheme();
   const isDark = theme === "dark";
+
+  const isReadOptions = [
+    { label: t("notifications.filterAll"), value: null },
+    { label: t("notifications.filterUnread"), value: false },
+    { label: t("notifications.filterRead"), value: true },
+  ];
 
   const styles = mergeSelectStyles(useSelectStyles<number>(), {
     control: (base) => ({
@@ -71,7 +73,7 @@ const NotificationsFilters: React.FC<Props> = ({
         value={typeFilter}
         isClearable
         onChange={(v) => onChange(isReadFilter, v)}
-        placeholder="Filter by type…"
+        placeholder={t("notifications.filterByType")}
         styles={styles}
         className="w-60"
       />

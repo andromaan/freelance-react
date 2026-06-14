@@ -1,22 +1,22 @@
 import React from "react";
 import type { NotificationVM } from "../../../../types/notification.types";
 import { Link } from "react-router-dom";
-import { getStatusText } from "../../../../utils";
+import { formatNotificationTime, getStatusText } from "../../../../utils";
 import ArrowIcon from "../../../../components/icons/ArrowIcon";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   n: NotificationVM;
   isToggling: boolean;
   onToggle: (id: string, currentIsRead: boolean) => void;
-  formatTime: (iso: string) => string;
 };
 
 const NotificationItem: React.FC<Props> = ({
   n,
   isToggling,
   onToggle,
-  formatTime,
 }) => {
+  const { t } = useTranslation();
   return (
     <div
       className={`group relative flex items-start items-center gap-4 p-4 rounded-xl border transition-all duration-300 notification-item-enter ${
@@ -48,7 +48,7 @@ const NotificationItem: React.FC<Props> = ({
               d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
             />
           </svg>
-          Check it
+          {t("notifications.checkIt")}
           <ArrowIcon direction="right" />
         </Link>
       )}
@@ -77,7 +77,7 @@ const NotificationItem: React.FC<Props> = ({
             className={`text-xs text-gray-400 dark:text-gray-500 
               ${!n.isRead ? "text-gray-500 dark:text-gray-100" : "text-gray-600 dark:text-gray-100/60 "}`}
           >
-            {formatTime(n.sentAt)}
+            {formatNotificationTime(n.sentAt, t)}
           </span>
         </div>
         <p className="text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
@@ -88,7 +88,7 @@ const NotificationItem: React.FC<Props> = ({
       <button
         onClick={() => onToggle(n.id, n.isRead)}
         disabled={isToggling}
-        title={n.isRead ? "Mark as unread" : "Mark as read"}
+        title={n.isRead ? t("notifications.markAsUnread") : t("notifications.markAsRead")}
         className={`flex-shrink-0 p-1.5 rounded-lg transition-all duration-200 opacity-0 group-hover:opacity-100 disabled:cursor-not-allowed ${
           n.isRead
             ? "text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
