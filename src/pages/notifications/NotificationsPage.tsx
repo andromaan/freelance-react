@@ -17,12 +17,10 @@ import NotificationsFilters from "./components/Filters/NotificationsFilters";
 import NotificationsList from "./components/List/NotificationsList";
 import Pagination from "../../components/ui/Pagination";
 import type { SelectOption } from "../../styles/selectStyles";
-import { useTranslation } from "react-i18next";
 
 const PAGE_SIZE = 10;
 
 const Notifications: React.FC = () => {
-  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useSelector(selectCurrentUser);
 

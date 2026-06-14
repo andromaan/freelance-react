@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useGetProjectByIdQuery } from "../../services/projects/projectsApi";
 import {
@@ -20,10 +21,10 @@ import ArrowIcon from "../../components/icons/ArrowIcon";
 type InterestFilter = "all" | "pending" | "interesting" | "not-interesting";
 
 const FILTER_TABS: { key: InterestFilter; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "pending", label: "Pending" },
-  { key: "interesting", label: "Interesting" },
-  { key: "not-interesting", label: "Not Interesting" },
+  { key: "all", label: "projects.bids.all" },
+  { key: "pending", label: "projects.bids.pending" },
+  { key: "interesting", label: "projects.bids.interesting" },
+  { key: "not-interesting", label: "projects.bids.notInteresting" },
 ];
 
 function filterBids(bids: BidVM[], filter: InterestFilter): BidVM[] {
@@ -44,6 +45,8 @@ function filterBids(bids: BidVM[], filter: InterestFilter): BidVM[] {
 // ─── Interest badge ───────────────────────────────────────────────────────────
 
 const InterestBadge: React.FC<{ value?: boolean | null }> = ({ value }) => {
+  const { t } = useTranslation();
+
   if (value === true)
     return (
       <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">
@@ -60,9 +63,7 @@ const InterestBadge: React.FC<{ value?: boolean | null }> = ({ value }) => {
             strokeWidth={2.5}
             d="M5 13l4 4L19 7"
           />
-        </svg>
-        Interesting
-      </span>
+        </svg>{t("projects.bids.interestingBadge")}</span>
     );
   if (value === false)
     return (
@@ -80,9 +81,7 @@ const InterestBadge: React.FC<{ value?: boolean | null }> = ({ value }) => {
             strokeWidth={2.5}
             d="M6 18L18 6M6 6l12 12"
           />
-        </svg>
-        Not Interesting
-      </span>
+        </svg>{t("projects.bids.notInterestingBadge")}</span>
     );
   return (
     <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400">
@@ -99,9 +98,7 @@ const InterestBadge: React.FC<{ value?: boolean | null }> = ({ value }) => {
           strokeWidth={2}
           d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
         />
-      </svg>
-      Pending
-    </span>
+      </svg>{t("projects.bids.pendingBadge")}</span>
   );
 };
 
@@ -370,6 +367,7 @@ const SkeletonCard: React.FC = () => (
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 const MyProjectBidsPage: React.FC = () => {
+  const { t } = useTranslation();
   const { projectId } = useParams<{ projectId: string }>();
   const navigate = useNavigate();
 
@@ -489,7 +487,7 @@ const MyProjectBidsPage: React.FC = () => {
                     : "bg-surface text-text-muted border-border hover:border-gray-300 dark:hover:border-gray-600"
                 }`}
               >
-                {label}
+                {t(label)}
                 <span
                   className={`text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[1.25rem] text-center ${
                     filter === key

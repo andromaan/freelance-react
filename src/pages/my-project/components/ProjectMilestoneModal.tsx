@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useId } from "react";
+import { useTranslation } from "react-i18next";
 import BaseModal from "../../../components/ui/BaseModal";
 import {
   useCreateProjectMilestoneMutation,
@@ -125,6 +126,8 @@ const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
   const [touched, setTouched] = useState<
     Partial<Record<keyof FormState, boolean>>
   >({});
+
+  const { t } = useTranslation();
 
   // Reset form when modal opens/switches mode
   useEffect(() => {
@@ -281,7 +284,7 @@ const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
         {/* ── Description ── */}
         <FormField
           id={descriptionId}
-          label="Description"
+          label={t("projects.milestoneModal.labelDesc")}
           required
           error={errors.description}
         >
@@ -293,7 +296,7 @@ const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
             value={form.description}
             onChange={handleChange}
             onBlur={handleBlur}
-            placeholder="Milestone details (e.g., UI design development)..."
+            placeholder={t("projects.milestoneModal.placeholderDesc")}
             className={`${inputClass} resize-none`}
           />
         </FormField>
@@ -302,7 +305,7 @@ const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
         <div className="grid grid-cols-2 gap-4">
           <FormField
             id={amountId}
-            label="Amount ($)"
+            label={t("projects.milestoneModal.labelAmount")}
             required
             error={errors.amount}
           >
@@ -323,7 +326,7 @@ const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
 
           <FormField
             id={dueDateId}
-            label="Due Date"
+            label={t("projects.milestoneModal.labelDueDate")}
             required
             error={errors.dueDate}
           >
@@ -361,7 +364,7 @@ const ProjectMilestoneModal: React.FC<ProjectMilestoneModalProps> = ({
                        disabled:opacity-50 disabled:cursor-not-allowed
                        transition-colors"
           >
-            Cancel
+            {t("common.cancel")}
           </button>
 
           <button

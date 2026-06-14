@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState, useMemo } from "react";
 import {
   useGetProjectsByEmployerQuery,
@@ -17,7 +18,7 @@ const TABS: { key: TabKey; status: ProjectStatus | null; label: string; icon: Re
   {
     key: "all",
     status: null,
-    label: "All Projects",
+    label: "projects.tabs.all",
     icon: (
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
@@ -27,7 +28,7 @@ const TABS: { key: TabKey; status: ProjectStatus | null; label: string; icon: Re
   {
     key: "open",
     status: ProjectStatus.Open,
-    label: "Open",
+    label: "projects.tabs.open",
     icon: (
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -37,7 +38,7 @@ const TABS: { key: TabKey; status: ProjectStatus | null; label: string; icon: Re
   {
     key: "inProgress",
     status: ProjectStatus.InProgress,
-    label: "In Progress",
+    label: "projects.tabs.inProgress",
     icon: (
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -47,7 +48,7 @@ const TABS: { key: TabKey; status: ProjectStatus | null; label: string; icon: Re
   {
     key: "completed",
     status: ProjectStatus.Completed,
-    label: "Completed",
+    label: "projects.tabs.completed",
     icon: (
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -57,7 +58,7 @@ const TABS: { key: TabKey; status: ProjectStatus | null; label: string; icon: Re
   {
     key: "cancelled",
     status: ProjectStatus.Cancelled,
-    label: "Cancelled",
+    label: "projects.tabs.cancelled",
     icon: (
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -67,6 +68,7 @@ const TABS: { key: TabKey; status: ProjectStatus | null; label: string; icon: Re
 ];
 
 const MyProjectsPage = () => {
+  const { t } = useTranslation();
   const { data: myProjects, isLoading, error } = useGetProjectsByEmployerQuery();
   const [deleteProject, { isLoading: isDeleting }] = useDeleteProjectMutation();
 
@@ -82,7 +84,7 @@ const MyProjectsPage = () => {
     if (!projectIdToDelete) return;
     try {
       await deleteProject(projectIdToDelete).unwrap();
-      toast.success("Project deleted successfully");
+      toast.success(t("projects.page.deletedSuccess"));
     } catch (error) {
       console.error("Failed to delete project:", error);
     } finally {
@@ -101,9 +103,7 @@ const MyProjectsPage = () => {
     <div className="min-h-[calc(100vh-64px)] bg-main transition-colors flex">
       {/* ── Sidebar ──────────────────────────────────────────────────────── */}
       <aside className="hidden lg:flex flex-col w-64 flex-shrink-0 bg-surface border-r border-border min-h-[calc(100vh-64px)]">
-        <div className="text-2xl font-bold text-center text-text-main p-6 border-b border-border">
-          My Projects
-        </div>
+        <div className="text-2xl font-bold text-center text-text-main p-6 border-b border-border">{t("projects.page.title")}</div>
 
         <div className="p-4 border-b border-border">
            <button
@@ -112,9 +112,7 @@ const MyProjectsPage = () => {
            >
              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-             </svg>
-             Create Project
-           </button>
+             </svg>{t("projects.page.create")}</button>
         </div>
 
         <nav aria-label="Projects sections" className="flex-1 py-3">
@@ -133,7 +131,7 @@ const MyProjectsPage = () => {
               <span className={activeTabKey === key ? "text-primary" : "text-gray-400 dark:text-gray-500"}>
                 {icon}
               </span>
-              {label}
+              {t(label)}
             </button>
           ))}
         </nav>
@@ -143,16 +141,14 @@ const MyProjectsPage = () => {
       <div className="flex-1 min-w-0 flex flex-col">
         {/* Mobile header area */}
         <div className="lg:hidden bg-surface border-b border-border p-4 flex justify-between items-center">
-            <h1 className="text-xl font-bold text-text-main">My Projects</h1>
+            <h1 className="text-xl font-bold text-text-main">{t("projects.page.title")}</h1>
             <button
              onClick={() => setIsCreateModalOpen(true)}
              className="bg-primary hover:bg-primary-hover text-white font-semibold py-2 px-3 rounded-xl transition-colors text-xs shadow-sm flex items-center gap-1"
            >
              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-             </svg>
-             Create
-           </button>
+             </svg>{t("common.create")}</button>
         </div>
         {/* Mobile tab bar */}
         <div className="lg:hidden bg-surface border-b border-border px-4 flex gap-1 overflow-x-auto">
@@ -169,7 +165,7 @@ const MyProjectsPage = () => {
               }`}
             >
               {icon}
-              {label}
+              {t(label)}
             </button>
           ))}
         </div>
@@ -178,7 +174,7 @@ const MyProjectsPage = () => {
         <main className="flex-1 p-6 lg:p-8 max-w-4xl w-full mx-auto">
           <div className="mb-6 pb-5 border-b border-border flex items-center justify-between">
             <h1 className="text-2xl font-bold text-text-main">
-              {activeTabConfig.label}
+              {t(activeTabConfig.label)}
             </h1>
             <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
               <button
@@ -188,7 +184,7 @@ const MyProjectsPage = () => {
                     ? "bg-white dark:bg-gray-700 text-primary shadow-sm"
                     : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 }`}
-                title="List View"
+                title={t("projects.page.listView")}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -201,7 +197,7 @@ const MyProjectsPage = () => {
                     ? "bg-white dark:bg-gray-700 text-primary shadow-sm"
                     : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 }`}
-                title="Grid View"
+                title={t("projects.page.gridView")}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -217,16 +213,14 @@ const MyProjectsPage = () => {
               </div>
             )}
             {error && (
-              <div className="p-4 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800">
-                Failed to load projects.
-              </div>
+              <div className="p-4 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800">{t("projects.page.loadError")}</div>
             )}
             {!isLoading && !error && filteredProjects.length === 0 && (
               <div className="text-center p-12 bg-surface rounded-2xl border border-border">
                 <svg className="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <p className="text-text-muted text-lg">No projects found in this category.</p>
+                <p className="text-text-muted text-lg">{t("projects.page.noProjects")}</p>
               </div>
             )}
             {!isLoading && !error && filteredProjects.length > 0 && (
@@ -253,9 +247,9 @@ const MyProjectsPage = () => {
         isOpen={!!projectIdToDelete}
         onClose={() => setProjectIdToDelete(null)}
         onConfirm={handleDeleteConfirm}
-        title="Delete Project?"
-        description="Are you sure you want to delete this project? This action cannot be undone."
-        confirmLabel="Delete"
+        title={t("projects.page.deleteTitle")}
+        description={t("projects.page.deleteDesc")}
+        confirmLabel={t("common.delete")}
         isLoading={isDeleting}
       />
     </div>

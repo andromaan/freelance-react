@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useId } from "react";
+import { useTranslation } from "react-i18next";
 import Select from "react-select";
 import BaseModal from "../../../components/ui/BaseModal";
 import { useCreateProjectMutation } from "../../../services/projects/projectsApi";
@@ -37,27 +38,27 @@ const EMPTY: FormState = {
 
 // ─── Validation ───────────────────────────────────────────────────────────────
 
-function validate(f: FormState, catIds: number[]): FormErrors {
+function validate(f: FormState, catIds: number[], t: any): FormErrors {
   const e: FormErrors = {};
-  if (!f.title.trim()) e.title = "Title is required";
-  else if (f.title.trim().length < 3) e.title = "At least 3 characters";
+  if (!f.title.trim()) e.title = t("projects.create.errTitleReq");
+  else if (f.title.trim().length < 3) e.title = t("projects.create.errTitleMin");
 
-  if (!f.description.trim()) e.description = "Description is required";
+  if (!f.description.trim()) e.description = t("projects.create.errDescReq");
   else if (f.description.trim().length < 10)
-    e.description = "At least 10 characters";
+    e.description = t("projects.create.errDescMin");
 
   const budget = parseFloat(f.budget);
-  if (!f.budget || isNaN(budget)) e.budget = "Please enter a budget";
-  else if (budget <= 0) e.budget = "Must be a positive number";
+  if (!f.budget || isNaN(budget)) e.budget = t("projects.create.errBudgetReq");
+  else if (budget <= 0) e.budget = t("projects.create.errBudgetPos");
 
-  if (!f.deadline) e.deadline = "Deadline is required";
+  if (!f.deadline) e.deadline = t("projects.create.errDeadlineReq");
   else {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    if (new Date(f.deadline) < today) e.deadline = "Cannot be in the past";
+    if (new Date(f.deadline) < today) e.deadline = t("projects.create.errDeadlinePast");
   }
 
-  if (catIds.length === 0) e.categories = "Select at least one category";
+  if (catIds.length === 0) e.categories = t("projects.create.errCategoryReq");
 
   return e;
 }
@@ -72,6 +73,7 @@ interface Props {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
+  const { t } = useTranslation();
   const titleId = useId();
   const descId = useId();
   const budgetId = useId();
@@ -110,7 +112,7 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
     };
     setForm((p) => ({ ...p, [name]: value }));
     if (touched[name]) {
-      const errs = validate({ ...form, [name]: value }, selectedCategoryIds);
+      const errs = validate({ ...form, [name]: value }, selectedCategoryIds, t);
       setErrors((p) => ({ ...p, [name]: errs[name] }));
     }
   };
@@ -120,7 +122,7 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
   ) => {
     const { name } = e.target as { name: keyof FormState };
     setTouched((p) => ({ ...p, [name]: true }));
-    const errs = validate(form, selectedCategoryIds);
+    const errs = validate(form, selectedCategoryIds, t);
     setErrors((p) => ({ ...p, [name]: errs[name] }));
   };
 
@@ -137,7 +139,7 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
     const ids = selected.map((o) => o.value);
     setSelectedCategoryIds(ids);
     if (touched.categories) {
-      const errs = validate(form, ids);
+      const errs = validate(form, ids, t);
       setErrors((p) => ({ ...p, categories: errs.categories }));
     }
   };
@@ -146,7 +148,7 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
     e.preventDefault();
     setSubmitError(null);
 
-    const errs = validate(form, selectedCategoryIds);
+    const errs = validate(form, selectedCategoryIds, t);
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
       setTouched({
@@ -170,11 +172,11 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
     try {
       await createProject(payload).unwrap();
 
-      toast.success("Project created successfully");
+      toast.success(t("projects.create.success"));
       onClose();
     } catch (err: any) {
       setSubmitError(
-        err?.data?.message ?? err?.data?.title ?? "Failed to create project.",
+        err?.data?.message ?? err?.data?.title ?? t("projects.create.fail"),
       );
     }
   };
@@ -185,8 +187,8 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
-      title="Create New Project"
-      description="Fill in the details to create a new project."
+      title={t("projects.create.title")}
+      description={t("projects.create.description")}
       size="lg"
       preventBackdropClose
     >
@@ -220,7 +222,7 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
         )}
 
         {/* Title */}
-        <FormField id={titleId} label="Title" required error={errors.title}>
+        <FormField id={titleId} label={t("projects.create.labelTitle")} required error={errors.title}>
           <input
             type="text"
             id={titleId}
@@ -229,7 +231,7 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
             value={form.title}
             onChange={handleChange}
             onBlur={handleBlur}
-            placeholder="Project title"
+            placeholder={t("projects.create.placeholderTitle")}
             className={inputClass}
           />
         </FormField>
@@ -237,7 +239,7 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
         {/* Description */}
         <FormField
           id={descId}
-          label="Description"
+          label={t("projects.create.labelDesc")}
           required
           error={errors.description}
         >
@@ -249,7 +251,7 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
             value={form.description}
             onChange={handleChange}
             onBlur={handleBlur}
-            placeholder="What does this project involve?"
+            placeholder={t("projects.create.placeholderDesc")}
             className={`${inputClass} resize-none`}
             style={
               {
@@ -265,7 +267,7 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
         <div className="grid grid-cols-2 gap-4">
           <FormField
             id={budgetId}
-            label="Budget ($)"
+            label={t("projects.create.labelBudget")}
             required
             error={errors.budget}
           >
@@ -286,7 +288,7 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
           <FormField
             id={deadlineId}
-            label="Deadline"
+            label={t("projects.create.labelDeadline")}
             required
             error={errors.deadline}
           >
@@ -321,8 +323,8 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
             onChange={handleCategoryChange}
             isLoading={isCategoriesLoading}
             styles={useSelectStyles<number>()}
-            placeholder="Select categories…"
-            noOptionsMessage={() => "No categories available"}
+            placeholder={t("projects.create.placeholderCategories")}
+            noOptionsMessage={() => t("projects.create.noCategories")}
             aria-label="Select project categories"
           />
           {errors.categories && (
@@ -358,9 +360,7 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
             onClick={onClose}
             disabled={isCreating}
             className="px-4 py-2 text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 border border-border hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            Cancel
-          </button>
+          >{t("common.cancel")}</button>
 
           <button
             type="submit"
@@ -391,7 +391,7 @@ const CreateProjectModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 />
               </svg>
             )}
-            {isCreating ? "Creating…" : "Create Project"}
+            {isCreating ? t("projects.create.creating") : t("projects.create.submitBtn")}
           </button>
         </div>
       </form>

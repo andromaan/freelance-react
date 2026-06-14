@@ -1,8 +1,13 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useGetProjectByIdQuery } from "../../services/projects/projectsApi";
 import { useGetQuotesByProjectQuery } from "../../services/quotes/quotesApi";
 import { useGetUserByIdQuery } from "../../services/user/userApi";
+import {
+  useGetAverageRatingQuery,
+  useGetReviewsByEmailQuery,
+} from "../../services/reviews/reviewsApi";
 import {
   useCreateContractMutation,
   useCanContractBeCreatedQuery,
@@ -11,7 +16,7 @@ import type { QuoteVM } from "../../types/quote.types";
 import ConfirmModal from "../../components/ui/ConfirmModal";
 import { toast } from "react-toastify";
 import ArrowIcon from "../../components/icons/ArrowIcon";
-import { avatarLetters } from "../../utils";
+import { avatarLetters, userImageUrl } from "../../utils";
 
 /* ─── Types ────────────────────────────────────────────────────────────── */
 interface CreateContractPayload {
@@ -26,6 +31,10 @@ interface SenderInfoProps {
 
 const SenderInfo: React.FC<SenderInfoProps> = ({ createdBy }) => {
   const { data: user, isLoading } = useGetUserByIdQuery(createdBy);
+
+  const email = user?.email || "";
+  const { data: averageRating = 0 } = useGetAverageRatingQuery(email, { skip: !email });
+  const { data: reviews = [] } = useGetReviewsByEmailQuery(email, { skip: !email });
 
   if (isLoading) {
     return (
@@ -42,26 +51,91 @@ const SenderInfo: React.FC<SenderInfoProps> = ({ createdBy }) => {
   if (!user) return null;
 
   return (
-    <div className="flex items-center gap-3 pt-4 border-t border-border-light">
-      <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm flex-shrink-0 uppercase">
-        {avatarLetters(user)}
-      </div>
-      <div className="flex flex-col min-w-0">
-        {user.displayName && (
-          <span className="text-sm font-medium text-text-main truncate">
-            {user.displayName}
-          </span>
-        )}
-        <span className="text-sm text-text-muted truncate">
-          {user.email}
-        </span>
-        {user.country?.name && (
-          <span className="text-xs text-gray-400 dark:text-gray-500">
-            {user.country.name}
-          </span>
+    <Link
+      to={`/freelancers/${createdBy}`}
+      className="flex items-center gap-4 mt-4 bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-xl transition-all group cursor-pointer border border-transparent hover:border-gray-200 dark:hover:border-gray-700"
+    >
+      <div className="relative flex-shrink-0">
+        {user.avatarImg ? (
+          <img
+            src={userImageUrl(user.avatarImg)}
+            alt={user.displayName || "Avatar"}
+            className="w-12 h-12 rounded-full object-cover border-2 border-white dark:border-gray-700 shadow-sm"
+          />
+        ) : (
+          <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-lg shadow-sm border-2 border-white dark:border-gray-700">
+            {avatarLetters(user)}
+          </div>
         )}
       </div>
-    </div>
+
+      <div className="flex flex-col flex-1">
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-semibold text-text-main group-hover:text-primary transition-colors flex items-center gap-1">
+            {user.displayName || user.email}
+            <svg
+              className="w-3.5 h-3.5 opacity-0 -ml-2 group-hover:opacity-100 group-hover:ml-0 transition-all text-primary"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              />
+            </svg>
+          </span>
+
+          <div className="flex items-center gap-1 text-xs">
+            <svg
+              className="w-3.5 h-3.5 text-amber-400"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <span className="font-semibold text-gray-700 dark:text-gray-300">
+              {averageRating > 0 ? averageRating.toFixed(1) : "—"}
+            </span>
+            <span className="text-gray-400 dark:text-gray-500">
+              ({reviews.length})
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between mt-0.5">
+          <span className="text-xs text-text-muted line-clamp-1">
+            {user.email}
+          </span>
+          {user.country?.name && (
+            <span className="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-0.5">
+              <svg
+                className="w-3 h-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+              {user.country.name}
+            </span>
+          )}
+        </div>
+      </div>
+    </Link>
   );
 };
 
@@ -190,6 +264,7 @@ const SkeletonCard: React.FC = () => (
 
 /* ─── Page ───────────────────────────────────────────────────────────────── */
 const MyProjectQuotesPage: React.FC = () => {
+  const { t } = useTranslation();
   const { projectId } = useParams<{ projectId: string }>();
   const navigate = useNavigate();
 
@@ -288,7 +363,7 @@ const MyProjectQuotesPage: React.FC = () => {
           setSelectedQuote(null);
         }}
         onConfirm={handleCreateContract}
-        title="Create contract based on this quote?"
+        title={t("projects.quotes.acceptTitle")}
         description={
           selectedQuote ? (
             <>

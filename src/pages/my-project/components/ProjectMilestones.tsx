@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   useGetProjectMilestonesByProjectQuery,
   useDeleteProjectMilestoneMutation,
@@ -54,91 +55,49 @@ const MilestoneRow: React.FC<MilestoneRowProps> = ({
   onEdit,
   onDelete,
   isDeleting,
-}) => (
-  <div
-    className="group flex items-start justify-between gap-4 p-4 rounded-xl
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <div
+      className="group flex items-start justify-between gap-4 p-4 rounded-xl
                border border-border-light
                bg-main
                hover:border-primary/30 dark:hover:border-primary/30
                hover:bg-primary/5 dark:hover:bg-primary/5
                transition-all duration-150"
-  >
-    {/* Left — description + date */}
-    <div className="min-w-0">
-      <p className="text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
-        {milestone.description || <em className="text-gray-400">No description</em>}
-      </p>
-      <p className="mt-1 text-[11px] font-medium text-gray-500 dark:text-gray-400 tracking-wide">
-        Due: {formatDate(milestone.dueDate)}
-      </p>
-    </div>
+    >
+      {/* Left — description + date */}
+      <div className="min-w-0">
+        <p className="text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
+          {milestone.description || (
+            <em className="text-gray-400">{t("projects.milestones.noDesc")}</em>
+          )}
+        </p>
+        <p className="mt-1 text-[11px] font-medium text-gray-500 dark:text-gray-400 tracking-wide">
+          Due: {formatDate(milestone.dueDate)}
+        </p>
+      </div>
 
-    {/* Right — amount + actions */}
-    <div className="flex-shrink-0 flex flex-col items-end gap-2">
-      <span className="text-sm font-bold text-text-main">
-        ${milestone.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
-      </span>
+      {/* Right — amount + actions */}
+      <div className="flex-shrink-0 flex flex-col items-end gap-2">
+        <span className="text-sm font-bold text-text-main">
+          $
+          {milestone.amount.toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+          })}
+        </span>
 
-      <div className="flex gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
-        {/* Edit */}
-        <button
-          type="button"
-          onClick={() => onEdit(milestone)}
-          aria-label={`Edit milestone for $${milestone.amount}`}
-          className="p-1.5 rounded-lg text-gray-400 hover:text-primary hover:bg-primary/10
+        <div className="flex gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+          {/* Edit */}
+          <button
+            type="button"
+            onClick={() => onEdit(milestone)}
+            aria-label={`Edit milestone for $${milestone.amount}`}
+            className="p-1.5 rounded-lg text-gray-400 hover:text-primary hover:bg-primary/10
                      focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60
                      transition-colors"
-        >
-          <svg
-            className="w-3.5 h-3.5"
-            aria-hidden="true"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-            />
-          </svg>
-        </button>
-
-        {/* Delete */}
-        <button
-          type="button"
-          onClick={() => onDelete(milestone.id)}
-          disabled={isDeleting}
-          aria-label={`Delete milestone for $${milestone.amount}`}
-          aria-busy={isDeleting}
-          className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20
-                     focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400/60
-                     disabled:opacity-50 disabled:cursor-wait
-                     transition-colors"
-        >
-          {isDeleting ? (
-            <svg
-              className="w-3.5 h-3.5 animate-spin"
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-              />
-            </svg>
-          ) : (
             <svg
               className="w-3.5 h-3.5"
               aria-hidden="true"
@@ -150,15 +109,66 @@ const MilestoneRow: React.FC<MilestoneRowProps> = ({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
               />
             </svg>
-          )}
-        </button>
+          </button>
+
+          {/* Delete */}
+          <button
+            type="button"
+            onClick={() => onDelete(milestone.id)}
+            disabled={isDeleting}
+            aria-label={`Delete milestone for $${milestone.amount}`}
+            aria-busy={isDeleting}
+            className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20
+                     focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400/60
+                     disabled:opacity-50 disabled:cursor-wait
+                     transition-colors"
+          >
+            {isDeleting ? (
+              <svg
+                className="w-3.5 h-3.5 animate-spin"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                />
+              </svg>
+            ) : (
+              <svg
+                className="w-3.5 h-3.5"
+                aria-hidden="true"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+            )}
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 // ─── Main component ────────────────────────────────────────────────────────────
 
@@ -171,6 +181,8 @@ const ProjectMilestones: React.FC<Props> = ({ projectId }) => {
 
   const [deleteMilestone, { isLoading: isDeleting, originalArgs: deletingId }] =
     useDeleteProjectMilestoneMutation();
+
+  const { t } = useTranslation();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editingMilestone, setEditingMilestone] = useState<
@@ -207,8 +219,7 @@ const ProjectMilestones: React.FC<Props> = ({ projectId }) => {
     }
   };
 
-  const total =
-    milestones?.reduce((sum, m) => sum + m.amount, 0) ?? 0;
+  const total = milestones?.reduce((sum, m) => sum + m.amount, 0) ?? 0;
 
   return (
     <>
@@ -266,7 +277,11 @@ const ProjectMilestones: React.FC<Props> = ({ projectId }) => {
 
         {/* Body */}
         {isLoading ? (
-          <div className="space-y-3" aria-busy="true" aria-label="Завантаження етапів">
+          <div
+            className="space-y-3"
+            aria-busy="true"
+            aria-label="Завантаження етапів"
+          >
             <SkeletonRow />
             <SkeletonRow />
             <SkeletonRow />
@@ -281,7 +296,7 @@ const ProjectMilestones: React.FC<Props> = ({ projectId }) => {
         ) : !milestones || milestones.length === 0 ? (
           <div className="text-center py-10">
             <p className="text-sm text-text-muted">
-              No milestones added yet.
+              {t("projects.milestones.noMilestones")}
             </p>
             <button
               type="button"
@@ -321,7 +336,7 @@ const ProjectMilestones: React.FC<Props> = ({ projectId }) => {
         isOpen={pendingDeleteId !== null}
         onClose={() => setPendingDeleteId(null)}
         onConfirm={handleConfirmDelete}
-        title="Delete this milestone?"
+        title={t("projects.milestones.deleteTitle")}
         description="This action cannot be undone. The milestone will be permanently deleted."
         confirmLabel="Delete"
         cancelLabel="Cancel"

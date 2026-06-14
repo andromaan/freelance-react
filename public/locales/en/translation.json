@@ -118,23 +118,183 @@
     "continue": "Continue"
   },
   "projects": {
-    "title": "Browse Projects",
-    "subtitle": "Discover open projects and find work that matches your skills.",
-    "searchPlaceholder": "Search by title…",
-    "budgetMin": "Budget min ($)",
-    "budgetMax": "Budget max ($)",
-    "maxDeadline": "Max deadline",
-    "selectCategories": "Select categories…",
-    "noCategories": "No categories available",
-    "clearFilters": "Clear filters",
-    "noProjectsFound": "No projects found",
-    "projectFound": "project found",
-    "projectsFound": "projects found",
-    "filtered": "filtered",
-    "tryAdjusting": "Try adjusting your filters or search terms.",
-    "daysAgo": "{{count}}d ago",
-    "daysLeft": "{{count}}d left",
-    "monthsLeft": "{{count}}mo left"
+    "tabs": {
+      "all": "All Projects",
+      "open": "Open",
+      "inProgress": "In Progress",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "page": {
+      "title": "My Projects",
+      "create": "Create Project",
+      "listView": "List View",
+      "gridView": "Grid View",
+      "loadError": "Failed to load projects.",
+      "noProjects": "No projects found in this category.",
+      "deleteTitle": "Delete Project?",
+      "deleteDesc": "Are you sure you want to delete this project? This action cannot be undone.",
+      "deletedSuccess": "Project deleted successfully",
+      "loading": "Loading project...",
+      "notFound": "Project not found or error loading project.",
+      "backToMyProjects": "Back to My Projects"
+    },
+    "card": {
+      "due": "Due",
+      "completed": "Completed",
+      "details": "Details",
+      "viewDetails": "VIEW DETAILS",
+      "status": "Status",
+      "deadline": "Deadline",
+      "dueText": {
+        "day": {
+          "left": "{{count}} day left",
+          "left_plural": "{{count}} days left",
+          "ago": "{{count}} day ago",
+          "ago_plural": "{{count}} days ago"
+        },
+        "month": {
+          "left": "{{count}} month left",
+          "left_plural": "{{count}} months left",
+          "ago": "{{count}} month ago",
+          "ago_plural": "{{count}} months ago"
+        },
+        "year": {
+          "left": "{{count}} year left",
+          "left_plural": "{{count}} years left",
+          "ago": "{{count}} year ago",
+          "ago_plural": "{{count}} years ago"
+        }
+      },
+      "dueDaysLeft_one": "{{count}} day left",
+      "dueDaysLeft_other": "{{count}} days left",
+      "dueDaysAgo_one": "{{count}} day ago",
+      "dueDaysAgo_other": "{{count}} days ago",
+      "dueMonthsLeft_one": "{{count}} month left",
+      "dueMonthsLeft_other": "{{count}} months left",
+      "dueMonthsAgo_one": "{{count}} month ago",
+      "dueMonthsAgo_other": "{{count}} months ago",
+      "dueYearsLeft_one": "{{count}} year left",
+      "dueYearsLeft_other": "{{count}} years left",
+      "dueYearsAgo_one": "{{count}} year ago",
+      "dueYearsAgo_other": "{{count}} years ago"
+    },
+    "table": {
+      "project": "Project",
+      "deadline": "Deadline",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "create": {
+      "errTitleReq": "Title is required",
+      "errTitleMin": "At least 3 characters",
+      "errDescReq": "Description is required",
+      "errDescMin": "At least 10 characters",
+      "errBudgetReq": "Please enter a budget",
+      "errBudgetPos": "Must be a positive number",
+      "errDeadlineReq": "Deadline is required",
+      "errDeadlinePast": "Cannot be in the past",
+      "errCategoryReq": "Select at least one category",
+      "success": "Project created successfully",
+      "fail": "Failed to create project.",
+      "title": "Create New Project",
+      "description": "Fill in the details to create a new project.",
+      "labelTitle": "Title",
+      "placeholderTitle": "Project title",
+      "labelDesc": "Description",
+      "placeholderDesc": "What does this project involve?",
+      "labelBudget": "Budget ($)",
+      "labelDeadline": "Deadline",
+      "labelCategories": "Categories",
+      "placeholderCategories": "Select categories…",
+      "noCategories": "No categories available",
+      "requiredFields": "Required fields",
+      "creating": "Creating…",
+      "submitBtn": "Create Project"
+    },
+    "bids": {
+      "all": "All",
+      "pending": "Pending",
+      "interesting": "Interesting",
+      "notInteresting": "Not Interesting",
+      "interestingBadge": "Interesting",
+      "notInterestingBadge": "Not Interesting",
+      "pendingBadge": "Pending",
+      "title": "Bids for Project",
+      "backToProject": "Back to Project",
+      "loadingBids": "Loading bids...",
+      "noBids": "No bids found for this project yet.",
+      "noBidsFilter": "No bids match the selected filter.",
+      "markInteresting": "Mark as Interesting",
+      "markNotInteresting": "Mark as Not Interesting",
+      "markInterestingTitle": "Mark as Interesting?",
+      "markInterestingDesc": "Are you sure you want to mark this bid as interesting?",
+      "markInterestingYes": "Yes, mark as interesting",
+      "markNotInterestingTitle": "Mark as Not Interesting?",
+      "markNotInterestingDesc": "Are you sure you want to mark this bid as NOT interesting?",
+      "markNotInterestingYes": "Yes, mark as not interesting",
+      "noReviews": "No reviews"
+    },
+    "quotes": {
+      "title": "Quotes for Project",
+      "loadingQuotes": "Loading quotes...",
+      "noQuotes": "No quotes found for this project yet.",
+      "cancelQuote": "Cancel Quote",
+      "acceptQuote": "Accept Quote",
+      "viewContract": "View Contract",
+      "acceptTitle": "Create contract based on this quote?",
+      "acceptDesc": "Are you sure you want to accept this quote? This will create a contract.",
+      "acceptYes": "Yes, Accept Quote",
+      "cancelTitle": "Cancel this quote?",
+      "cancelDesc": "Are you sure you want to cancel this quote?",
+      "cancelYes": "Yes, Cancel",
+      "acceptedSuccess": "Quote accepted, contract created",
+      "acceptedFail": "Failed to accept quote",
+      "cancelledSuccess": "Quote cancelled",
+      "cancelledFail": "Failed to cancel quote",
+      "budget": "Budget",
+      "deadline": "Deadline",
+      "status": "Quote Status"
+    },
+    "header": {
+      "details": "Project Details",
+      "status": "Status"
+    },
+    "meta": {
+      "edit": "Edit Details",
+      "budget": "Budget",
+      "deadline": "Deadline",
+      "description": "Description"
+    },
+    "milestoneModal": {
+      "titleAdd": "Add New Milestone",
+      "titleEdit": "Edit Milestone",
+      "labelDesc": "Description",
+      "placeholderDesc": "Milestone details (e.g., UI design development)...",
+      "labelAmount": "Amount ($)",
+      "labelDueDate": "Due Date",
+      "saving": "Saving...",
+      "save": "Save Milestone"
+    },
+    "milestones": {
+      "title": "Milestones",
+      "add": "Add Milestone",
+      "noMilestones": "No milestones added yet.",
+      "noDesc": "No description",
+      "deleteTitle": "Delete this milestone?",
+      "deleteDesc": "Are you sure you want to delete this milestone?"
+    },
+    "responses": {
+      "title": "Responses",
+      "bids": "Bids",
+      "quotes": "Quotes"
+    },
+    "edit": {
+      "title": "Edit Project",
+      "projectDetails": "Project details",
+      "saveDetails": "Save Details",
+      "saveCategories": "Save Categories"
+    }
   },
   "freelancers": {
     "title": "Find Freelancers",

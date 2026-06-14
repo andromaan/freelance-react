@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { useGetProjectByIdQuery } from "../../services/projects/projectsApi";
 import ProjectHeader from "./components/ProjectHeader";
@@ -9,6 +10,7 @@ import PageLoading from "../../components/ui/PageLoading";
 import PageError from "../../components/ui/PageError";
 
 const MyProjectPage: React.FC = () => {
+  const { t } = useTranslation();
   const { projectId } = useParams<{ projectId: string }>();
 
   const {
@@ -20,14 +22,14 @@ const MyProjectPage: React.FC = () => {
   });
 
   if (isLoading) {
-    return <PageLoading message="Loading project..." />;
+    return <PageLoading message={t("projects.page.loading")} />;
   }
 
   if (error || !project) {
     return (
       <PageError 
-        message="Project not found or error loading project." 
-        backToLabel="Back to My Projects"
+        message={t("projects.page.notFound")} 
+        backToLabel={t("projects.page.backToMyProjects")}
         backToPath="/my-projects"
       />
     );

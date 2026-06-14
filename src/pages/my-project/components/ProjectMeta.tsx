@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { ProjectVM } from "../../../types/project.types";
 import ProjectEditModal from "./ProjectEditModal";
 import { formatDateLocalized } from "../../../utils";
@@ -10,6 +11,8 @@ interface Props {
 
 const ProjectMeta: React.FC<Props> = ({ project }) => {
   const [editOpen, setEditOpen] = useState(false);
+
+  const { t } = useTranslation();
 
   const { data: allCategories = [] } = useGetAllCategoriesQuery();
 
@@ -69,17 +72,13 @@ const ProjectMeta: React.FC<Props> = ({ project }) => {
             </div>
             <div className="shrink-0 flex lg:flex-col gap-4 text-right">
               <div className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border border-gray-300 dark:border-gray-700">
-                <p className="text-[10px] text-gray-500 uppercase font-bold mb-1">
-                  Budget
-                </p>
+                <p className="text-[10px] text-gray-500 uppercase font-bold mb-1">{t("projects.meta.budget")}</p>
                 <p className="text-xl font-bold text-text-main">
                   ${project.budget}
                 </p>
               </div>
               <div className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border border-gray-300 dark:border-gray-700">
-                <p className="text-[10px] text-gray-500 uppercase font-bold mb-1">
-                  Deadline
-                </p>
+                <p className="text-[10px] text-gray-500 uppercase font-bold mb-1">{t("projects.meta.deadline")}</p>
                 <p className="font-medium text-text-main">
                   {formatDateLocalized(project.deadline)}
                 </p>

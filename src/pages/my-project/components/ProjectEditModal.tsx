@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useId } from "react";
+import { useTranslation } from "react-i18next";
 import Select from "react-select";
 import BaseModal from "../../../components/ui/BaseModal";
 import {
@@ -169,6 +170,8 @@ const ProjectEditModal: React.FC<Props> = ({
     null,
   );
 
+  const { t } = useTranslation();
+
   // ── Categories state ──────────────────────────────────────────────────────
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
   const [catServerError, setCatServerError] = useState<string | null>(null);
@@ -293,7 +296,7 @@ const ProjectEditModal: React.FC<Props> = ({
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
-      title="Edit Project"
+      title={t("projects.edit.title")}
       description="Changes are saved per section."
       size="xl"
       preventBackdropClose
@@ -301,7 +304,7 @@ const ProjectEditModal: React.FC<Props> = ({
       <div className="space-y-8">
         {/* ════════════════ FIELDS SECTION ════════════════ */}
         <section aria-labelledby="edit-fields-heading">
-          <SectionDivider label="Project details" />
+          <SectionDivider label={t("projects.edit.projectDetails")} />
 
           {fieldsServerError && (
             <div className="mt-3">
@@ -319,7 +322,7 @@ const ProjectEditModal: React.FC<Props> = ({
             {/* Title */}
             <FormField
               id={titleId}
-              label="Title"
+              label={t("projects.create.labelTitle")}
               required
               error={fieldErrors.title}
             >
@@ -331,7 +334,7 @@ const ProjectEditModal: React.FC<Props> = ({
                 value={fields.title}
                 onChange={handleFieldChange}
                 onBlur={handleFieldBlur}
-                placeholder="Project title"
+                placeholder={t("projects.create.placeholderTitle")}
                 className={inputClass}
               />
             </FormField>
@@ -339,7 +342,7 @@ const ProjectEditModal: React.FC<Props> = ({
             {/* Description */}
             <FormField
               id={descriptionId}
-              label="Description"
+              label={t("projects.create.labelDesc")}
               required
               error={fieldErrors.description}
             >
@@ -351,7 +354,7 @@ const ProjectEditModal: React.FC<Props> = ({
                 value={fields.description}
                 onChange={handleFieldChange}
                 onBlur={handleFieldBlur}
-                placeholder="What does this project involve?"
+                placeholder={t("projects.create.placeholderDesc")}
                 className={`${inputClass} resize-none`}
                 style={
                   {
@@ -367,7 +370,7 @@ const ProjectEditModal: React.FC<Props> = ({
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 id={budgetId}
-                label="Budget ($)"
+                label={t("projects.create.labelBudget")}
                 required
                 error={fieldErrors.budget}
               >
@@ -388,7 +391,7 @@ const ProjectEditModal: React.FC<Props> = ({
 
               <FormField
                 id={deadlineId}
-                label="Deadline"
+                label={t("projects.create.labelDeadline")}
                 required
                 error={fieldErrors.deadline}
               >
@@ -413,7 +416,7 @@ const ProjectEditModal: React.FC<Props> = ({
               <SaveBtn
                 form="project-fields-form"
                 isLoading={isSavingFields}
-                label="Save Details"
+                label={t("projects.edit.saveDetails")}
                 loadingLabel="Saving…"
               />
             </div>
@@ -422,7 +425,7 @@ const ProjectEditModal: React.FC<Props> = ({
 
         {/* ════════════════ CATEGORIES SECTION ════════════════ */}
         <section aria-labelledby="edit-categories-heading">
-          <SectionDivider label="Categories" />
+          <SectionDivider label={t("projects.create.labelCategories")} />
 
           {catServerError && (
             <div className="mt-3">
@@ -439,8 +442,8 @@ const ProjectEditModal: React.FC<Props> = ({
               value={selectedCategoryOptions}
               onChange={handleCategoryChange}
               styles={useSelectStyles<number>()}
-              placeholder="Select categories…"
-              noOptionsMessage={() => "No categories available"}
+              placeholder={t("projects.create.placeholderCategories")}
+              noOptionsMessage={() => t("projects.create.noCategories")}
               aria-label="Select project categories"
             />
           </div>
@@ -448,7 +451,7 @@ const ProjectEditModal: React.FC<Props> = ({
           <div className="flex items-center justify-end mt-4">
             <SaveBtn
               isLoading={isSavingCategories}
-              label="Save Categories"
+              label={t("projects.edit.saveCategories")}
               loadingLabel="Saving…"
               onClick={handleCategoriesSave}
             />

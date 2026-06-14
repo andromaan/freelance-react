@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { ProjectStatus, type ProjectVM } from "../../../types/project.types";
 import { getStatusText } from "../../../utils";
@@ -10,6 +11,7 @@ interface Props {
 }
 
 const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
+  const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -25,16 +27,14 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
     return () => document.removeEventListener("mousedown", handler);
   }, [menuOpen]);
 
-  // const categoryName =
-  //   project.categories.length > 0
-  //     ? project.categories[0].name.toUpperCase()
-  //     : "GENERAL";
-
-  const deadlineDate = new Date(project.deadline).toLocaleDateString(document.documentElement.lang === "uk" ? "uk-UA" : "en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  const deadlineDate = new Date(project.deadline).toLocaleDateString(
+    document.documentElement.lang === "uk" ? "uk-UA" : "en-US",
+    {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    },
+  );
 
   const deadline = new Date(project.deadline);
   const now = new Date();
@@ -45,13 +45,13 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
   const isFuture = diffInMs >= 0;
   let dueDate = "";
   if (diffInDays < 31) {
-    dueDate = `${diffInDays} day${diffInDays === 1 ? "" : "s"} ${isFuture ? "left" : "ago"}`;
+    dueDate = t(isFuture ? "projects.card.dueDaysLeft" : "projects.card.dueDaysAgo", { count: diffInDays });
   } else if (diffInDays < 365) {
     const months = Math.floor(diffInDays / 30);
-    dueDate = `${months} month${months === 1 ? "" : "s"} ${isFuture ? "left" : "ago"}`;
+    dueDate = t(isFuture ? "projects.card.dueMonthsLeft" : "projects.card.dueMonthsAgo", { count: months });
   } else {
     const years = Math.floor(diffInDays / 365);
-    dueDate = `${years} year${years === 1 ? "" : "s"} ${isFuture ? "left" : "ago"}`;
+    dueDate = t(isFuture ? "projects.card.dueYearsLeft" : "projects.card.dueYearsAgo", { count: years });
   }
 
   const dueSoon = isFuture && diffInDays <= 3;
@@ -79,7 +79,7 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                Due {dueDate}
+                {t("projects.card.due")} {dueDate}
               </span>
             )}
           </div>
@@ -120,7 +120,7 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
                     className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                   >
                     <DeleteIcon className="w-5 h-5" />
-                    Delete
+                    {t("common.delete")}
                   </button>
                 </div>
               )}
@@ -169,13 +169,13 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
                   d="M5 13l4 4L19 7"
                 />
               </svg>
-              Completed
+              {t("projects.card.completed")}
             </span>
             <Link
               to={`/my-projects/${project.id}`}
               className="text-[10px] font-bold text-primary hover:opacity-80 uppercase tracking-wider transition-opacity inline-block"
             >
-              Details
+              {t("projects.card.details")}
             </Link>
           </div>
         ) : (
@@ -186,7 +186,7 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
                   <div className="flex justify-between mb-2">
                     <div>
                       <p className="text-[10px] text-gray-500 uppercase font-bold mb-0.5">
-                        Status
+                        {t("projects.card.status")}
                       </p>
                       <p className="text-sm font-medium text-text-main">
                         {getStatusText(project.status)}
@@ -194,7 +194,7 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
                     </div>
                     <div>
                       <p className="text-[10px] text-gray-500 uppercase font-bold mb-0.5">
-                        Deadline
+                        {t("projects.card.deadline")}
                       </p>
                       <p className="text-sm font-medium text-text-main">
                         {deadlineDate}
@@ -207,7 +207,7 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
                     to={`/my-projects/${project.id}`}
                     className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-hover transition-colors inline-block"
                   >
-                    VIEW DETAILS
+                    {t("projects.card.viewDetails")}
                   </Link>
                 </div>
               </div>
@@ -220,7 +220,7 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
                   to={`/my-projects/${project.id}`}
                   className="text-[10px] font-bold text-primary hover:opacity-80 uppercase tracking-wider transition-opacity inline-block"
                 >
-                  Details
+                  {t("projects.card.details")}
                 </Link>
               </div>
             )}

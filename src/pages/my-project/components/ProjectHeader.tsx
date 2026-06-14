@@ -1,7 +1,8 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { getStatusText } from "../../../utils";
 import ArrowIcon from "../../../components/icons/ArrowIcon";
+import { getStatusText } from "../../../utils";
 
 interface Props {
   status: string;

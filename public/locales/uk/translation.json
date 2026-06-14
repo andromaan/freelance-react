@@ -118,23 +118,183 @@
     "continue": "Продовжити"
   },
   "projects": {
-    "title": "Перегляд проєктів",
-    "subtitle": "Знаходьте відкриті проєкти та роботу, що відповідає вашим навичкам.",
-    "searchPlaceholder": "Пошук за назвою…",
-    "budgetMin": "Мін. бюджет ($)",
-    "budgetMax": "Макс. бюджет ($)",
-    "maxDeadline": "Дедлайн до",
-    "selectCategories": "Оберіть категорії…",
-    "noCategories": "Категорії відсутні",
-    "clearFilters": "Очистити фільтри",
-    "noProjectsFound": "Проєктів не знайдено",
-    "projectFound": "проєкт знайдено",
-    "projectsFound": "проєктів знайдено",
-    "filtered": "відфільтровано",
-    "tryAdjusting": "Спробуйте змінити фільтри або критерії пошуку.",
-    "daysAgo": "{{count}} дн. тому",
-    "daysLeft": "залишилось {{count}} дн.",
-    "monthsLeft": "залишилось {{count}} міс."
+    "tabs": {
+      "all": "Всі проєкти",
+      "open": "Відкриті",
+      "inProgress": "В процесі",
+      "completed": "Завершені",
+      "cancelled": "Скасовані"
+    },
+    "page": {
+      "title": "Мої проєкти",
+      "create": "Створити проєкт",
+      "listView": "Список",
+      "gridView": "Сітка",
+      "loadError": "Не вдалося завантажити проєкти.",
+      "noProjects": "У цій категорії не знайдено проєктів.",
+      "deleteTitle": "Видалити проєкт?",
+      "deleteDesc": "Ви впевнені, що хочете видалити цей проєкт? Цю дію неможливо скасувати.",
+      "deletedSuccess": "Проєкт успішно видалено",
+      "loading": "Завантаження проєкту...",
+      "notFound": "Проєкт не знайдено або помилка завантаження.",
+      "backToMyProjects": "Назад до моїх проєктів"
+    },
+    "card": {
+      "due": "Дедлайн:",
+      "completed": "Завершено",
+      "details": "Деталі",
+      "viewDetails": "ДЕТАЛІ",
+      "status": "Статус",
+      "deadline": "Дедлайн",
+      "dueText": {
+        "day": {
+          "left": "залишилося: {{count}} дн.",
+          "left_plural": "залишилося: {{count}} дн.",
+          "ago": "{{count}} дн. тому",
+          "ago_plural": "{{count}} дн. тому"
+        },
+        "month": {
+          "left": "залишилося: {{count}} міс.",
+          "left_plural": "залишилося: {{count}} міс.",
+          "ago": "{{count}} міс. тому",
+          "ago_plural": "{{count}} міс. тому"
+        },
+        "year": {
+          "left": "залишилося: {{count}} р.",
+          "left_plural": "залишилося: {{count}} р.",
+          "ago": "{{count}} р. тому",
+          "ago_plural": "{{count}} р. тому"
+        }
+      },
+      "dueDaysLeft": "Залишилося {{count}} дн.",
+      "dueDaysLeft_other": "Залишилося {{count}} дн.",
+      "dueDaysAgo": "{{count}} дн. тому",
+      "dueDaysAgo_other": "{{count}} дн. тому",
+      "dueMonthsLeft": "Залишилося {{count}} міс.",
+      "dueMonthsLeft_other": "Залишилося {{count}} міс.",
+      "dueMonthsAgo": "{{count}} міс. тому",
+      "dueMonthsAgo_other": "{{count}} міс. тому",
+      "dueYearsLeft": "Залишилося {{count}} р.",
+      "dueYearsLeft_other": "Залишилося {{count}} р.",
+      "dueYearsAgo": "{{count}} р. тому",
+      "dueYearsAgo_other": "{{count}} р. тому"
+    },
+    "table": {
+      "project": "Проєкт",
+      "deadline": "Дедлайн",
+      "status": "Статус",
+      "actions": "Дії"
+    },
+    "create": {
+      "errTitleReq": "Назва є обов'язковою",
+      "errTitleMin": "Мінімум 3 символи",
+      "errDescReq": "Опис є обов'язковим",
+      "errDescMin": "Мінімум 10 символів",
+      "errBudgetReq": "Введіть бюджет",
+      "errBudgetPos": "Має бути більше нуля",
+      "errDeadlineReq": "Дедлайн є обов'язковим",
+      "errDeadlinePast": "Не може бути в минулому",
+      "errCategoryReq": "Виберіть хоча б одну категорію",
+      "success": "Проєкт успішно створено",
+      "fail": "Не вдалося створити проєкт.",
+      "title": "Створити новий проєкт",
+      "description": "Заповніть деталі для створення нового проєкту.",
+      "labelTitle": "Назва",
+      "placeholderTitle": "Назва проєкту",
+      "labelDesc": "Опис",
+      "placeholderDesc": "Що потрібно зробити?",
+      "labelBudget": "Бюджет ($)",
+      "labelDeadline": "Дедлайн",
+      "labelCategories": "Категорії",
+      "placeholderCategories": "Виберіть категорії…",
+      "noCategories": "Немає доступних категорій",
+      "requiredFields": "Обов'язкові поля",
+      "creating": "Створення…",
+      "submitBtn": "Створити проєкт"
+    },
+    "bids": {
+      "all": "Всі",
+      "pending": "Очікують",
+      "interesting": "Цікаві",
+      "notInteresting": "Не цікаві",
+      "interestingBadge": "Цікаво",
+      "notInterestingBadge": "Не цікаво",
+      "pendingBadge": "Очікується",
+      "title": "Пропозиції до проєкту",
+      "backToProject": "Назад до проєкту",
+      "loadingBids": "Завантаження пропозицій...",
+      "noBids": "Поки немає пропозицій для цього проєкту.",
+      "noBidsFilter": "Жодна пропозиція не відповідає фільтру.",
+      "markInteresting": "Позначити як цікаве",
+      "markNotInteresting": "Позначити як нецікаве",
+      "markInterestingTitle": "Позначити як цікаве?",
+      "markInterestingDesc": "Ви впевнені, що хочете позначити цю пропозицію як цікаву?",
+      "markInterestingYes": "Так, позначити як цікаве",
+      "markNotInterestingTitle": "Позначити як нецікаве?",
+      "markNotInterestingDesc": "Ви впевнені, що хочете позначити цю пропозицію як нецікаву?",
+      "markNotInterestingYes": "Так, позначити як нецікаве",
+      "noReviews": "Немає відгуків"
+    },
+    "quotes": {
+      "title": "Оцінки для проєкту",
+      "loadingQuotes": "Завантаження оцінок...",
+      "noQuotes": "Поки немає оцінок для цього проєкту.",
+      "cancelQuote": "Скасувати оцінку",
+      "acceptQuote": "Прийняти оцінку",
+      "viewContract": "Переглянути контракт",
+      "acceptTitle": "Створити контракт на основі цієї оцінки?",
+      "acceptDesc": "Ви впевнені, що хочете прийняти цю оцінку? Це створить контракт.",
+      "acceptYes": "Так, Прийняти",
+      "cancelTitle": "Скасувати цю оцінку?",
+      "cancelDesc": "Ви впевнені, що хочете скасувати цю оцінку?",
+      "cancelYes": "Так, Скасувати",
+      "acceptedSuccess": "Оцінку прийнято, контракт створено",
+      "acceptedFail": "Не вдалося прийняти оцінку",
+      "cancelledSuccess": "Оцінку скасовано",
+      "cancelledFail": "Не вдалося скасувати оцінку",
+      "budget": "Бюджет",
+      "deadline": "Дедлайн",
+      "status": "Статус оцінки"
+    },
+    "header": {
+      "details": "Деталі проєкту",
+      "status": "Статус"
+    },
+    "meta": {
+      "edit": "Редагувати деталі",
+      "budget": "Бюджет",
+      "deadline": "Дедлайн",
+      "description": "Опис"
+    },
+    "milestoneModal": {
+      "titleAdd": "Додати новий етап",
+      "titleEdit": "Редагувати етап",
+      "labelDesc": "Опис",
+      "placeholderDesc": "Деталі етапу (наприклад, розробка дизайну)...",
+      "labelAmount": "Сума ($)",
+      "labelDueDate": "Дедлайн",
+      "saving": "Збереження...",
+      "save": "Зберегти етап"
+    },
+    "milestones": {
+      "title": "Етапи",
+      "add": "Додати етап",
+      "noMilestones": "Етапи ще не додано.",
+      "noDesc": "Без опису",
+      "deleteTitle": "Видалити цей етап?",
+      "deleteDesc": "Ви впевнені, що хочете видалити цей етап?"
+    },
+    "responses": {
+      "title": "Відгуки",
+      "bids": "Пропозиції",
+      "quotes": "Оцінки"
+    },
+    "edit": {
+      "title": "Редагувати проєкт",
+      "projectDetails": "Деталі проєкту",
+      "saveDetails": "Зберегти деталі",
+      "saveCategories": "Зберегти категорії"
+    }
   },
   "freelancers": {
     "title": "Пошук фрілансерів",
