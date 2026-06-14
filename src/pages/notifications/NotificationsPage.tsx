@@ -17,6 +17,7 @@ import NotificationsFilters from "./components/Filters/NotificationsFilters";
 import NotificationsList from "./components/List/NotificationsList";
 import Pagination from "../../components/ui/Pagination";
 import type { SelectOption } from "../../styles/selectStyles";
+import { useTranslation } from "react-i18next";
 
 const PAGE_SIZE = 10;
 
@@ -29,7 +30,7 @@ const formatTime = (iso: string) => {
   if (diffMin < 60) return `${diffMin} min ago`;
   const diffH = Math.floor(diffMin / 60);
   if (diffH < 24) return `${diffH} hours ago`;
-  return date.toLocaleDateString("uk-UA");
+  return date.toLocaleDateString(document.documentElement.lang === "uk" ? "uk-UA" : "en-US");
 };
 
 const Notifications: React.FC = () => {

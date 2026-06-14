@@ -43,7 +43,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onEditQuote, onDeleteQuote
           ${quote.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
         </span>
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 uppercase tracking-wide font-medium">
-          Submitted {new Date(quote.createdAt).toLocaleDateString("uk-UA")}
+          Submitted {new Date(quote.createdAt).toLocaleDateString(document.documentElement.lang === "uk" ? "uk-UA" : "en-US")}
         </p>
       </div>
       <ContractStatus quoteId={quote.id} />

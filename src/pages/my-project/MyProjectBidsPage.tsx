@@ -237,7 +237,7 @@ const BidCard: React.FC<BidCardProps> = ({ bid, onMark, isUpdating }) => (
         <span className="text-2xl font-bold text-primary tabular-nums">
           ${bid.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
           <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 uppercase tracking-wide font-medium">
-            {new Date(bid.modifiedAt).toLocaleDateString("uk-UA")}
+            {new Date(bid.modifiedAt).toLocaleDateString(document.documentElement.lang === "uk" ? "uk-UA" : "en-US")}
           </p>
         </span>
       </div>

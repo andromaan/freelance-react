@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { ProjectVM } from "../../../types/project.types";
+import { formatDateLocalized } from "../../../utils";
 
 function formatDeadline(iso: string) {
-  return new Date(iso).toLocaleDateString("uk-UA", {
+  return formatDateLocalized(iso, {
     day: "2-digit",
     month: "short",
     year: "numeric",

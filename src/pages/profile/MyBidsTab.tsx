@@ -119,7 +119,7 @@ const BidCard: React.FC<BidCardProps> = ({
           ${bid.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
         </span>
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 uppercase tracking-wide font-medium">
-          Submitted {new Date(bid.createdAt).toLocaleDateString("uk-UA")}
+          Submitted {new Date(bid.createdAt).toLocaleDateString(document.documentElement.lang === "uk" ? "uk-UA" : "en-US")}
         </p>
       </div>
       <InterestBadge value={bid.isInteresting} />

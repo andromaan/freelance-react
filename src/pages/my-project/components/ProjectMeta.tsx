@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import type { ProjectVM } from "../../../types/project.types";
 import ProjectEditModal from "./ProjectEditModal";
+import { formatDateLocalized } from "../../../utils";
 import { useGetAllCategoriesQuery } from "../../../services/categories/categoriesApi";
 
 interface Props {
@@ -80,7 +81,7 @@ const ProjectMeta: React.FC<Props> = ({ project }) => {
                   Deadline
                 </p>
                 <p className="font-medium text-text-main">
-                  {new Date(project.deadline).toLocaleDateString("uk-UA")}
+                  {formatDateLocalized(project.deadline)}
                 </p>
               </div>
             </div>

@@ -4,6 +4,7 @@ import {
 } from "../../../services/project-milestones/project-milestonesApi";
 import type { ProjectMilestoneVM } from "../../../types/project-milestone.types";
 import { useTranslation } from "react-i18next";
+import { formatDateLocalized } from "../../../utils";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -15,7 +16,7 @@ interface Props {
 
 function formatDate(iso: string): string {
   try {
-    return new Date(iso).toLocaleDateString("uk-UA", {
+    return formatDateLocalized(iso, {
       day: "2-digit",
       month: "short",
       year: "numeric",

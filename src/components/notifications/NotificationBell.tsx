@@ -23,7 +23,7 @@ const formatTime = (iso: string) => {
   if (diffMin < 60) return `${diffMin} min ago`;
   const diffH = Math.floor(diffMin / 60);
   if (diffH < 24) return `${diffH} hours ago`;
-  return date.toLocaleDateString("uk-UA");
+  return date.toLocaleDateString(document.documentElement.lang === "uk" ? "uk-UA" : "en-US");
 };
 
 const NotificationBell: React.FC = () => {

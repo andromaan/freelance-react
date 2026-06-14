@@ -24,7 +24,7 @@ const ProjectTableRow: React.FC<{ project: ProjectVM; onDelete?: (id: string) =>
     return () => document.removeEventListener("mousedown", handler);
   }, [menuOpen]);
 
-  const deadlineDate = new Date(project.deadline).toLocaleDateString("en-US", {
+  const deadlineDate = new Date(project.deadline).toLocaleDateString(document.documentElement.lang === "uk" ? "uk-UA" : "en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",

@@ -1,6 +1,7 @@
 import APP_ENV from "../env";
 import { format, isThisWeek, isToday, isYesterday } from "date-fns";
 import type { UserVM } from "../types/user.types";
+import i18n from "../i18n";
 
 export const getStatusText = (s: string) => s.split(/(?=[A-Z])/).join(" ");
 
@@ -25,3 +26,16 @@ export function formatMessageDate(sentAt: string): string {
 export const avatarLetters = (user: UserVM | undefined | null) => user?.displayName
     ? user.displayName.slice(0, 2).toUpperCase()
     : (user?.email?.slice(0, 2).toUpperCase() ?? "??");
+
+export function formatDateLocalized(
+  dateInput: Date | string,
+  options?: Intl.DateTimeFormatOptions
+): string {
+  try {
+    const date = new Date(dateInput);
+    const locale = i18n.language === "uk" ? "uk-UA" : "en-US";
+    return date.toLocaleDateString(locale, options);
+  } catch {
+    return String(dateInput);
+  }
+}

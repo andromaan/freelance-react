@@ -30,7 +30,7 @@ const ProjectCard: React.FC<Props> = ({ project, onDelete }) => {
   //     ? project.categories[0].name.toUpperCase()
   //     : "GENERAL";
 
-  const deadlineDate = new Date(project.deadline).toLocaleDateString("en-US", {
+  const deadlineDate = new Date(project.deadline).toLocaleDateString(document.documentElement.lang === "uk" ? "uk-UA" : "en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",

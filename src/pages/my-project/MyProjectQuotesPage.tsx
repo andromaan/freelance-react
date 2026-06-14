@@ -72,7 +72,7 @@ interface QuoteCardProps {
 }
 
 const QuoteCard: React.FC<QuoteCardProps> = ({ quote, onCreateContract }) => {
-  const dateStr = new Date(quote.createdAt).toLocaleDateString("uk-UA");
+  const dateStr = new Date(quote.createdAt).toLocaleDateString(document.documentElement.lang === "uk" ? "uk-UA" : "en-US");
 
   const {
     data: canContractBeCreated,

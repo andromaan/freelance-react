@@ -1,6 +1,7 @@
 import React from "react";
 import type { ProjectVM } from "../../../types/project.types";
 import { useTranslation } from "react-i18next";
+import { formatDateLocalized } from "../../../utils";
 
 interface Props {
   project: ProjectVM;
@@ -50,7 +51,7 @@ const ProjectMeta: React.FC<Props> = ({ project }) => {
                 {t("projectDetails.deadline")}
               </p>
               <p className="font-medium text-text-main">
-                {new Date(project.deadline).toLocaleDateString("uk-UA")}
+                {formatDateLocalized(project.deadline)}
               </p>
             </div>
           </div>
