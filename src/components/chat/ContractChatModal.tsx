@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { createPortal } from "react-dom";
 import {
@@ -11,6 +11,9 @@ import { Link } from "react-router-dom";
 import { ROLES } from "../../constants/roles";
 import { formatMessageDate, userImageUrl } from "../../utils";
 import DeleteIcon from "../icons/DeleteIcon";
+import { useVoiceInput } from "../../hooks/useVoiceInput";
+import { useTranslation } from "react-i18next";
+import ArrowIcon from "../icons/ArrowIcon";
 
 interface ContractChatWidgetProps {
   isOpen: boolean;
@@ -31,6 +34,21 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
   const [newMessage, setNewMessage] = useState("");
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [messageToDelete, setMessageToDelete] = useState<string | null>(null);
+
+  const handleTranscript = useCallback((text: string) => {
+    setNewMessage((prev) => (prev ? prev + " " + text : text));
+  }, []);
+
+  const { i18n } = useTranslation();
+  const voiceLang = i18n.language === "uk" ? "uk-UA" : "en-US";
+
+  const { status: voiceStatus, interimText, toggle: toggleVoice } = useVoiceInput({
+    onTranscript: handleTranscript,
+    lang: voiceLang,
+  });
+
+  const isListening = voiceStatus === "listening";
+  const isVoiceBusy = voiceStatus === "loading" || voiceStatus === "processing";
 
   // Use skip to not fetch if modal is closed
   const {
@@ -58,6 +76,8 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
     chatDetails?.interlocutorId,
     chatDetails?.isInterlocutorOnline,
   );
+
+  const isChatActive = chatDetails?.contractStatus === "Active" || chatDetails?.contractStatus === "Pending";
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({
@@ -122,7 +142,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
       : `/employers/${chatDetails?.interlocutorId}`;
 
   return createPortal(
-    <div className="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-50 flex flex-col w-full sm:w-[500px] h-[100dvh] sm:h-[600px] sm:max-h-[85vh] bg-surface sm:rounded-2xl shadow-2xl overflow-hidden border-0 sm:border border-border animate-in slide-in-from-bottom-8">
+    <div className="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 flex flex-col w-full sm:w-[500px] h-[100dvh] sm:h-[600px] sm:max-h-[85vh] bg-surface sm:rounded-2xl shadow-2xl overflow-hidden border-0 sm:border border-border animate-in slide-in-from-bottom-8">
       {detailsLoading || messagesLoading ? (
         <div className="flex-1 flex flex-col items-center justify-center">
           <span className="text-text-muted">
@@ -308,21 +328,23 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
 
           {/* Input Area */}
           <div className="bg-surface p-2 border-t border-border shrink-0">
-            {!(
-              chatDetails.contractStatus === "Active" ||
-              chatDetails.contractStatus === "Pending"
-            ) && (
+            {!(isChatActive) && (
               <div className="text-center text-sm text-text-muted mb-2">
                 You cannot send messages because the contract is{" "}
                 {chatDetails.contractStatus}.
               </div>
             )}
+            {/* Interim voice text hint — covers native interim, whisper progress, processing */}
+            {(isListening || isVoiceBusy) && interimText && (
+              <div className={`px-3 py-1 mb-1 text-xs italic truncate ${
+                isVoiceBusy ? "text-primary animate-pulse" : "text-text-muted animate-pulse"
+              }`}>
+                {interimText}
+              </div>
+            )}
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
-                const isChatActive =
-                  chatDetails.contractStatus === "Active" ||
-                  chatDetails.contractStatus === "Pending";
                 if (!newMessage.trim() || !isChatActive) return;
 
                 if (editingMessageId) {
@@ -333,19 +355,55 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                 }
                 setNewMessage("");
               }}
-              className="flex gap-1 sm:gap-3 items-end align-center items-center"
+              className="flex gap-1 sm:gap-2 items-end"
             >
+              {/* Mic button */}
+              {voiceStatus !== "unsupported" && (
+                <button
+                  type="button"
+                  onClick={toggleVoice}
+                  disabled={!isChatActive || !isConnected || isVoiceBusy}
+                  title={
+                    isListening ? "Stop recording"
+                    : isVoiceBusy ? "Processing…"
+                    : voiceStatus === "error" ? "Error, try again"
+                    : "Voice input"
+                  }
+                  className={`shrink-0 p-2 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-60 disabled:cursor-not-allowed ${
+                    isListening
+                      ? "bg-red-500 border-red-500 text-white shadow-lg shadow-red-500/30 animate-pulse"
+                      : isVoiceBusy
+                      ? "bg-primary/10 border-primary text-primary"
+                      : voiceStatus === "error"
+                      ? "bg-orange-100 dark:bg-orange-900/30 border-orange-400 text-orange-500"
+                      : "bg-gray-100 dark:bg-gray-700 border-border text-gray-500 dark:text-gray-400 hover:bg-primary/10 hover:border-primary hover:text-primary"
+                  }`}
+                  aria-label={isListening ? "Stop recording" : "Start voice input"}
+                >
+                  {isListening ? (
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <rect x="6" y="6" width="12" height="12" rx="2" />
+                    </svg>
+                  ) : isVoiceBusy ? (
+                    /* Spinner */
+                    <svg className="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                  ) : (
+                    /* Mic icon */
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4M12 3a4 4 0 014 4v4a4 4 0 01-8 0V7a4 4 0 014-4z" />
+                    </svg>
+                  )}
+                </button>
+              )}
               <textarea
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyDown={async (e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
-                    const isChatActive =
-                      chatDetails.contractStatus === "Active" ||
-                      chatDetails.contractStatus === "Pending";
-                    if (!newMessage.trim() || !isChatActive || !isConnected)
-                      return;
+                    if (!newMessage.trim() || !isChatActive || !isConnected) return;
 
                     if (editingMessageId) {
                       await editMessage(editingMessageId, newMessage);
@@ -356,21 +414,17 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                     setNewMessage("");
                   }
                 }}
-                disabled={
-                  !(
-                    chatDetails.contractStatus === "Active" ||
-                    chatDetails.contractStatus === "Pending"
-                  ) || !isConnected
-                }
+                disabled={!isChatActive || !isConnected}
                 placeholder={
-                  !(
-                    chatDetails.contractStatus === "Active" ||
-                    chatDetails.contractStatus === "Pending"
-                  )
+                  !isChatActive
                     ? "Chat disabled"
+                    : isListening
+                    ? "Listening..."
+                    : isVoiceBusy
+                    ? "Processing..."
                     : editingMessageId
-                      ? "Edit message..."
-                      : "Type your message..."
+                    ? "Edit message..."
+                    : "Type your message..."
                 }
                 style={
                   {
@@ -379,21 +433,18 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                     maxHeight: "10lh",
                   } as React.CSSProperties
                 }
-                className="flex-1 px-3 py-2 rounded-xl border border-border bg-gray-50 dark:bg-gray-700 text-text-main placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:opacity-60 disabled:cursor-not-allowed transition-all text-sm sm:text-base resize-none custom-scrollbar"
+                className={`flex-1 px-3 py-2 rounded-xl border bg-gray-50 dark:bg-gray-700 text-xs sm:text-sm text-text-main placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:opacity-60 disabled:cursor-not-allowed transition-all text-sm sm:text-base resize-none custom-scrollbar ${
+                  isListening ? "border-red-400 ring-2 ring-red-400/30"
+                  : isVoiceBusy ? "border-primary/50 ring-2 ring-primary/20"
+                  : "border-border"
+                }`}
               />
               <button
                 type="submit"
-                disabled={
-                  !(
-                    chatDetails.contractStatus === "Active" ||
-                    chatDetails.contractStatus === "Pending"
-                  ) ||
-                  !isConnected ||
-                  !newMessage.trim()
-                }
-                className="px-4 sm:px-6 py-2 bg-primary text-white text-xs sm:text-base font-medium rounded-xl hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shrink-0 shadow-sm shadow-primary/30 flex items-center justify-center"
+                disabled={!isChatActive || !isConnected || !newMessage.trim()}
+                className="px-3 py-2 bg-primary text-white text-xs sm:text-sm font-medium rounded-xl hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shrink-0 shadow-sm shadow-primary/30 flex items-center justify-center"
               >
-                {editingMessageId ? "Save" : "Send"}
+                {editingMessageId ? "Save" : <div className="flex alight-center items-center">Send<ArrowIcon direction="right"/></div>}
               </button>
               {editingMessageId && (
                 <button
@@ -402,7 +453,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                     setEditingMessageId(null);
                     setNewMessage("");
                   }}
-                  className="px-3 sm:px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs sm:text-base font-medium rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none transition-all"
+                  className="px-3 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs sm:text-sm font-medium rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none transition-all"
                 >
                   Cancel
                 </button>
