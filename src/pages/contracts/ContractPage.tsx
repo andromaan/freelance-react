@@ -81,12 +81,12 @@ const ContractPage: React.FC = () => {
               contract.status !== "Completed" && (
                 <button
                   onClick={() => setIsDisputeModalOpen(true)}
-                  className="px-3 py-1 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 rounded-full transition-colors border border-red-200 dark:border-red-800 focus:outline-none"
+                  className="px-3 py-1 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 rounded-full transition-colors border border-red-300 dark:border-red-800/70 dark:text-red-600/90 focus:outline-none"
                 >
                   Open Dispute
                 </button>
               )}
-            <span className="text-sm font-bold tracking-wider px-3 py-1 rounded-full bg-primary/10 text-primary dark:text-white">
+            <span className="text-sm font-bold tracking-wider px-3 py-1 rounded-full bg-primary/5 text-primary dark:text-white border border-primary/50 dark:border-white/30">
               {getStatusText(contract.status).toUpperCase()}
             </span>
           </div>

@@ -19,7 +19,7 @@ const ProjectHeader: React.FC<Props> = ({ status }) => {
         <ArrowIcon direction="left" />
         Back to Projects
       </button>
-      <span className="text-sm font-bold tracking-wider px-3 py-1 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
+      <span className="text-sm font-bold tracking-wider px-3 py-1 rounded-full bg-primary/5 text-primary dark:text-white border border-primary/50 dark:border-white/30">
         {getStatusText(status).toUpperCase()}
       </span>
     </div>

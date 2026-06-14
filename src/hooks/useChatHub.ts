@@ -13,6 +13,7 @@ export const useChatHub = (
 ) => {
   const [messages, setMessages] = useState<MessageVM[]>(initialMessages);
   const [isConnected, setIsConnected] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(true);
   const [isInterlocutorOnline, setIsInterlocutorOnline] = useState(initialOnlineStatus);
   const connectionRef = useRef<HubConnection | null>(null);
   const interlocutorIdRef = useRef(interlocutorId);
@@ -34,6 +35,7 @@ export const useChatHub = (
     const token = tokenStorage.getAccessToken();
     if (!token || !contractId) return;
 
+    setIsConnecting(true);
     let isMounted = true;
 
     const newConnection = new HubConnectionBuilder()
@@ -90,6 +92,7 @@ export const useChatHub = (
       .then(() => {
         if (isMounted) {
           setIsConnected(true);
+          setIsConnecting(false);
           return newConnection.invoke("JoinChat", contractId);
         }
       })
@@ -98,6 +101,7 @@ export const useChatHub = (
           console.error("SignalR Connection Error: ", err);
           toast.error("Failed to connect to chat");
         }
+        if (isMounted) setIsConnecting(false);
       });
 
     return () => {
@@ -107,6 +111,7 @@ export const useChatHub = (
         connectionRef.current.stop();
         connectionRef.current = null;
         setIsConnected(false);
+        setIsConnecting(false);
       }
     };
   }, [contractId]);
@@ -166,5 +171,5 @@ export const useChatHub = (
     [contractId, isConnected]
   );
 
-  return { messages, isConnected, isInterlocutorOnline, sendMessage, editMessage, deleteMessage, markAsRead };
+  return { messages, isConnected, isConnecting, isInterlocutorOnline, sendMessage, editMessage, deleteMessage, markAsRead };
 };

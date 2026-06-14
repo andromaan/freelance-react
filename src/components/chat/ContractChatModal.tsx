@@ -42,7 +42,11 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
   const { i18n } = useTranslation();
   const voiceLang = i18n.language === "uk" ? "uk-UA" : "en-US";
 
-  const { status: voiceStatus, interimText, toggle: toggleVoice } = useVoiceInput({
+  const {
+    status: voiceStatus,
+    interimText,
+    toggle: toggleVoice,
+  } = useVoiceInput({
     onTranscript: handleTranscript,
     lang: voiceLang,
   });
@@ -65,6 +69,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
   const {
     messages,
     isConnected,
+    isConnecting,
     isInterlocutorOnline,
     sendMessage,
     editMessage,
@@ -77,12 +82,17 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
     chatDetails?.isInterlocutorOnline,
   );
 
-  const isChatActive = chatDetails?.contractStatus === "Active" || chatDetails?.contractStatus === "Pending";
+  const isChatActive =
+    chatDetails?.contractStatus === "Active" ||
+    chatDetails?.contractStatus === "Pending";
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({
+  const scrollToBottom = (offset = 32) => {
+    const container = messagesEndRef.current?.parentElement;
+    if (!container) return;
+
+    container.scrollTo({
+      top: container.scrollHeight + offset - container.clientHeight,
       behavior: "smooth",
-      block: "end",
     });
   };
 
@@ -90,7 +100,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
     if (isOpen) {
       scrollToBottom();
     }
-  }, [messages, isOpen]);
+  }, [messages, isOpen, isConnected]);
 
   // Force fetch fresh data when chat opens so we get correct online status
   useEffect(() => {
@@ -145,9 +155,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
     <div className="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 flex flex-col w-full sm:w-[500px] h-[100dvh] sm:h-[600px] sm:max-h-[85vh] bg-surface sm:rounded-2xl shadow-2xl overflow-hidden border-0 sm:border border-border animate-in slide-in-from-bottom-8">
       {detailsLoading || messagesLoading ? (
         <div className="flex-1 flex flex-col items-center justify-center">
-          <span className="text-text-muted">
-            Loading chat...
-          </span>
+          <span className="text-text-muted">Loading chat...</span>
         </div>
       ) : !chatDetails ? (
         <div className="flex-1 flex flex-col items-center justify-center">
@@ -182,12 +190,40 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                   )}
                 </Link>
                 <div>
-                  <Link
-                    to={linkToInterlocutor}
-                    className="text-lg font-bold text-text-main leading-tight flex items-center gap-3 hover:underline"
-                  >
-                    <h2>{chatDetails.interlocutorName}</h2>
-                  </Link>
+                  <div className="flex gap-3">
+                    <Link
+                      to={linkToInterlocutor}
+                      className="text-xl font-bold text-text-main leading-tight flex items-center gap-3 hover:underline"
+                    >
+                      <h2>{chatDetails.interlocutorName}</h2>
+                    </Link>
+                    {isConnecting ? (
+                      <span className="px-2 py-0.5 text-xs/[1.5] font-medium rounded-full text-blue-600 dark:text-blue-500 bg-blue-50 dark:bg-blue-800/5 border border-blue-200 dark:border-blue-500/50 flex items-center gap-1">
+                        <svg
+                          className="w-3 h-3 animate-spin"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                          />
+                        </svg>
+                        {i18n.language === "uk"
+                          ? "Підключення..."
+                          : "Connecting..."}
+                      </span>
+                    ) : (
+                      !isConnected && (
+                        <span className="px-2 text-xs/[1.5] font-medium rounded-full text-red-600 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+                          Disconnected
+                        </span>
+                      )
+                    )}
+                  </div>
                   <div className="flex items-center gap-2">
                     <span className="flex items-center gap-1.5 text-xs font-medium">
                       <span
@@ -212,11 +248,6 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
               </div>
             </div>
             <div className="flex items-center gap-3">
-              {!isConnected && (
-                <span className="px-2 py-1 bg-red-100 text-red-600 text-xs font-medium rounded-full hidden sm:inline-block">
-                  Disconnected
-                </span>
-              )}
               <button
                 onClick={onClose}
                 className="p-2 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors focus:outline-none"
@@ -240,7 +271,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
           </div>
 
           {/* Messages List */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 custom-scrollbar bg-main">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 sm:p-6 custom-scrollbar bg-main">
             {messages.length === 0 ? (
               <div className="h-full flex items-center justify-center text-text-muted text-sm">
                 No messages yet. Start the conversation!
@@ -255,6 +286,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                   <div
                     key={msg.id}
                     className={`flex ${isMine ? "justify-end" : "justify-start"}`}
+                    ref={messagesEndRef}
                   >
                     <div
                       className={`group relative max-w-[85%] sm:max-w-[75%] rounded-2xl px-4 py-2 shadow-sm ${
@@ -323,12 +355,11 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                 );
               })
             )}
-            <div ref={messagesEndRef} />
           </div>
 
           {/* Input Area */}
           <div className="bg-surface p-2 border-t border-border shrink-0">
-            {!(isChatActive) && (
+            {!isChatActive && (
               <div className="text-center text-sm text-text-muted mb-2">
                 You cannot send messages because the contract is{" "}
                 {chatDetails.contractStatus}.
@@ -336,9 +367,13 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
             )}
             {/* Interim voice text hint — covers native interim, whisper progress, processing */}
             {(isListening || isVoiceBusy) && interimText && (
-              <div className={`px-3 py-1 mb-1 text-xs italic truncate ${
-                isVoiceBusy ? "text-primary animate-pulse" : "text-text-muted animate-pulse"
-              }`}>
+              <div
+                className={`px-3 py-1 mb-1 text-xs italic truncate ${
+                  isVoiceBusy
+                    ? "text-primary animate-pulse"
+                    : "text-text-muted animate-pulse"
+                }`}
+              >
                 {interimText}
               </div>
             )}
@@ -364,35 +399,64 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                   onClick={toggleVoice}
                   disabled={!isChatActive || !isConnected || isVoiceBusy}
                   title={
-                    isListening ? "Stop recording"
-                    : isVoiceBusy ? "Processing…"
-                    : voiceStatus === "error" ? "Error, try again"
-                    : "Voice input"
+                    isListening
+                      ? "Stop recording"
+                      : isVoiceBusy
+                        ? "Processing…"
+                        : voiceStatus === "error"
+                          ? "Error, try again"
+                          : "Voice input"
                   }
                   className={`shrink-0 p-2 rounded-xl border transition-all focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-60 disabled:cursor-not-allowed ${
                     isListening
                       ? "bg-red-500 border-red-500 text-white shadow-lg shadow-red-500/30 animate-pulse"
                       : isVoiceBusy
-                      ? "bg-primary/10 border-primary text-primary"
-                      : voiceStatus === "error"
-                      ? "bg-orange-100 dark:bg-orange-900/30 border-orange-400 text-orange-500"
-                      : "bg-gray-100 dark:bg-gray-700 border-border text-gray-500 dark:text-gray-400 hover:bg-primary/10 hover:border-primary hover:text-primary"
+                        ? "bg-primary/10 border-primary text-primary"
+                        : voiceStatus === "error"
+                          ? "bg-orange-100 dark:bg-orange-900/30 border-orange-400 text-orange-500"
+                          : "bg-gray-100 dark:bg-gray-700 border-border text-gray-500 dark:text-gray-400 hover:bg-primary/10 hover:border-primary hover:text-primary"
                   }`}
-                  aria-label={isListening ? "Stop recording" : "Start voice input"}
+                  aria-label={
+                    isListening ? "Stop recording" : "Start voice input"
+                  }
                 >
                   {isListening ? (
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
                       <rect x="6" y="6" width="12" height="12" rx="2" />
                     </svg>
                   ) : isVoiceBusy ? (
                     /* Spinner */
-                    <svg className="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    <svg
+                      className="w-5 h-5 animate-spin"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                      />
                     </svg>
                   ) : (
                     /* Mic icon */
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4M12 3a4 4 0 014 4v4a4 4 0 01-8 0V7a4 4 0 014-4z" />
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4M12 3a4 4 0 014 4v4a4 4 0 01-8 0V7a4 4 0 014-4z"
+                      />
                     </svg>
                   )}
                 </button>
@@ -403,7 +467,8 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                 onKeyDown={async (e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
-                    if (!newMessage.trim() || !isChatActive || !isConnected) return;
+                    if (!newMessage.trim() || !isChatActive || !isConnected)
+                      return;
 
                     if (editingMessageId) {
                       await editMessage(editingMessageId, newMessage);
@@ -419,13 +484,14 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                   !isChatActive
                     ? "Chat disabled"
                     : isListening
-                    ? "Listening..."
-                    : isVoiceBusy
-                    ? "Processing..."
-                    : editingMessageId
-                    ? "Edit message..."
-                    : "Type your message..."
+                      ? "Listening..."
+                      : isVoiceBusy
+                        ? "Processing..."
+                        : editingMessageId
+                          ? "Edit message..."
+                          : "Type your message..."
                 }
+                rows={1}
                 style={
                   {
                     fieldSizing: "content",
@@ -433,18 +499,27 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                     maxHeight: "10lh",
                   } as React.CSSProperties
                 }
-                className={`flex-1 px-3 py-2 rounded-xl border bg-gray-50 dark:bg-gray-700 text-xs sm:text-sm text-text-main placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:opacity-60 disabled:cursor-not-allowed transition-all text-sm sm:text-base resize-none custom-scrollbar ${
-                  isListening ? "border-red-400 ring-2 ring-red-400/30"
-                  : isVoiceBusy ? "border-primary/50 ring-2 ring-primary/20"
-                  : "border-border"
+                className={`flex-1 px-3 py-2 rounded-xl border bg-gray-50 dark:bg-gray-700 text-xs sm:text-sm text-text-main placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:opacity-60 disabled:cursor-not-allowed transition-all sm:text-base resize-none custom-scrollbar ${
+                  isListening
+                    ? "border-red-400 ring-2 ring-red-400/30"
+                    : isVoiceBusy
+                      ? "border-primary/50 ring-2 ring-primary/20"
+                      : "border-border"
                 }`}
               />
               <button
                 type="submit"
                 disabled={!isChatActive || !isConnected || !newMessage.trim()}
-                className="px-3 py-2 bg-primary text-white text-xs sm:text-sm font-medium rounded-xl hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shrink-0 shadow-sm shadow-primary/30 flex items-center justify-center"
+                className={`${editingMessageId ? "p-3" : "pr-2 pl-3"} py-2 bg-primary text-white text-xs sm:text-sm font-medium rounded-xl hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shrink-0 shadow-sm shadow-primary/30 flex items-center justify-center`}
               >
-                {editingMessageId ? "Save" : <div className="flex alight-center items-center">Send<ArrowIcon direction="right"/></div>}
+                {editingMessageId ? (
+                  "Save"
+                ) : (
+                  <div className="flex alight-center items-center">
+                    Send
+                    <ArrowIcon direction="right" />
+                  </div>
+                )}
               </button>
               {editingMessageId && (
                 <button
@@ -475,12 +550,25 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
                 onClick={() => setMessageToDelete(null)}
                 className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 rounded-md p-1 -mr-2"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
               </button>
             </div>
             <div className="p-3">
               <p className="mb-3 text-sm leading-relaxed text-text-muted">
-                Are you sure you want to delete this message? This action cannot be undone.
+                Are you sure you want to delete this message? This action cannot
+                be undone.
               </p>
               <div className="flex items-center justify-center gap-3 flex-wrap">
                 <button

@@ -28,7 +28,7 @@ const ProjectHeader: React.FC<Props> = ({
   const isFreelancer = user?.role?.name === ROLES.FREELANCER;
   const isOpen = projectStatus === ProjectStatus.Open;
   const statusBadge = (
-    <span className="text-sm font-bold tracking-wider px-3 py-1 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
+    <span className="text-sm font-bold tracking-wider px-3 py-1 rounded-full bg-primary/5 text-primary dark:text-white border border-primary/50 dark:border-white/30">
       {getStatusText(projectStatus).toUpperCase()}
     </span>
   );
