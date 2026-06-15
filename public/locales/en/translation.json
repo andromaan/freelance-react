@@ -125,6 +125,7 @@
     "budgetMax": "Budget max ($)",
     "maxDeadline": "Max deadline",
     "selectCategories": "Select categories…",
+    "noCategories": "No categories",
     "clearFilters": "Clear filters",
     "noProjectsFound": "No projects found",
     "projectFound": "project found",
@@ -538,8 +539,10 @@
     "edit": {
       "avatarTitle": "Profile Image",
       "changeAvatar": "Change Avatar",
+      "avatarSuccess": "Avatar changed successfully",
       "uploadImage": "Upload Image",
       "saveImage": "Save Image",
+      "profileSuccess": "Profile settings have been successfully saved",
       "generalInfo": "General Information",
       "displayName": "Display Name",
       "country": "Country",
