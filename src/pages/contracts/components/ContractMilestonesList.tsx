@@ -19,6 +19,7 @@ import { contractsApi } from "../../../services/contracts/contractsApi";
 interface ContractMilestonesListProps {
   contractId: string;
   isFreelancer: boolean;
+  isDisputed?: boolean;
 }
 
 const getStatusBadgeClass = (status: string) => {
@@ -43,6 +44,7 @@ const getStatusBadgeClass = (status: string) => {
 const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
   contractId,
   isFreelancer,
+  isDisputed = false,
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -200,7 +202,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
               <>
                 {milestone.status === ContractMilestoneStatusLabel.Pending && (
                   <button
-                    disabled={isUpdating}
+                    disabled={isUpdating || isDisputed}
                     onClick={() =>
                       setConfirmAction({
                         id: milestone.id,
@@ -213,7 +215,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                 )}
                 {milestone.status === ContractMilestoneStatusLabel.InProgress && (
                   <button
-                    disabled={isUpdating}
+                    disabled={isUpdating || isDisputed}
                     onClick={() =>
                       setConfirmAction({
                         id: milestone.id,
@@ -229,7 +231,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
               <>
                 {milestone.status === ContractMilestoneStatusLabel.Submitted && (
                   <button
-                    disabled={isUpdating}
+                    disabled={isUpdating || isDisputed}
                     onClick={() =>
                       setConfirmAction({
                         id: milestone.id,
@@ -243,7 +245,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                 {(milestone.status === ContractMilestoneStatusLabel.UnderReview ||
                   milestone.status === ContractMilestoneStatusLabel.Submitted) && (
                   <button
-                    disabled={isUpdating}
+                    disabled={isUpdating || isDisputed}
                     onClick={() =>
                       setConfirmAction({
                         id: milestone.id,
@@ -257,7 +259,7 @@ const ContractMilestonesList: React.FC<ContractMilestonesListProps> = ({
                 {(milestone.status === ContractMilestoneStatusLabel.UnderReview ||
                   milestone.status === ContractMilestoneStatusLabel.Submitted) && (
                   <button
-                    disabled={isUpdating}
+                    disabled={isUpdating || isDisputed}
                     onClick={() =>
                       setConfirmAction({
                         id: milestone.id,

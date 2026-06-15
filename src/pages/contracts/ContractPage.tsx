@@ -181,6 +181,7 @@ const ContractPage: React.FC = () => {
           <ContractMilestonesList
             contractId={contract.id}
             isFreelancer={isFreelancer}
+            isDisputed={contract.status === "Disputed"}
           />
         </div>
       </div>
