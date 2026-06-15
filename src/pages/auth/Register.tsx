@@ -94,9 +94,35 @@ const Register: React.FC = () => {
       toast.success(t("auth.registerSuccess"));
       navigate("/");
     } catch (error: any) {
-      const errorMessage =
-        error?.message || error?.data?.message || t("auth.registerError");
-      toast.error(errorMessage);
+      const apiErrors = error?.errors;
+      const errorMessage = error?.message || error?.data?.message || t("auth.registerError");
+
+      if (apiErrors && Object.keys(apiErrors).length > 0) {
+        const newErrors: FormErrors = {};
+        Object.keys(apiErrors).forEach((key) => {
+          const field = key.charAt(0).toLowerCase() + key.slice(1);
+          newErrors[field] = apiErrors[key][0];
+        });
+        setErrors(newErrors);
+      } else if (
+        errorMessage.toLowerCase().includes("email") ||
+        errorMessage.toLowerCase().includes("пошт")
+      ) {
+        setErrors({ email: errorMessage });
+      } else if (
+        errorMessage.toLowerCase().includes("password") ||
+        errorMessage.toLowerCase().includes("пароль")
+      ) {
+        setErrors({ password: errorMessage });
+      } else if (
+        errorMessage.toLowerCase().includes("name") ||
+        errorMessage.toLowerCase().includes("ім'я") ||
+        errorMessage.toLowerCase().includes("имя")
+      ) {
+        setErrors({ displayName: errorMessage });
+      } else {
+        toast.error(errorMessage);
+      }
     }
   };
 

@@ -7,6 +7,7 @@ import type {
   ExternalLoginVM,
   AuthResponse,
 } from "../../types/auth.types";
+import i18n from "../../i18n";
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -34,8 +35,9 @@ export const authApi = createApi({
       },
       transformErrorResponse: (response: any) => ({
         success: false,
-        message: response.data?.message || "Помилка входу",
+        message: response.data?.message || i18n.t("auth.loginError"),
         data: response.data?.data,
+        errors: response.data?.errors,
       }),
     }),
 
@@ -60,8 +62,9 @@ export const authApi = createApi({
       },
       transformErrorResponse: (response: any) => ({
         success: false,
-        message: response.data?.message || "Помилка реєстрації",
+        message: response.data?.message || i18n.t("auth.registerError"),
         data: response.data?.data,
+        errors: response.data?.errors,
       }),
     }),
 
@@ -86,7 +89,7 @@ export const authApi = createApi({
       },
       transformErrorResponse: (response: any) => ({
         success: false,
-        message: response.data?.message || "Помилка авторизації через Google",
+        message: response.data?.message || i18n.t("auth.loginError"),
         data: response.data?.data,
       }),
     }),

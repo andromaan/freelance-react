@@ -1,16 +1,16 @@
+import type { ChangeEvent, FormEvent } from "react";
 import React, { useState } from "react";
-import type { FormEvent, ChangeEvent } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { toast } from "react-toastify";
-import { useSignInMutation } from "../../services/auth/authApi";
-import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { userApi } from "../../services/user/userApi";
-import type { AppDispatch } from "../../store";
-import type { SignInVM, FormErrors } from "../../types/auth.types";
-import GoogleLogin from "./GoogleLogin";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import ArrowIcon from "../../components/icons/ArrowIcon";
 import PasswordEyeIcon from "../../components/icons/PasswordEyeIcon";
+import { useSignInMutation } from "../../services/auth/authApi";
+import { userApi } from "../../services/user/userApi";
+import type { AppDispatch } from "../../store";
+import type { FormErrors, SignInVM } from "../../types/auth.types";
+import GoogleLogin from "./GoogleLogin";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -73,9 +73,31 @@ const Login: React.FC = () => {
       );
       navigate("/");
     } catch (error: any) {
-      const errorMessage =
-        error?.message || error?.data?.message || t("auth.loginError");
-      toast.error(errorMessage);
+      const apiErrors = error?.errors;
+      const errorMessage = error?.message || error?.data?.message || t("auth.loginError");
+
+      if (apiErrors && Object.keys(apiErrors).length > 0) {
+        const newErrors: FormErrors = {};
+        Object.keys(apiErrors).forEach((key) => {
+          const field = key.charAt(0).toLowerCase() + key.slice(1);
+          newErrors[field] = apiErrors[key][0];
+        });
+        setErrors(newErrors);
+      } else if (
+        errorMessage.toLowerCase().includes("password") ||
+        errorMessage.toLowerCase().includes("пароль")
+      ) {
+        setErrors({ password: errorMessage });
+      } else if (
+        errorMessage.toLowerCase().includes("email") ||
+        errorMessage.toLowerCase().includes("пошт") ||
+        errorMessage.toLowerCase().includes("user") ||
+        errorMessage.toLowerCase().includes("користувач")
+      ) {
+        setErrors({ email: errorMessage });
+      } else {
+        toast.error(errorMessage);
+      }
     }
   };
 
