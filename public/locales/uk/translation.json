@@ -118,6 +118,23 @@
     "continue": "Продовжити"
   },
   "projects": {
+    "title": "Перегляд проєктів",
+    "subtitle": "Знаходьте відкриті проєкти та роботу, що відповідає вашим навичкам.",
+    "searchPlaceholder": "Пошук за назвою…",
+    "budgetMin": "Мін. бюджет ($)",
+    "budgetMax": "Макс. бюджет ($)",
+    "maxDeadline": "Дедлайн до",
+    "selectCategories": "Оберіть категорії…",
+    "noCategories": "Категорії відсутні",
+    "clearFilters": "Очистити фільтри",
+    "noProjectsFound": "Проєктів не знайдено",
+    "projectFound": "проєкт знайдено",
+    "projectsFound": "проєктів знайдено",
+    "filtered": "відфільтровано",
+    "tryAdjusting": "Спробуйте змінити фільтри або критерії пошуку.",
+    "daysAgo": "{{count}} дн. тому",
+    "daysLeft": "залишилось {{count}} дн.",
+    "monthsLeft": "залишилось {{count}} міс.",
     "tabs": {
       "all": "Всі проєкти",
       "open": "Відкриті",

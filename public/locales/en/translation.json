@@ -118,6 +118,22 @@
     "continue": "Continue"
   },
   "projects": {
+    "title": "Browse Projects",
+    "subtitle": "Discover open projects and find work that matches your skills.",
+    "searchPlaceholder": "Search by title…",
+    "budgetMin": "Budget min ($)",
+    "budgetMax": "Budget max ($)",
+    "maxDeadline": "Max deadline",
+    "selectCategories": "Select categories…",
+    "clearFilters": "Clear filters",
+    "noProjectsFound": "No projects found",
+    "projectFound": "project found",
+    "projectsFound": "projects found",
+    "filtered": "filtered",
+    "tryAdjusting": "Try adjusting your filters or search terms.",
+    "daysAgo": "{{count}}d ago",
+    "daysLeft": "{{count}}d left",
+    "monthsLeft": "{{count}}mo left",
     "tabs": {
       "all": "All Projects",
       "open": "Open",
