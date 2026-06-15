@@ -425,7 +425,8 @@
     "companyName": "Назва компанії",
     "notSpecified": "Не вказано",
     "website": "Вебсайт",
-    "noLanguages": "Мови не вказані."
+    "noLanguages": "Мови не вказані.",
+    "languages": "Мови"
   },
   "contracts": {
     "disputeReasonRequired": "Будь ласка, вкажіть причину спору.",
@@ -584,7 +585,9 @@
       "displayNamePlaceholder": "напр. Джон Доу",
       "selectSkills": "Виберіть навички...",
       "projectNamePlaceholder": "Назва проєкту",
-      "shortDescPlaceholder": "Короткий опис..."
+      "shortDescPlaceholder": "Короткий опис...",
+      "readMore": "Читати більше",
+      "showLess": "Бачити менше"
     },
     "bids": {
       "title": "Мої ставки",

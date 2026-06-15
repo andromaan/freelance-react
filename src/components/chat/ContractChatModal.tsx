@@ -118,7 +118,7 @@ const ContractChatModal: React.FC<ContractChatWidgetProps> = ({
       // Return focus to open button when closing
       openButtonRef.current?.focus();
     }
-  }, [messages, isOpen, isConnected]);
+  }, [messagesLoading, isOpen, detailsLoading]);
 
   // Force fetch fresh data when chat opens so we get correct online status
   useEffect(() => {

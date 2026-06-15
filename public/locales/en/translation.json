@@ -424,7 +424,8 @@
     "companyName": "Company Name",
     "notSpecified": "Not specified",
     "website": "Website",
-    "noLanguages": "No languages specified."
+    "noLanguages": "No languages specified.",
+    "languages": "Languages"
   },
   "contracts": {
     "disputeReasonRequired": "Please provide a reason for the dispute.",
@@ -583,7 +584,9 @@
       "unsavedChanges": "Unsaved changes",
       "selectCountry": "Select a country...",
       "companyWebsitePlaceholder": "e.g. https://acme-corp.com",
-      "displayNamePlaceholder": "e.g. John Doe"
+      "displayNamePlaceholder": "e.g. John Doe",
+      "readMore": "Read more",
+      "showLess": "Show less"
     },
     "bids": {
       "title": "My Bids",
