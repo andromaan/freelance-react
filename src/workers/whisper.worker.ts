@@ -10,8 +10,8 @@
 import { pipeline, env } from "@xenova/transformers";
 
 // Cache models in the origin's storage (IndexedDB) so we don't re-download
-env.allowLocalModels = false;
-env.useBrowserCache = true;
+(env as any).allowLocalModels = false;
+(env as any).useBrowserCache = true;
 
 let transcriber: Awaited<ReturnType<typeof pipeline>> | null = null;
 

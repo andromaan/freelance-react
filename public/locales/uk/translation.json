@@ -311,7 +311,19 @@
       "projectDetails": "Деталі проєкту",
       "saveDetails": "Зберегти деталі",
       "saveCategories": "Зберегти категорії"
-    }
+    },
+    "daysAgo_one": "{{count}} день тому",
+    "daysAgo_few": "{{count}} дні тому",
+    "daysAgo_many": "{{count}} днів тому",
+    "daysAgo_other": "{{count}} днів тому",
+    "daysLeft_one": "Залишився {{count}} день",
+    "daysLeft_few": "Залишилося {{count}} дні",
+    "daysLeft_many": "Залишилося {{count}} днів",
+    "daysLeft_other": "Залишилося {{count}} днів",
+    "monthsLeft_one": "Залишився {{count}} місяць",
+    "monthsLeft_few": "Залишилося {{count}} місяці",
+    "monthsLeft_many": "Залишилося {{count}} місяців",
+    "monthsLeft_other": "Залишилося {{count}} місяців"
   },
   "freelancers": {
     "title": "Пошук фрілансерів",
@@ -335,7 +347,11 @@
     "review": "відгук",
     "reviews": "відгуків",
     "noBio": "Цей фрілансер ще не додав опис.",
-    "more": "ще +{{count}}"
+    "more": "ще +{{count}}",
+    "more_one": "ще {{count}}",
+    "more_few": "ще {{count}}",
+    "more_many": "ще {{count}}",
+    "more_other": "ще {{count}}"
   },
   "projectDetails": {
     "loading": "Завантаження проєкту...",
@@ -385,7 +401,15 @@
     "portfolioEmptyDesc": "Цей фрілансер ще не додав проєктів до портфоліо.",
     "noReviewText": "Текстовий відгук відсутній.",
     "unknownEmployer": "Невідомий роботодавець",
-    "viewProject": "Переглянути проєкт"
+    "viewProject": "Переглянути проєкт",
+    "showLess": "Show less",
+    "readMore": "Read more",
+    "loadingPortfolio": "Loading portfolio...",
+    "portfolioFor": "Portfolio for",
+    "seeAllReviews": "See all reviews",
+    "seeAllPortfolio": "See all portfolio & projects",
+    "loadingReviews": "Loading reviews...",
+    "reviewsFor": "Reviews for"
   },
   "bids": {
     "noRating": "Ще немає рейтингу",
@@ -413,7 +437,15 @@
     "requiredFields": "Обов'язкові поля",
     "cancel": "Скасувати",
     "submitBid": "Відправити ставку",
-    "submitting": "Відправлення…"
+    "submitting": "Відправлення…",
+    "charCount_one": "Залишився {{count}} символ",
+    "charCount_few": "Залишилося {{count}} символи",
+    "charCount_many": "Залишилося {{count}} символів",
+    "charCount_other": "Залишилося {{count}} символів",
+    "bidsTotal_one": "{{count}} пропозиція",
+    "bidsTotal_few": "{{count}} пропозиції",
+    "bidsTotal_many": "{{count}} пропозицій",
+    "bidsTotal_other": "{{count}} пропозицій"
   },
   "employerProfile": {
     "incomplete": "Цей профіль може бути неповним або не існує.",
@@ -523,12 +555,22 @@
     "myDisputesTitle": "Мої Спори",
     "totalCount": "Всього: {{count}}",
     "noDisputes": "Спорних ситуацій не знайдено",
-    "noDisputesDesc": "Наразі у вас немає відкритих спорів."
+    "noDisputesDesc": "Наразі у вас немає відкритих спорів.",
+    "reasonColumn": "Reason",
+    "dateColumn": "Date Opened",
+    "statusColumn": "Status",
+    "actionsColumn": "Actions",
+    "totalCount_one": "Total: {{count}}",
+    "totalCount_few": "Total: {{count}}",
+    "totalCount_many": "Total: {{count}}",
+    "totalCount_other": "Total: {{count}}"
   },
   "common": {
     "cancel": "Скасувати",
     "save": "Зберегти",
-    "send": "Відправити"
+    "send": "Відправити",
+    "delete": "Видалити",
+    "create": "Створити"
   },
   "profile": {
     "tabs": {
@@ -589,7 +631,12 @@
       "projectNamePlaceholder": "Назва проєкту",
       "shortDescPlaceholder": "Короткий опис...",
       "readMore": "Читати більше",
-      "showLess": "Бачити менше"
+      "showLess": "Бачити менше",
+      "avatarError": "Зображення є обов'язковим",
+      "langError": "Мова є обов'язковою",
+      "portfolioError": "Неправильне посилання на портфоліо",
+      "companyNamePlaceholder": "наприклад, Acme Corp",
+      "noLanguages": "Немає доданих мов"
     },
     "bids": {
       "title": "Мої ставки",
@@ -712,6 +759,14 @@
     "justNow": "щойно",
     "minAgo": "{{count}} хв тому",
     "hoursAgo": "{{count}} год тому",
-    "yesterday": "Вчора"
+    "yesterday": "Вчора",
+    "minAgo_one": "{{count}} хвилину тому",
+    "minAgo_few": "{{count}} хвилини тому",
+    "minAgo_many": "{{count}} хвилин тому",
+    "minAgo_other": "{{count}} хвилин тому",
+    "hoursAgo_one": "{{count}} годину тому",
+    "hoursAgo_few": "{{count}} години тому",
+    "hoursAgo_many": "{{count}} годин тому",
+    "hoursAgo_other": "{{count}} годин тому"
   }
 }

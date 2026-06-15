@@ -311,7 +311,13 @@
       "projectDetails": "Project details",
       "saveDetails": "Save Details",
       "saveCategories": "Save Categories"
-    }
+    },
+    "daysAgo_one": "{{count}} day ago",
+    "daysAgo_other": "{{count}} days ago",
+    "daysLeft_one": "{{count}} day left",
+    "daysLeft_other": "{{count}} days left",
+    "monthsLeft_one": "{{count}} month left",
+    "monthsLeft_other": "{{count}} months left"
   },
   "freelancers": {
     "title": "Find Freelancers",
@@ -335,7 +341,9 @@
     "review": "review",
     "reviews": "reviews",
     "noBio": "This freelancer hasn't provided a bio yet.",
-    "more": "+{{count}} more"
+    "more": "+{{count}} more",
+    "more_one": "+{{count}} more",
+    "more_other": "+{{count}} more"
   },
   "projectDetails": {
     "loading": "Loading project...",
@@ -385,7 +393,15 @@
     "portfolioEmptyDesc": "This freelancer hasn't added any projects to their portfolio yet.",
     "noReviewText": "No written review provided.",
     "unknownEmployer": "Unknown Employer",
-    "viewProject": "View Project"
+    "viewProject": "View Project",
+    "showLess": "Show less",
+    "readMore": "Read more",
+    "loadingPortfolio": "Loading portfolio...",
+    "portfolioFor": "Portfolio for",
+    "seeAllReviews": "See all reviews",
+    "seeAllPortfolio": "See all portfolio & projects",
+    "loadingReviews": "Loading reviews...",
+    "reviewsFor": "Reviews for"
   },
   "bids": {
     "noRating": "No rating yet",
@@ -413,7 +429,11 @@
     "requiredFields": "Required fields",
     "cancel": "Cancel",
     "submitBid": "Submit Bid",
-    "submitting": "Submitting…"
+    "submitting": "Submitting…",
+    "charCount_one": "{{count}} character left",
+    "charCount_other": "{{count}} characters left",
+    "bidsTotal_one": "{{count}} bid",
+    "bidsTotal_other": "{{count}} bids"
   },
   "employerProfile": {
     "incomplete": "This profile might be incomplete or does not exist.",
@@ -523,12 +543,20 @@
     "myDisputesTitle": "My Disputes",
     "totalCount": "Total: {{count}}",
     "noDisputes": "No disputes found",
-    "noDisputesDesc": "You don't have any disputes at the moment."
+    "noDisputesDesc": "You don't have any disputes at the moment.",
+    "reasonColumn": "Reason",
+    "dateColumn": "Date Opened",
+    "statusColumn": "Status",
+    "actionsColumn": "Actions",
+    "totalCount_one": "Total: {{count}}",
+    "totalCount_other": "Total: {{count}}"
   },
   "common": {
     "cancel": "Cancel",
     "save": "Save",
-    "send": "Send"
+    "send": "Send",
+    "delete": "Delete",
+    "create": "Create"
   },
   "profile": {
     "tabs": {
@@ -589,7 +617,12 @@
       "companyWebsitePlaceholder": "e.g. https://acme-corp.com",
       "displayNamePlaceholder": "e.g. John Doe",
       "readMore": "Read more",
-      "showLess": "Show less"
+      "showLess": "Show less",
+      "avatarError": "Image is required",
+      "langError": "Language is required",
+      "portfolioError": "Invalid portfolio link",
+      "companyNamePlaceholder": "e.g. Acme Corp",
+      "noLanguages": "No languages added"
     },
     "bids": {
       "title": "My Bids",
@@ -712,6 +745,10 @@
     "justNow": "just now",
     "minAgo": "{{count}} min ago",
     "hoursAgo": "{{count}} hours ago",
-    "yesterday": "Yesterday"
+    "yesterday": "Yesterday",
+    "minAgo_one": "{{count}} minute ago",
+    "minAgo_other": "{{count}} minutes ago",
+    "hoursAgo_one": "{{count}} hour ago",
+    "hoursAgo_other": "{{count}} hours ago"
   }
 }
