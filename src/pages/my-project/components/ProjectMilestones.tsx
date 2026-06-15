@@ -280,7 +280,7 @@ const ProjectMilestones: React.FC<Props> = ({ projectId }) => {
           <div
             className="space-y-3"
             aria-busy="true"
-            aria-label="Завантаження етапів"
+            aria-label="Loading stages"
           >
             <SkeletonRow />
             <SkeletonRow />

@@ -75,12 +75,12 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
         });
 
       if (stripeError) {
-        setCardError(stripeError.message ?? "Помилка оплати");
+        setCardError(stripeError.message ?? "Payment error");
         return;
       }
 
       if (paymentIntent?.status !== "succeeded") {
-        setCardError("Платіж не підтверджено");
+        setCardError("Payment not confirmed");
         return;
       }
 
@@ -88,12 +88,12 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
       await confirmDeposit({ paymentIntentId }).unwrap();
 
       toast.success(
-        `Успішно поповнено на ${formatCurrencyAmount(amount, currency)}!`,
+        `Successfully topped up by ${formatCurrencyAmount(amount, currency)}!`,
       );
       onSuccess();
     } catch (err: any) {
       const msg =
-        err?.data?.message || err?.message || "Помилка під час оплати";
+        err?.data?.message || err?.message || "An error occurred during payment";
       toast.error(msg);
     } finally {
       setProcessing(false);
